@@ -26,6 +26,7 @@ class Settings(BaseSettings):
         "https://www.agentspool.ai",
         "https://api.agentspool.ai",
         os.getenv("FRONTEND_URL", ""),  # Railway frontend URL
+        "https://frontend-production-9c5f.up.railway.app",  # Railway direct URL
     ]
     
     # Database
