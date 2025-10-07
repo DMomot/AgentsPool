@@ -15,9 +15,8 @@ export default async function handler(
     const xmlData = await response.text();
     
     // Set proper headers for XML sitemap
-    res.setHeader('Content-Type', 'text/xml; charset=utf-8');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
     
     res.status(200).send(xmlData);
   } catch (error) {

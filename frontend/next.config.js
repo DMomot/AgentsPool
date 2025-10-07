@@ -65,11 +65,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Type',
-            value: 'text/xml; charset=utf-8',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            value: 'application/json; charset=utf-8',
           },
           {
             key: 'Cache-Control',
