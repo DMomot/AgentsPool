@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     ]
     
     # Database
-    database_url: str = "sqlite:///./agentspool.db"
+    database_url: str = os.getenv("DATABASE_URL", "sqlite:///./agentspool.db")
     
     class Config:
         env_file = ".env"

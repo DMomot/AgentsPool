@@ -1311,6 +1311,14 @@ def get_generated_sitemap(db: Session = Depends(get_db)):
 
 if __name__ == "__main__":
     import uvicorn
+    import os
+    
+    # Log startup configuration
+    print(f"🚀 Starting AgentsPool API")
+    print(f"📡 Port: {settings.port} (from PORT env: {os.getenv('PORT', 'not set')})")
+    print(f"🗄️  Database: {settings.database_url[:50]}...")
+    print(f"🌐 CORS origins: {settings.allowed_origins}")
+    
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
