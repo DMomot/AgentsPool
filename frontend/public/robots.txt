@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Mobile
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+# Sitemap location
+Sitemap: https://primeagents.info/sitemap-generated.xml

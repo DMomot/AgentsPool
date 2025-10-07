@@ -1,0 +1,573 @@
+{
+  "meta": {
+    "home": {
+      "title": "PrimeAgents - Best AI Agents Catalog",
+      "description": "Find the perfect AI agent for your business. 500+ verified artificial intelligence solutions with reviews, ratings, and demos.",
+      "keywords": "AI agents, artificial intelligence, business automation, chatbots, machine learning, neural networks, AI catalog"
+    },
+    "catalog": {
+      "title": "AI Agents Catalog - PrimeAgents",
+      "description": "Complete AI agents catalog with search and filtering. Find the perfect agent for your tasks.",
+      "keywords": "AI agents catalog, artificial intelligence search, category filters, chatbots, automation, machine learning"
+    },
+    "categories": {
+      "title": "AI Agent Categories - PrimeAgents",
+      "description": "All AI agent categories. Find agents for any task: chatbots, content creation, data analysis, and much more.",
+      "keywords": "AI categories, chatbots, content creation, data analysis, code assistant, marketing, education"
+    },
+    "agent": {
+      "title": "AI Agent",
+      "loading": "Loading Agent...",
+      "notFound": "Agent Not Found - PrimeAgents",
+      "notFoundDescription": "The requested AI agent was not found. Return to the catalog to search for other agents."
+    },
+    "about": {
+      "title": "About Us - PrimeAgents",
+      "description": "Learn more about PrimeAgents - the leading AI agents marketplace. Our mission, team, and vision for the future of artificial intelligence.",
+      "keywords": "about company, PrimeAgents team, mission, vision, AI marketplace, artificial intelligence"
+    },
+    "addAgent": {
+      "title": "Add Agent - PrimeAgents",
+      "description": "Add your AI agent to the PrimeAgents marketplace. Share your solution with the developer and user community.",
+      "keywords": "add AI agent, publish agent, AI marketplace, developers, artificial intelligence"
+    },
+    "help": {
+      "title": "Help Center - PrimeAgents",
+      "description": "Guide to using PrimeAgents. How to add an agent, moderation process, requirements and frequently asked questions.",
+      "keywords": "help, guide, FAQ, moderation, requirements, adding agents, support"
+    }
+  },
+  "common": {
+    "buttons": {
+      "getStarted": "Get Started",
+      "learnMore": "Learn More",
+      "viewAll": "View All",
+      "tryDemo": "Try Demo",
+      "contactUs": "Contact Us",
+      "addAgent": "Add Agent",
+      "searchCatalog": "Search Catalog",
+      "cancel": "Cancel",
+      "submit": "Submit",
+      "submitForModeration": "Submit for Moderation",
+      "submitting": "Submitting...",
+      "tryAgain": "Try Again",
+      "backToCatalog": "Back to Catalog"
+    },
+    "navigation": {
+      "home": "Home",
+      "catalog": "Catalog",
+      "categories": "Categories",
+      "about": "About",
+      "help": "Help",
+      "addAgent": "Add Agent"
+    },
+    "loading": "Loading...",
+    "error": "Error",
+    "noResults": "No results found",
+    "free": "Free",
+    "perMonth": "per month",
+    "oneTime": "one-time payment",
+    "perUsage": "per usage"
+  },
+  "pages": {
+    "home": {
+      "hero": {
+        "title": "Find Your Perfect AI Agent",
+        "subtitle": "Discover powerful AI solutions for your business needs. Browse our curated collection of verified agents.",
+        "cta": "Explore Catalog"
+      },
+      "categories": {
+        "title": "Popular Categories",
+        "subtitle": "Find agents for any task"
+      },
+      "features": {
+        "title": "Why Choose PrimeAgents?",
+        "subtitle": "We make AI accessible to everyone",
+        "quickDeployment": {
+          "title": "Quick Deployment",
+          "description": "Launch an AI agent in minutes with a simple API"
+        },
+        "verifiedQuality": {
+          "title": "Verified Quality",
+          "description": "All agents undergo thorough review by our experts"
+        },
+        "support": {
+          "title": "24/7 Support",
+          "description": "Our team is always ready to help with integration and setup"
+        }
+      }
+    },
+    "catalog": {
+      "title": "AI Agents Catalog",
+      "subtitle": "Find the perfect AI agent among {count} available solutions",
+      "resultsFound": "Found {count} agents",
+      "pageInfo": "Page {current} of {total}",
+      "noAgentsFound": {
+        "title": "No Agents Found",
+        "description": "Try changing search parameters or reset filters"
+      },
+      "loadingError": {
+        "title": "Loading Error",
+        "description": "Failed to load agents"
+      }
+    },
+    "categories": {
+      "title": "AI Agent Categories",
+      "subtitle": "Explore {categoriesCount} categories with {agentsCount} AI agents. From chatbots to data analysis — find the perfect solution for your tasks.",
+      "popularCategories": "🔥 Popular Categories",
+      "allCategories": "All Categories",
+      "stats": {
+        "categories": "Categories",
+        "agents": "AI Agents",
+        "averagePerCategory": "Average per category"
+      },
+      "cta": {
+        "title": "Didn't find a suitable category?",
+        "description": "Use catalog search or contact us to add new categories"
+      }
+    },
+    "agent": {
+      "breadcrumb": {
+        "home": "Home",
+        "catalog": "Catalog"
+      },
+      "tabs": {
+        "overview": "Overview",
+        "reviews": "Reviews",
+        "documentation": "Documentation"
+      },
+      "overview": {
+        "description": "Description",
+        "capabilities": "Capabilities",
+        "useCases": "Use Cases",
+        "screenshots": "Screenshots"
+      },
+      "reviews": {
+        "noReviews": "No reviews for this agent yet"
+      },
+      "documentation": {
+        "externalLink": "Documentation is available via external link",
+        "openDocs": "Open Documentation"
+      },
+      "sidebar": {
+        "information": "Information",
+        "author": "Author",
+        "version": "Version",
+        "updated": "Updated",
+        "downloads": "Downloads",
+        "website": "Website",
+        "visitWebsite": "Visit Website",
+        "support": "Support",
+        "supportDescription": "Need help with this agent?",
+        "contactAuthor": "Contact Author",
+        "helpCenter": "Help Center"
+      },
+      "actions": {
+        "tryDemo": "Try Demo",
+        "apiDocs": "API Documentation",
+        "sourceCode": "Source Code"
+      },
+      "notFound": {
+        "title": "Agent not found",
+        "description": "The requested agent was not found or an error occurred while loading"
+      }
+    },
+    "about": {
+      "hero": {
+        "title": "About PrimeAgents",
+        "subtitle": "We are creating a future where artificial intelligence is accessible to everyone. PrimeAgents is a marketplace of the best AI agents for solving any tasks."
+      },
+      "mission": {
+        "title": "Our Mission",
+        "description": "We believe that artificial intelligence should be accessible and useful for everyone. Our goal is to create an ecosystem where developers can share their AI solutions, and users can easily find the perfect tools for their tasks.",
+        "points": {
+          "democratization": "Democratization of access to AI technologies",
+          "support": "Support for innovative developers",
+          "ecosystem": "Creating a safe and reliable ecosystem"
+        }
+      },
+      "stats": {
+        "title": "PrimeAgents in Numbers",
+        "subtitle": "Our achievements speak for themselves",
+        "agents": "AI Agents",
+        "users": "Active Users",
+        "developers": "Developers",
+        "support": "Support"
+      },
+      "team": {
+        "title": "Our Team",
+        "subtitle": "Experts in AI and technology",
+        "members": {
+          "alexJohnson": {
+            "name": "Alex Johnson",
+            "role": "CEO & Founder",
+            "description": "15+ years in AI and machine learning. Previously worked at Google and OpenAI."
+          },
+          "mariaSmith": {
+            "name": "Maria Smith",
+            "role": "CTO",
+            "description": "Expert in distributed systems architecture. Master of Computer Science from MIT."
+          },
+          "davidWilson": {
+            "name": "David Wilson",
+            "role": "Head of Product",
+            "description": "UX/UI specialist and product strategy expert. 10+ years in technology startups."
+          }
+        }
+      },
+      "values": {
+        "title": "Our Values",
+        "subtitle": "The principles that guide us",
+        "quality": {
+          "title": "Quality",
+          "description": "We carefully test every AI agent to guarantee high quality and reliability."
+        },
+        "community": {
+          "title": "Community",
+          "description": "We build an open community of developers and users of AI technologies."
+        },
+        "innovation": {
+          "title": "Innovation",
+          "description": "We constantly implement new technologies and approaches to improve user experience."
+        }
+      },
+      "vision": {
+        "title": "Our Vision",
+        "description": "We see a future where artificial intelligence becomes an integral part of everyone's daily life. PrimeAgents will become a bridge between complex AI technologies and simple human needs.",
+        "future": "By 2030, we plan to become the world's leading platform for AI agents, connecting millions of users and thousands of developers.",
+        "goals": {
+          "title": "Our goals for 2024-2025:",
+          "items": {
+            "agents": "Launch 1000+ verified AI agents",
+            "users": "Attract 100k+ active users",
+            "api": "Create API for integration with popular platforms",
+            "program": "Launch developer program"
+          }
+        }
+      },
+      "cta": {
+        "title": "Ready to join the AI future?",
+        "subtitle": "Become part of the PrimeAgents community today"
+      }
+    },
+    "addAgent": {
+      "title": "Add AI Agent",
+      "subtitle": "Share your AI solution with the community. All agents undergo moderation before publication.",
+      "sections": {
+        "basicInfo": {
+          "title": "Basic Information",
+          "fields": {
+            "name": {
+              "label": "Agent Name",
+              "placeholder": "For example: ChatGPT Assistant"
+            },
+            "category": {
+              "label": "Category",
+              "placeholder": "Select Category"
+            },
+            "description": {
+              "label": "Description",
+              "placeholder": "Detailed description of your AI agent's capabilities and features..."
+            }
+          }
+        },
+        "pricing": {
+          "title": "Pricing",
+          "fields": {
+            "model": {
+              "label": "Pricing Model",
+              "options": {
+                "free": "Free",
+                "freemium": "Freemium",
+                "subscription": "Subscription",
+                "oneTime": "One-time Payment",
+                "usageBased": "Usage-based"
+              }
+            },
+            "price": {
+              "label": "Price (USD)",
+              "placeholder": "0.00"
+            }
+          }
+        },
+        "features": {
+          "title": "Features and Applications",
+          "fields": {
+            "tags": {
+              "label": "Tags",
+              "placeholder": "AI, chatbot, automation (separate with commas)"
+            },
+            "capabilities": {
+              "label": "Key Capabilities",
+              "placeholder": "Text generation, data analysis, image processing (separate with commas)"
+            },
+            "useCases": {
+              "label": "Use Cases",
+              "placeholder": "Customer support, content creation, document analysis (separate with commas)"
+            }
+          }
+        },
+        "links": {
+          "title": "Links and Resources",
+          "fields": {
+            "demo": {
+              "label": "Demo URL",
+              "placeholder": "https://demo.example.com"
+            },
+            "api": {
+              "label": "API Endpoint",
+              "placeholder": "https://api.example.com"
+            },
+            "docs": {
+              "label": "Documentation",
+              "placeholder": "https://docs.example.com"
+            },
+            "github": {
+              "label": "GitHub Repository",
+              "placeholder": "https://github.com/username/repo"
+            },
+            "website": {
+              "label": "Website",
+              "placeholder": "https://example.com"
+            },
+            "email": {
+              "label": "Contact Email",
+              "placeholder": "contact@example.com"
+            }
+          }
+        },
+        "media": {
+          "title": "Media Materials",
+          "fields": {
+            "logo": {
+              "label": "Logo URL",
+              "placeholder": "https://example.com/logo.png"
+            },
+            "screenshots": {
+              "label": "Screenshots (URLs)",
+              "placeholder": "https://example.com/screenshot1.png, https://example.com/screenshot2.png (separate with commas)"
+            }
+          }
+        },
+        "terms": {
+          "agreement": "I agree to the terms of use and privacy policy. I understand that my agent will undergo moderation before publication.",
+          "termsLink": "terms of use",
+          "privacyLink": "privacy policy"
+        }
+      },
+      "help": {
+        "title": "Need Help?",
+        "moderation": {
+          "title": "Moderation Process",
+          "description": "All agents undergo review within 24-48 hours. We check functionality, security, and compliance with our standards."
+        },
+        "requirements": {
+          "title": "Agent Requirements",
+          "description": "The agent must be functional, have a clear description, and match the selected category. Malicious or illegal solutions are prohibited."
+        },
+        "guide": "Detailed guide for adding agents →"
+      }
+    },
+    "help": {
+      "title": "Help Center",
+      "subtitle": "Everything you need to know about PrimeAgents: from adding agents to using the platform",
+      "quickNav": {
+        "title": "Quick Navigation",
+        "addingAgents": "Adding agents",
+        "moderation": "Moderation process",
+        "requirements": "Requirements",
+        "faq": "FAQ"
+      },
+      "addingAgents": {
+        "title": "Agent Adding Guide",
+        "preparation": {
+          "title": "Step 1: Preparation",
+          "description": "Before adding an agent, make sure you have:",
+          "items": {
+            "workingAgent": "Working AI agent with accessible API or demo",
+            "description": "Detailed description of agent capabilities",
+            "documentation": "Usage documentation",
+            "media": "Screenshots or demo materials",
+            "contact": "Contact information"
+          }
+        },
+        "form": {
+          "title": "Step 2: Form Filling",
+          "basicInfo": {
+            "title": "Basic Information",
+            "name": "Name: Brief and clear agent name",
+            "description": "Description: Detailed description of functions and capabilities",
+            "category": "Category: Choose the most suitable category"
+          },
+          "pricing": {
+            "title": "Pricing",
+            "model": "Model: Free, Freemium, Subscription, One-time Payment, Usage-based",
+            "price": "Price: Specify cost in USD (if applicable)"
+          },
+          "capabilities": {
+            "title": "Capabilities and Applications",
+            "tags": "Tags: Keywords separated by commas (AI, chatbot, automation)",
+            "capabilities": "Capabilities: Main agent functions",
+            "useCases": "Use Cases: Where and how the agent can be applied"
+          },
+          "links": {
+            "title": "Links and Media",
+            "demo": "Demo URL: Link to working demonstration",
+            "api": "API Endpoint: API address for integration",
+            "docs": "Documentation: Link to technical documentation",
+            "github": "GitHub: Source code repository (if available)",
+            "media": "Logo and screenshots: Visual materials"
+          }
+        },
+        "submission": {
+          "title": "Step 3: Submission",
+          "description": "After filling all required fields:",
+          "steps": {
+            "check": "Check the correctness of entered information",
+            "agree": "Agree to terms of use",
+            "submit": "Click \"Submit for Moderation\"",
+            "confirmation": "Receive confirmation of application receipt"
+          }
+        },
+        "tip": {
+          "title": "Tip",
+          "description": "The more detailed and high-quality you fill out the form, the faster moderation will pass. Add maximum useful information for users."
+        }
+      },
+      "moderation": {
+        "title": "Moderation Process",
+        "steps": {
+          "receipt": {
+            "title": "Application Receipt (0-2 hours)",
+            "description": "Your application enters the moderation queue. You will receive an email confirmation of receipt."
+          },
+          "initial": {
+            "title": "Initial Review (2-12 hours)",
+            "description": "Moderators check:",
+            "items": {
+              "category": "Compliance with selected category",
+              "quality": "Quality of description and information",
+              "links": "Functionality of provided links",
+              "rules": "Compliance with platform rules"
+            }
+          },
+          "technical": {
+            "title": "Technical Review (12-24 hours)",
+            "description": "Functionality testing:",
+            "items": {
+              "demo": "Demo version testing",
+              "api": "API testing (if provided)",
+              "security": "Security and stability assessment",
+              "compliance": "Compliance with stated capabilities"
+            }
+          },
+          "decision": {
+            "title": "Decision (24-48 hours)",
+            "description": "You will receive a notification about the moderation result. Upon approval, the agent will appear in the catalog. Upon rejection - detailed comments for improvement."
+          }
+        },
+        "timeNote": {
+          "title": "Moderation Time",
+          "description": "Usually the process takes 24-48 hours. During high load periods, it may take up to 72 hours."
+        }
+      },
+      "requirements": {
+        "title": "Agent Requirements",
+        "allowed": {
+          "title": "✅ Allowed",
+          "items": {
+            "functional": "Functional AI agents with clear purpose",
+            "business": "Agents for business process automation",
+            "educational": "Educational and research tools",
+            "creative": "Creative and entertainment AI solutions",
+            "developer": "Tools for developers and analysts",
+            "opensource": "Open source agents"
+          }
+        },
+        "forbidden": {
+          "title": "❌ Forbidden",
+          "items": {
+            "malware": "Malware and hacking agents",
+            "fake": "Agents for creating fake news",
+            "spam": "Tools for spam and fraud",
+            "discrimination": "Agents with discriminatory content",
+            "nonfunctional": "Non-functional or fake agents",
+            "copyright": "Agents violating copyright"
+          }
+        },
+        "important": {
+          "title": "Important",
+          "description": "Agents must comply with legislation and ethical standards. We reserve the right to reject any agent that may harm users."
+        }
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "questions": {
+          "cost": {
+            "question": "How much does it cost to list an agent?",
+            "answer": "Listing agents on PrimeAgents is free. We only take a commission from paid agents upon sale."
+          },
+          "edit": {
+            "question": "Can I edit an agent after publication?",
+            "answer": "Yes, you can update information about your agent. Significant changes may require re-moderation."
+          },
+          "rejected": {
+            "question": "What to do if an agent was rejected?",
+            "answer": "You will receive detailed comments about rejection reasons. Fix the indicated issues and resubmit."
+          },
+          "promote": {
+            "question": "How to promote my agent?",
+            "answer": "Quality description, screenshots, active user interaction, and regular updates help increase agent popularity."
+          },
+          "languages": {
+            "question": "Are agents in other languages supported?",
+            "answer": "Yes, we accept agents in any languages. We recommend providing descriptions in English or Russian for better accessibility."
+          },
+          "support": {
+            "question": "How to contact support?",
+            "answer": "You can write to us at support@primeagents.com or use the feedback form on the site."
+          }
+        }
+      },
+      "cta": {
+        "title": "Ready to add your agent?",
+        "subtitle": "Share your AI solution with the developer and user community"
+      },
+      "contact": {
+        "title": "Didn't find an answer to your question?",
+        "email": "Write to support",
+        "form": "Feedback form"
+      }
+    }
+  },
+  "components": {
+    "agentCard": {
+      "rating": "rating",
+      "reviews": "reviews",
+      "downloads": "downloads"
+    },
+    "categoryCard": {
+      "agents": "agents"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page"
+    },
+    "searchFilters": {
+      "search": "Search agents...",
+      "category": "Category",
+      "allCategories": "All Categories",
+      "pricing": "Pricing",
+      "allPricing": "All Pricing",
+      "rating": "Rating",
+      "sort": "Sort by",
+      "sortOptions": {
+        "relevance": "Relevance",
+        "rating": "Rating",
+        "downloads": "Downloads",
+        "newest": "Newest"
+      }
+    }
+  }
+}
