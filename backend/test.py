@@ -23,10 +23,14 @@ def status():
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", "8000"))
-    print(f"Starting test server on port {port}")
+    print(f"🚀 Starting test server")
+    print(f"📡 Port from env: {os.getenv('PORT', 'NOT SET')}")
+    print(f"📡 Using port: {port}")
+    print(f"📡 Host: 0.0.0.0")
     uvicorn.run(
         "test:app",
         host="0.0.0.0",
         port=port,
-        reload=False
+        reload=False,
+        log_level="info"
     )
