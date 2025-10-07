@@ -1314,15 +1314,20 @@ if __name__ == "__main__":
     import os
     
     # Log startup configuration
+    port = int(os.getenv("PORT", "8000"))
+    print("=" * 70)
     print(f"🚀 Starting AgentsPool API")
-    print(f"📡 Port: {settings.port} (from PORT env: {os.getenv('PORT', 'not set')})")
-    print(f"🗄️  Database: {settings.database_url[:50]}...")
+    print(f"📡 Host: 0.0.0.0")
+    print(f"📡 Port: {port} (from PORT env: '{os.getenv('PORT', 'NOT SET')}')")
+    print(f"🗄️  Database URL: {os.getenv('DATABASE_URL', 'NOT SET')[:80]}...")
+    print(f"🌐 Frontend URL: {os.getenv('FRONTEND_URL', 'NOT SET')}")
     print(f"🌐 CORS origins: {settings.allowed_origins}")
+    print("=" * 70)
     
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=settings.port,
+        port=port,
         reload=False,  # Disable reload in production
         log_level="info"
     )
