@@ -16,7 +16,6 @@ from datetime import datetime
 from database.config import get_db
 from database.models import Agent, Category, Review
 from config import settings
-from web_parser import WebPageParser
 
 # Create FastAPI app
 app = FastAPI(
@@ -809,6 +808,9 @@ async def parse_website(request: dict):
 
         print(f"🔍 Parsing website: {url}")
 
+        # Lazy import to avoid startup errors
+        from web_parser import WebPageParser
+        
         # Initialize parser
         parser = WebPageParser()
 
