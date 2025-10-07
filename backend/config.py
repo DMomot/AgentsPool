@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     api_port: int = 8000
     port: int = int(os.getenv("PORT", "8000"))  # For uvicorn.run compatibility
     debug: bool = True
+    secret_key: str = os.getenv("SECRET_KEY", "not-needed-for-mvp")  # Optional for MVP
     
     # CORS settings
     allowed_origins: List[str] = [
