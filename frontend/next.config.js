@@ -49,6 +49,15 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload'
+          },
+        ],
+      },
+      {
         source: '/sitemap-generated.xml',
         headers: [
           {
@@ -75,32 +84,6 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=86400',
-          },
-        ],
-      },
-      {
-        source: '/sitemap-txt.xml',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'text/xml; charset=utf-8',
-          },
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600',
-          },
-        ],
-      },
-      {
-        source: '/sitemap-json.xml',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'text/xml; charset=utf-8',
-          },
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600',
           },
         ],
       },
