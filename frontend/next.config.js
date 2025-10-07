@@ -79,11 +79,11 @@ const nextConfig = {
         ],
       },
       {
-        source: '/sitemap.txt',
+        source: '/sitemap-txt.xml',
         headers: [
           {
             key: 'Content-Type',
-            value: 'text/plain; charset=utf-8',
+            value: 'text/xml; charset=utf-8',
           },
           {
             key: 'Cache-Control',
@@ -92,11 +92,11 @@ const nextConfig = {
         ],
       },
       {
-        source: '/sitemap.json',
+        source: '/sitemap-json.xml',
         headers: [
           {
             key: 'Content-Type',
-            value: 'application/json; charset=utf-8',
+            value: 'text/xml; charset=utf-8',
           },
           {
             key: 'Cache-Control',
