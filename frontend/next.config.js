@@ -3,6 +3,33 @@ const nextConfig = {
   images: {
     domains: ['localhost', 'via.placeholder.com'],
   },
+  async redirects() {
+    return [
+      // Redirect from old domain primeagents.info to new domain agentspool.ai
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'primeagents.info',
+          },
+        ],
+        destination: 'https://agentspool.ai/:path*',
+        permanent: true, // 301 redirect
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.primeagents.info',
+          },
+        ],
+        destination: 'https://agentspool.ai/:path*',
+        permanent: true, // 301 redirect
+      },
+    ]
+  },
   async rewrites() {
     return [
       {
