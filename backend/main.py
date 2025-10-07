@@ -1239,7 +1239,7 @@ Focus on:
         print(f"❌ Auto-update failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.api_route("/api/v1/sitemap-generated.xml", methods=["GET", "HEAD"])
+@app.get("/api/v1/sitemap-generated.xml")
 def get_generated_sitemap(db: Session = Depends(get_db)):
     """Return dynamic sitemap XML"""
     from fastapi.responses import Response
