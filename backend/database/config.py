@@ -14,26 +14,30 @@ load_dotenv()
 # Database URL from environment or default
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./agentspool.db")
 
-# Debug: Print DATABASE_URL (without password for security)
-if DATABASE_URL:
-    # Hide password in logs
-    safe_url = DATABASE_URL.split('@')[0].split(':')[:-1]
-    safe_url = ':'.join(safe_url) + ':***@' + DATABASE_URL.split('@')[1] if '@' in DATABASE_URL else DATABASE_URL
-    print(f"Database URL configured: {safe_url}")
-else:
-    print("Warning: DATABASE_URL not set!")
+# Debug: Print DATABASE_URL status
+try:
+    if DATABASE_URL:
+        db_type = DATABASE_URL.split(':')[0] if ':' in DATABASE_URL else 'unknown'
+        print(f"✅ Database URL configured ({db_type})")
+    else:
+        print("⚠️ Warning: DATABASE_URL not set!")
+except Exception as e:
+    print(f"⚠️ Error checking DATABASE_URL: {e}")
 
 # Create engine with error handling
 try:
-    engine = create_engine(DATABASE_URL)
-    print("Database engine created successfully")
+    engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+    print("✅ Database engine created successfully")
 except Exception as e:
-    print(f"Failed to create database engine: {e}")
-    print(f"DATABASE_URL value: {DATABASE_URL}")
-    raise
+    print(f"❌ Failed to create database engine: {e}")
+    # Don't raise - let app start anyway
+    engine = None
 
 # Create session factory
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+if engine:
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+else:
+    SessionLocal = None
 
 # Base class for models
 Base = declarative_base()
@@ -41,6 +45,8 @@ Base = declarative_base()
 # Dependency to get database session
 def get_db():
     """Database dependency for FastAPI"""
+    if not SessionLocal:
+        raise Exception("Database not configured")
     db = SessionLocal()
     try:
         yield db
