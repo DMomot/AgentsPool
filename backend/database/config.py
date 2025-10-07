@@ -8,11 +8,10 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
 
 # Database URL from environment or default
-# For production use: postgresql://agentspool_user:AgentsPool2024SecurePass@gondola.proxy.rlwy.net:22252/railway
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./agentspool.db")
 
 # Debug: Print DATABASE_URL (without password for security)
