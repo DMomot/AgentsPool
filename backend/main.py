@@ -1329,8 +1329,9 @@ if __name__ == "__main__":
     print("=" * 70)
     print(f"🚀 Starting AgentsPool API")
     print(f"📡 Host: 0.0.0.0")
-    print(f"📡 Port: {port} (from PORT env: '{os.getenv('PORT', 'NOT SET')}')")
-    print(f"🗄️  Database URL: {os.getenv('DATABASE_URL', 'NOT SET')[:80]}...")
+    print(f"📡 Port from env: {os.getenv('PORT', 'NOT SET')}")
+    print(f"📡 Using port: {port}")
+    print(f"🗄️  Database configured: {'Yes' if os.getenv('DATABASE_URL') else 'No'}")
     print(f"🌐 Frontend URL: {os.getenv('FRONTEND_URL', 'NOT SET')}")
     print(f"🌐 CORS origins: {settings.allowed_origins}")
     print("=" * 70)
@@ -1339,6 +1340,6 @@ if __name__ == "__main__":
         "main:app",
         host="0.0.0.0",
         port=port,
-        reload=False,  # Disable reload in production
+        reload=False,
         log_level="info"
     )
