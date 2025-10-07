@@ -98,7 +98,7 @@ export default function CategoriesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Head>
-        <title>AI Agent Categories | PrimeAgents</title>
+        <title>AI Agent Categories | AgentsPool</title>
         <meta 
           name="description" 
           content="Browse AI agents by category. Find the perfect AI solution for your needs across different industries and use cases." 

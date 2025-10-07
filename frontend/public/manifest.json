@@ -1,6 +1,6 @@
 {
-  "name": "PrimeAgents - AI Agents Catalog",
-  "short_name": "PrimeAgents",
+  "name": "AgentsPool - AI Agents Catalog",
+  "short_name": "AgentsPool",
   "description": "Find the best AI agents for your business",
   "start_url": "/",
   "display": "standalone",

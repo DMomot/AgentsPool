@@ -4,7 +4,7 @@
 
 ### **Default Password:**
 ```
-PrimeAgents2024Admin!
+AgentsPool2024Admin!
 ```
 
 ### **Custom Password (Recommended):**
@@ -95,8 +95,8 @@ openssl rand -base64 24
 
 ### **If Password Lost:**
 1. Check Railway Variables for `NEXT_PUBLIC_ADMIN_PASSWORD`
-2. Or use default: `PrimeAgents2024Admin!`
-3. Or clear localStorage: `localStorage.removeItem('primeagents_admin_auth')`
+2. Or use default: `AgentsPool2024Admin!`
+3. Or clear localStorage: `localStorage.removeItem('agentspool_admin_auth')`
 
 ### **If Locked Out:**
 1. Clear browser localStorage

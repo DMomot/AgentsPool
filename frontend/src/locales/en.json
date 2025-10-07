@@ -1,39 +1,39 @@
 {
   "meta": {
     "home": {
-      "title": "PrimeAgents - Best AI Agents Catalog",
+      "title": "AgentsPool - Best AI Agents Catalog",
       "description": "Find the perfect AI agent for your business. 500+ verified artificial intelligence solutions with reviews, ratings, and demos.",
       "keywords": "AI agents, artificial intelligence, business automation, chatbots, machine learning, neural networks, AI catalog"
     },
     "catalog": {
-      "title": "AI Agents Catalog - PrimeAgents",
+      "title": "AI Agents Catalog - AgentsPool",
       "description": "Complete AI agents catalog with search and filtering. Find the perfect agent for your tasks.",
       "keywords": "AI agents catalog, artificial intelligence search, category filters, chatbots, automation, machine learning"
     },
     "categories": {
-      "title": "AI Agent Categories - PrimeAgents",
+      "title": "AI Agent Categories - AgentsPool",
       "description": "All AI agent categories. Find agents for any task: chatbots, content creation, data analysis, and much more.",
       "keywords": "AI categories, chatbots, content creation, data analysis, code assistant, marketing, education"
     },
     "agent": {
       "title": "AI Agent",
       "loading": "Loading Agent...",
-      "notFound": "Agent Not Found - PrimeAgents",
+      "notFound": "Agent Not Found - AgentsPool",
       "notFoundDescription": "The requested AI agent was not found. Return to the catalog to search for other agents."
     },
     "about": {
-      "title": "About Us - PrimeAgents",
-      "description": "Learn more about PrimeAgents - the leading AI agents marketplace. Our mission, team, and vision for the future of artificial intelligence.",
-      "keywords": "about company, PrimeAgents team, mission, vision, AI marketplace, artificial intelligence"
+      "title": "About Us - AgentsPool",
+      "description": "Learn more about AgentsPool - the leading AI agents marketplace. Our mission, team, and vision for the future of artificial intelligence.",
+      "keywords": "about company, AgentsPool team, mission, vision, AI marketplace, artificial intelligence"
     },
     "addAgent": {
-      "title": "Add Agent - PrimeAgents",
-      "description": "Add your AI agent to the PrimeAgents marketplace. Share your solution with the developer and user community.",
+      "title": "Add Agent - AgentsPool",
+      "description": "Add your AI agent to the AgentsPool marketplace. Share your solution with the developer and user community.",
       "keywords": "add AI agent, publish agent, AI marketplace, developers, artificial intelligence"
     },
     "help": {
-      "title": "Help Center - PrimeAgents",
-      "description": "Guide to using PrimeAgents. How to add an agent, moderation process, requirements and frequently asked questions.",
+      "title": "Help Center - AgentsPool",
+      "description": "Guide to using AgentsPool. How to add an agent, moderation process, requirements and frequently asked questions.",
       "keywords": "help, guide, FAQ, moderation, requirements, adding agents, support"
     }
   },
@@ -81,7 +81,7 @@
         "subtitle": "Find agents for any task"
       },
       "features": {
-        "title": "Why Choose PrimeAgents?",
+        "title": "Why Choose AgentsPool?",
         "subtitle": "We make AI accessible to everyone",
         "quickDeployment": {
           "title": "Quick Deployment",
@@ -174,8 +174,8 @@
     },
     "about": {
       "hero": {
-        "title": "About PrimeAgents",
-        "subtitle": "We are creating a future where artificial intelligence is accessible to everyone. PrimeAgents is a marketplace of the best AI agents for solving any tasks."
+        "title": "About AgentsPool",
+        "subtitle": "We are creating a future where artificial intelligence is accessible to everyone. AgentsPool is a marketplace of the best AI agents for solving any tasks."
       },
       "mission": {
         "title": "Our Mission",
@@ -187,7 +187,7 @@
         }
       },
       "stats": {
-        "title": "PrimeAgents in Numbers",
+        "title": "AgentsPool in Numbers",
         "subtitle": "Our achievements speak for themselves",
         "agents": "AI Agents",
         "users": "Active Users",
@@ -233,7 +233,7 @@
       },
       "vision": {
         "title": "Our Vision",
-        "description": "We see a future where artificial intelligence becomes an integral part of everyone's daily life. PrimeAgents will become a bridge between complex AI technologies and simple human needs.",
+        "description": "We see a future where artificial intelligence becomes an integral part of everyone's daily life. AgentsPool will become a bridge between complex AI technologies and simple human needs.",
         "future": "By 2030, we plan to become the world's leading platform for AI agents, connecting millions of users and thousands of developers.",
         "goals": {
           "title": "Our goals for 2024-2025:",
@@ -247,7 +247,7 @@
       },
       "cta": {
         "title": "Ready to join the AI future?",
-        "subtitle": "Become part of the PrimeAgents community today"
+        "subtitle": "Become part of the AgentsPool community today"
       }
     },
     "addAgent": {
@@ -370,7 +370,7 @@
     },
     "help": {
       "title": "Help Center",
-      "subtitle": "Everything you need to know about PrimeAgents: from adding agents to using the platform",
+      "subtitle": "Everything you need to know about AgentsPool: from adding agents to using the platform",
       "quickNav": {
         "title": "Quick Navigation",
         "addingAgents": "Adding agents",
@@ -505,7 +505,7 @@
         "questions": {
           "cost": {
             "question": "How much does it cost to list an agent?",
-            "answer": "Listing agents on PrimeAgents is free. We only take a commission from paid agents upon sale."
+            "answer": "Listing agents on AgentsPool is free. We only take a commission from paid agents upon sale."
           },
           "edit": {
             "question": "Can I edit an agent after publication?",
@@ -525,7 +525,7 @@
           },
           "support": {
             "question": "How to contact support?",
-            "answer": "You can write to us at support@primeagents.com or use the feedback form on the site."
+            "answer": "You can write to us at support@agentspool.ai or use the feedback form on the site."
           }
         }
       },

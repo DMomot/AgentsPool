@@ -29,7 +29,7 @@ export default function Footer() {
               <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">P</span>
               </div>
-              <span className="text-xl font-bold">PrimeAgents</span>
+              <span className="text-xl font-bold">AgentsPool</span>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
               Marketplace of the best AI agents for business automation, 
@@ -127,7 +127,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 PrimeAgents. All rights reserved.
+              © 2024 AgentsPool. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
               <span className="text-gray-400 text-sm">Made with ❤️ for the AI community</span>

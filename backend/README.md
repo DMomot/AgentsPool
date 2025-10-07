@@ -1,6 +1,6 @@
-# PrimeAgents Database
+# AgentsPool Database
 
-This directory contains all database-related files for the PrimeAgents project.
+This directory contains all database-related files for the AgentsPool project.
 
 ## Structure
 
@@ -35,7 +35,7 @@ python -m database.setup --with-data
 
 ### 2. Environment Variables
 ```bash
-export DATABASE_URL="postgresql://user:password@localhost:5432/primeagents"
+export DATABASE_URL="postgresql://user:password@localhost:5432/agentspool"
 ```
 
 ### 3. Manual Operations
@@ -102,7 +102,7 @@ For Railway/Docker deployment:
 For local development:
 
 1. Install PostgreSQL
-2. Create database: `createdb primeagents`
+2. Create database: `createdb agentspool`
 3. Run setup: `python -m database.setup --with-data`
 4. Start backend server
 

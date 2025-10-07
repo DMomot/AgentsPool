@@ -92,11 +92,11 @@ export default function AddAgentPage() {
   return (
     <>
       <MetaTags
-        title="Add Agent - PrimeAgents"
-        description="Add your AI agent to the PrimeAgents marketplace. Share your solution with the developer and user community."
+        title="Add Agent - AgentsPool"
+        description="Add your AI agent to the AgentsPool marketplace. Share your solution with the developer and user community."
         keywords="add AI agent, publish agent, AI marketplace, developers, artificial intelligence"
-        url="https://primeagents.info/add-agent"
-        canonicalUrl="https://primeagents.info/add-agent"
+        url="https://agentspool.ai/add-agent"
+        canonicalUrl="https://agentspool.ai/add-agent"
         noIndex={true}
       />
 

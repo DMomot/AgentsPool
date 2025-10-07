@@ -7,11 +7,11 @@ export default function HelpPage() {
   return (
     <>
       <MetaTags
-        title="Help Center - PrimeAgents"
-        description="Guide to using PrimeAgents. How to add an agent, moderation process, requirements and frequently asked questions."
+        title="Help Center - AgentsPool"
+        description="Guide to using AgentsPool. How to add an agent, moderation process, requirements and frequently asked questions."
         keywords="help, guide, FAQ, moderation, requirements, adding agents, support"
-        url="https://primeagents.info/help"
-        canonicalUrl="https://primeagents.info/help"
+        url="https://agentspool.ai/help"
+        canonicalUrl="https://agentspool.ai/help"
       />
 
       <div className="min-h-screen bg-gray-50">
@@ -22,7 +22,7 @@ export default function HelpPage() {
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Центр помощи</h1>
             <p className="text-lg text-gray-600">
-              Все что нужно знать о PrimeAgents: от добавления агентов до использования платформы
+              Все что нужно знать о AgentsPool: от добавления агентов до использования платформы
             </p>
           </div>
 
@@ -326,7 +326,7 @@ export default function HelpPage() {
               <div>
                 <h3 className="font-semibold text-gray-900 mb-2">Сколько стоит размещение агента?</h3>
                 <p className="text-gray-600">
-                  Размещение агентов на PrimeAgents бесплатно. Мы берем комиссию только с платных агентов при продаже.
+                  Размещение агентов на AgentsPool бесплатно. Мы берем комиссию только с платных агентов при продаже.
                 </p>
               </div>
 
@@ -361,7 +361,7 @@ export default function HelpPage() {
               <div>
                 <h3 className="font-semibold text-gray-900 mb-2">Как связаться с поддержкой?</h3>
                 <p className="text-gray-600">
-                  Вы можете написать нам на <a href="mailto:support@primeagents.com" className="text-primary-600 hover:text-primary-700">support@primeagents.com</a> или использовать форму обратной связи на сайте.
+                  Вы можете написать нам на <a href="mailto:support@agentspool.ai" className="text-primary-600 hover:text-primary-700">support@agentspool.ai</a> или использовать форму обратной связи на сайте.
                 </p>
               </div>
             </div>
@@ -386,7 +386,7 @@ export default function HelpPage() {
             <p className="text-gray-600 mb-4">Не нашли ответ на свой вопрос?</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
-                href="mailto:support@primeagents.com" 
+                href="mailto:support@agentspool.ai" 
                 className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

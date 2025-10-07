@@ -1,4 +1,4 @@
-# Frontend Dockerfile for PrimeAgents
+# Frontend Dockerfile for AgentsPool
 FROM node:18-alpine
 
 WORKDIR /app

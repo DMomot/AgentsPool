@@ -123,7 +123,7 @@ export default function CategoryPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Head>
-        <title>{category.name} - AI Agents | PrimeAgents</title>
+        <title>{category.name} - AI Agents | AgentsPool</title>
         <meta 
           name="description" 
           content={`Discover ${total} AI agents in ${category.name}. ${category.description}`} 

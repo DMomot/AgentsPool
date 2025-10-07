@@ -57,11 +57,11 @@ export default function CatalogPage() {
   return (
     <>
       <MetaTags
-        title="AI Agents Catalog - PrimeAgents"
+        title="AI Agents Catalog - AgentsPool"
         description={`Complete AI agents catalog with search and filtering. ${searchResponse?.total ? `${searchResponse.total} verified agents` : 'Find the perfect agent'} for your tasks.`}
         keywords="AI agents catalog, artificial intelligence search, category filters, chatbots, automation, machine learning"
-        url="https://primeagents.info/catalog"
-        canonicalUrl="https://primeagents.info/catalog"
+        url="https://agentspool.ai/catalog"
+        canonicalUrl="https://agentspool.ai/catalog"
       />
 
       <div className="min-h-screen bg-gray-50">

@@ -49,10 +49,10 @@ export default function Home() {
   return (
     <>
       <MetaTags
-        title="PrimeAgents - Best AI Agents Catalog"
+        title="AgentsPool - Best AI Agents Catalog"
         description="Find the perfect AI agent for your business. 500+ verified artificial intelligence solutions with reviews, ratings, and demos."
         keywords="AI agents, artificial intelligence, business automation, chatbots, machine learning, neural networks, AI catalog"
-        url="https://primeagents.info"
+        url="https://agentspool.ai"
         type="website"
       />
       <main className="min-h-screen bg-white">
@@ -106,7 +106,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Why Choose PrimeAgents?
+              Why Choose AgentsPool?
             </h2>
             <p className="text-lg text-gray-600">
               We make AI accessible to everyone

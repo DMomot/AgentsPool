@@ -5,8 +5,8 @@ interface AdminAuthProps {
   children: React.ReactNode;
 }
 
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'PrimeAgents2024Admin!';
-const AUTH_KEY = 'primeagents_admin_auth';
+const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'AgentsPool2024Admin!';
+const AUTH_KEY = 'agentspool_admin_auth';
 
 export default function AdminAuth({ children }: AdminAuthProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

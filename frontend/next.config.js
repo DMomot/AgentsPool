@@ -7,11 +7,11 @@ const nextConfig = {
     return [
       {
         source: '/sitemap-generated.xml',
-        destination: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/sitemap-generated.xml` : 'https://api.primeagents.info/api/v1/sitemap-generated.xml',
+        destination: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/sitemap-generated.xml` : 'https://api.agentspool.ai/api/v1/sitemap-generated.xml',
       },
       {
         source: '/api/:path*',
-        destination: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/:path*` : 'https://api.primeagents.info/api/:path*',
+        destination: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/:path*` : 'https://api.agentspool.ai/api/:path*',
       },
     ]
   },
@@ -50,7 +50,7 @@ const nextConfig = {
     ]
   },
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://api.primeagents.info',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://api.agentspool.ai',
     OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
   },
 }

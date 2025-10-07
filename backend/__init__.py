@@ -1,5 +1,5 @@
 """
-PrimeAgents Database Package
+AgentsPool Database Package
 """
 
 from .config import engine, SessionLocal, Base, get_db, test_connection

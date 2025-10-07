@@ -112,8 +112,8 @@ export default function AgentPage() {
         title={`${agent.name} - AI Agent`}
         description={agent.short_description || agent.description}
         keywords={`${agent.name}, AI agent, ${agent.tags?.join(', ') || ''}, artificial intelligence, automation`}
-        url={`https://primeagents.info/agents/${agent.slug}`}
-        canonicalUrl={`https://primeagents.info/agents/${agent.slug}`}
+        url={`https://agentspool.ai/agents/${agent.slug}`}
+        canonicalUrl={`https://agentspool.ai/agents/${agent.slug}`}
         type="article"
       />
 

@@ -12,16 +12,16 @@ interface MetaTagsProps {
 }
 
 const MetaTags: React.FC<MetaTagsProps> = ({
-  title = 'PrimeAgents - AI Agents Catalog',
+  title = 'AgentsPool - AI Agents Catalog',
   description = 'Find the best AI agents for your business. Catalog of verified artificial intelligence solutions with reviews and ratings.',
   keywords = 'AI agents, artificial intelligence, automation, chatbots, machine learning',
-  image = 'https://primeagents.info/og-image.jpg',
-  url = 'https://primeagents.info',
+  image = 'https://agentspool.ai/og-image.jpg',
+  url = 'https://agentspool.ai',
   type = 'website',
   noIndex = false,
   canonicalUrl
 }) => {
-  const fullTitle = title.includes('PrimeAgents') ? title : `${title} | PrimeAgents`;
+  const fullTitle = title.includes('AgentsPool') ? title : `${title} | AgentsPool`;
   
   return (
     <Head>
@@ -44,7 +44,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
       <meta property="og:url" content={url} />
-      <meta property="og:site_name" content="PrimeAgents" />
+      <meta property="og:site_name" content="AgentsPool" />
       <meta property="og:locale" content="ru_RU" />
       
       {/* Twitter Card */}
@@ -54,7 +54,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({
       <meta name="twitter:image" content={image} />
       
       {/* Additional SEO */}
-      <meta name="author" content="PrimeAgents" />
+      <meta name="author" content="AgentsPool" />
       <meta name="theme-color" content="#3b82f6" />
       
       {/* Favicon */}
@@ -71,9 +71,9 @@ const MetaTags: React.FC<MetaTagsProps> = ({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            "name": "PrimeAgents",
-            "url": "https://primeagents.info",
-            "logo": "https://primeagents.info/logo.png",
+            "name": "AgentsPool",
+            "url": "https://agentspool.ai",
+            "logo": "https://agentspool.ai/logo.png",
             "description": "AI agents catalog for business",
             "sameAs": []
           })

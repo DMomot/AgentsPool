@@ -16,7 +16,7 @@ export default function Header() {
               <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">P</span>
               </div>
-              <span className="text-xl font-bold text-gray-900">PrimeAgents</span>
+              <span className="text-xl font-bold text-gray-900">AgentsPool</span>
             </Link>
           </div>
 

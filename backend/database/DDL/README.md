@@ -1,6 +1,6 @@
 # Database DDL (Data Definition Language)
 
-This folder contains SQL files for creating the PrimeAgents database schema.
+This folder contains SQL files for creating the AgentsPool database schema.
 
 ## File Structure
 
@@ -15,7 +15,7 @@ This folder contains SQL files for creating the PrimeAgents database schema.
 
 ### Full database initialization
 ```bash
-psql -d primeagents -f init.sql
+psql -d agentspool -f init.sql
 ```
 
 ### Creating individual tables

@@ -23,8 +23,8 @@ export default function LetterPage({ letter, agents, totalCount, availableLetter
         title={`AI Agents Starting with ${displayLetter} - Directory`}
         description={`Browse ${totalCount} AI agents starting with ${displayLetter}. Find the perfect artificial intelligence solution organized alphabetically.`}
         keywords={`AI agents ${displayLetter}, artificial intelligence ${displayLetter}, agents starting with ${displayLetter}, AI directory`}
-        url={`https://primeagents.info/agents/browse/${letter}`}
-        canonicalUrl={`https://primeagents.info/agents/browse/${letter}`}
+        url={`https://agentspool.ai/agents/browse/${letter}`}
+        canonicalUrl={`https://agentspool.ai/agents/browse/${letter}`}
       />
 
       <div className="min-h-screen bg-gray-50">

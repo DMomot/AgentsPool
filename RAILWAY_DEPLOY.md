@@ -13,7 +13,7 @@ git push origin main
 1. Go to [railway.app](https://railway.app)
 2. Click "New Project"
 3. Select "Deploy from GitHub repo"
-4. Choose your PrimeAgents repository
+4. Choose your AgentsPool repository
 
 ### 3. Add PostgreSQL Database
 1. In Railway dashboard: "New Service" → "Database" → "PostgreSQL"

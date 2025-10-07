@@ -1,4 +1,4 @@
-# Backend Dockerfile for PrimeAgents (Railway deployment)
+# Backend Dockerfile for AgentsPool (Railway deployment)
 FROM python:3.11-slim
 
 # Set working directory

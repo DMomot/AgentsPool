@@ -1,4 +1,4 @@
-# 🌐 Настройка домена primeagents.info
+# 🌐 Настройка домена agentspool.ai
 
 ## Шаг 1: Деплой на Railway
 
@@ -8,7 +8,7 @@
 
 ## Шаг 2: Настройка DNS записей
 
-В панели управления вашего регистратора домена (где куплен primeagents.info) добавьте следующие DNS записи:
+В панели управления вашего регистратора домена (где куплен agentspool.ai) добавьте следующие DNS записи:
 
 ### Основной сайт (Frontend):
 ```
@@ -38,38 +38,38 @@ TTL: 300 (или Auto)
 2. Перейдите в **Settings** → **Domains**
 3. Нажмите **"Custom Domain"**
 4. Добавьте домены:
-   - `primeagents.info`
-   - `www.primeagents.info`
+   - `agentspool.ai`
+   - `www.agentspool.ai`
 
 ### Backend Service:
 1. Откройте Backend сервис в Railway Dashboard
 2. Перейдите в **Settings** → **Domains**
 3. Нажмите **"Custom Domain"**
 4. Добавьте домен:
-   - `api.primeagents.info`
+   - `api.agentspool.ai`
 
 ## Шаг 4: Обновление переменных окружения
 
 ### Frontend Service:
 ```bash
-NEXT_PUBLIC_API_URL=https://api.primeagents.info
+NEXT_PUBLIC_API_URL=https://api.agentspool.ai
 ```
 
 ### Backend Service:
 ```bash
 DATABASE_URL=${{Postgres.DATABASE_URL}}
 SECRET_KEY=your-super-secret-production-key
-FRONTEND_URL=https://primeagents.info
+FRONTEND_URL=https://agentspool.ai
 ```
 
 ## Шаг 5: Проверка
 
 После настройки (может занять до 24 часов для полного распространения DNS):
 
-- ✅ **Основной сайт**: https://primeagents.info
-- ✅ **С www**: https://www.primeagents.info  
-- ✅ **API**: https://api.primeagents.info/health
-- ✅ **API Docs**: https://api.primeagents.info/docs
+- ✅ **Основной сайт**: https://agentspool.ai
+- ✅ **С www**: https://www.agentspool.ai  
+- ✅ **API**: https://api.agentspool.ai/health
+- ✅ **API Docs**: https://api.agentspool.ai/docs
 
 ## Популярные регистраторы
 
@@ -101,7 +101,7 @@ Railway автоматически выдаст SSL сертификаты дл�
 ## Результат
 
 После завершения настройки:
-- **Главная страница**: https://primeagents.info
-- **API**: https://api.primeagents.info  
+- **Главная страница**: https://agentspool.ai
+- **API**: https://api.agentspool.ai  
 - **Автоматические SSL сертификаты**
 - **Автоматические деплои при git push**

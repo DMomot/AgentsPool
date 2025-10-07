@@ -1,11 +1,11 @@
-# PrimeAgents
+# AgentsPool
 
 AI Agent Marketplace - A platform for discovering and sharing AI agents.
 
 ## Project Structure
 
 ```
-PrimeAgents/
+AgentsPool/
 ├── backend/                # FastAPI backend
 │   ├── main.py            # Main application file
 │   ├── config.py          # Configuration settings
@@ -37,7 +37,7 @@ PrimeAgents/
 1. **Clone and setup**:
    ```bash
    git clone <repository>
-   cd PrimeAgents
+   cd AgentsPool
    ```
 
 2. **Start with Docker Compose**:

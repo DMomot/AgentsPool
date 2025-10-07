@@ -6,11 +6,11 @@ export default function AboutPage() {
   return (
     <>
       <MetaTags
-        title="About Us - PrimeAgents"
-        description="Learn more about PrimeAgents - the leading AI agents marketplace. Our mission, team, and vision for the future of artificial intelligence."
-        keywords="about company, PrimeAgents team, mission, vision, AI marketplace, artificial intelligence"
-        url="https://primeagents.info/about"
-        canonicalUrl="https://primeagents.info/about"
+        title="About Us - AgentsPool"
+        description="Learn more about AgentsPool - the leading AI agents marketplace. Our mission, team, and vision for the future of artificial intelligence."
+        keywords="about company, AgentsPool team, mission, vision, AI marketplace, artificial intelligence"
+        url="https://agentspool.ai/about"
+        canonicalUrl="https://agentspool.ai/about"
       />
 
       <div className="min-h-screen bg-gray-50">
@@ -21,11 +21,11 @@ export default function AboutPage() {
           <section className="bg-gradient-to-br from-primary-50 to-primary-100 py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                About <span className="text-primary-600">PrimeAgents</span>
+                About <span className="text-primary-600">AgentsPool</span>
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 We are creating a future where artificial intelligence is accessible to everyone. 
-                PrimeAgents is a marketplace of the best AI agents for solving any tasks.
+                AgentsPool is a marketplace of the best AI agents for solving any tasks.
               </p>
             </div>
           </section>
@@ -85,7 +85,7 @@ export default function AboutPage() {
           <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">PrimeAgents in Numbers</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">AgentsPool in Numbers</h2>
                 <p className="text-lg text-gray-600">Our achievements speak for themselves</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -213,7 +213,7 @@ export default function AboutPage() {
                   <h2 className="text-3xl font-bold text-gray-900 mb-6">Наше видение</h2>
                   <p className="text-lg text-gray-600 mb-6">
                     Мы видим будущее, где искусственный интеллект станет неотъемлемой частью повседневной жизни каждого человека. 
-                    PrimeAgents станет мостом между сложными AI технологиями и простыми человеческими потребностями.
+                    AgentsPool станет мостом между сложными AI технологиями и простыми человеческими потребностями.
                   </p>
                   <p className="text-lg text-gray-600 mb-8">
                     К 2030 году мы планируем стать ведущей платформой для AI агентов в мире, 
@@ -250,7 +250,7 @@ export default function AboutPage() {
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-white mb-4">Ready to join the AI future?</h2>
               <p className="text-xl text-primary-100 mb-8">
-                Become part of the PrimeAgents community today
+                Become part of the AgentsPool community today
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">

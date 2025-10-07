@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PrimeAgents API - Simple Production Backend
+AgentsPool API - Simple Production Backend
 AI Agent Catalog and Marketplace
 """
 
@@ -120,7 +120,7 @@ def convert_agent_data(agent):
 async def root():
     """Health check endpoint"""
     return {
-        "message": "PrimeAgents API is running",
+        "message": "AgentsPool API is running",
         "version": "1.0.0",
         "status": "healthy"
     }
@@ -1245,25 +1245,25 @@ def get_generated_sitemap(db: Session = Depends(get_db)):
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
             '  <url>',
-            '    <loc>https://primeagents.info/</loc>',
+            '    <loc>https://agentspool.ai/</loc>',
             f'    <lastmod>{now}</lastmod>',
             '    <changefreq>daily</changefreq>',
             '    <priority>1.0</priority>',
             '  </url>',
             '  <url>',
-            '    <loc>https://primeagents.info/catalog</loc>',
+            '    <loc>https://agentspool.ai/catalog</loc>',
             f'    <lastmod>{now}</lastmod>',
             '    <changefreq>daily</changefreq>',
             '    <priority>0.9</priority>',
             '  </url>',
             '  <url>',
-            '    <loc>https://primeagents.info/categories</loc>',
+            '    <loc>https://agentspool.ai/categories</loc>',
             f'    <lastmod>{now}</lastmod>',
             '    <changefreq>daily</changefreq>',
             '    <priority>0.8</priority>',
             '  </url>',
             '  <url>',
-            '    <loc>https://primeagents.info/agents</loc>',
+            '    <loc>https://agentspool.ai/agents</loc>',
             f'    <lastmod>{now}</lastmod>',
             '    <changefreq>daily</changefreq>',
             '    <priority>0.8</priority>',
@@ -1275,7 +1275,7 @@ def get_generated_sitemap(db: Session = Depends(get_db)):
             cat_slug = cat.name.lower().replace(' ', '-').replace('&', 'and')
             sitemap_lines.extend([
                 '  <url>',
-                f'    <loc>https://primeagents.info/{cat_slug}</loc>',
+                f'    <loc>https://agentspool.ai/{cat_slug}</loc>',
                 f'    <lastmod>{now}</lastmod>',
                 '    <changefreq>weekly</changefreq>',
                 '    <priority>0.7</priority>',
@@ -1287,7 +1287,7 @@ def get_generated_sitemap(db: Session = Depends(get_db)):
             agent_lastmod = agent.updated_at.isoformat() + 'Z' if hasattr(agent.updated_at, 'isoformat') else now
             sitemap_lines.extend([
                 '  <url>',
-                f'    <loc>https://primeagents.info/agents/{agent.slug}</loc>',
+                f'    <loc>https://agentspool.ai/agents/{agent.slug}</loc>',
                 f'    <lastmod>{agent_lastmod}</lastmod>',
                 '    <changefreq>weekly</changefreq>',
                 '    <priority>0.7</priority>',

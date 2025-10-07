@@ -21,8 +21,8 @@ export default function AgentsPage({ totalCount, letterStats, availableLetters }
         title="All AI Agents - Complete Directory"
         description={`Browse all ${totalCount} AI agents in our directory. Find agents alphabetically organized from A to Z for easy navigation.`}
         keywords="AI agents directory, all agents, alphabetical list, artificial intelligence catalog, agent index"
-        url="https://primeagents.info/agents"
-        canonicalUrl="https://primeagents.info/agents"
+        url="https://agentspool.ai/agents"
+        canonicalUrl="https://agentspool.ai/agents"
       />
 
       <div className="min-h-screen bg-gray-50">

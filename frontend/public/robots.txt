@@ -19,4 +19,4 @@ User-agent: Googlebot-News
 Allow: /
 
 # Sitemap location
-Sitemap: https://primeagents.info/sitemap-generated.xml
+Sitemap: https://agentspool.ai/sitemap-generated.xml

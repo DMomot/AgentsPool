@@ -1,6 +1,6 @@
-# PrimeAgents Deployment Guide
+# AgentsPool Deployment Guide
 
-This guide explains how to deploy PrimeAgents on Railway.
+This guide explains how to deploy AgentsPool on Railway.
 
 ## Prerequisites
 
@@ -22,7 +22,7 @@ railway login
 1. Go to [railway.app](https://railway.app)
 2. Click "New Project"
 3. Choose "Deploy from GitHub repo"
-4. Select your PrimeAgents repository
+4. Select your AgentsPool repository
 
 ### 3. Set up PostgreSQL Database
 

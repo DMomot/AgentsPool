@@ -1,5 +1,5 @@
--- PrimeAgents Database Schema Initialization
--- This file creates all tables and initial data for the PrimeAgents platform
+-- AgentsPool Database Schema Initialization
+-- This file creates all tables and initial data for the AgentsPool platform
 -- Run this file to set up the complete database schema
 
 -- Enable required extensions
@@ -68,5 +68,5 @@ CREATE TRIGGER reviews_update_rating
     EXECUTE FUNCTION trigger_update_agent_rating();
 
 -- Grant permissions (adjust as needed for your environment)
--- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO primeagents_user;
--- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO primeagents_user;
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO agentspool_user;
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO agentspool_user;
