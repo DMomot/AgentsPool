@@ -41,6 +41,18 @@ const nextConfig = {
         destination: '/api/sitemap.xml',
       },
       {
+        source: '/sitemap-txt.xml',
+        destination: '/api/sitemap-txt.xml',
+      },
+      {
+        source: '/sitemap-json.xml',
+        destination: '/api/sitemap-json.xml',
+      },
+      {
+        source: '/sitemap-xml.xml',
+        destination: '/api/sitemap-xml.xml',
+      },
+      {
         source: '/api/:path*',
         destination: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/:path*` : 'https://api.agentspool.ai/api/:path*',
       },
