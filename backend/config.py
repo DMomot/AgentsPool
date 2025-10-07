@@ -23,7 +23,8 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "https://agentspool.ai",
         "https://www.agentspool.ai",
-        "https://api.agentspool.ai"
+        "https://api.agentspool.ai",
+        os.getenv("FRONTEND_URL", ""),  # Railway frontend URL
     ]
     
     # Database
