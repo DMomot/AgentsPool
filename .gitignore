@@ -8,6 +8,8 @@ venv/
 env/
 ENV/
 *.egg-info/
+*.db
+*.db-journal
 
 # Node
 node_modules/
@@ -31,3 +33,6 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
+# Railway
+.railway/
