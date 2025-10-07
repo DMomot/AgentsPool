@@ -124,6 +124,15 @@ async def root():
         "status": "healthy"
     }
 
+@app.get("/status")
+async def status():
+    """Simple status check without DB"""
+    return {
+        "status": "ok",
+        "service": "AgentsPool API",
+        "version": "1.0.0"
+    }
+
 @app.get("/health")
 async def health_check():
     """Detailed health check"""
