@@ -12,13 +12,13 @@ export default async function handler(
       throw new Error('Failed to fetch sitemap');
     }
     
-    const xmlData = await response.text();
+    let xmlData = await response.text();
     
-    // Keep XML declaration
+    // Remove XML declaration
+    xmlData = xmlData.replace(/<\?xml[^?]*\?>\s*/g, '');
     
-    // Set headers: text/xml + nosniff
+    // Config: text/xml; charset=utf-8, NO XML declaration, NO nosniff
     res.setHeader('Content-Type', 'text/xml; charset=utf-8');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
     
     res.status(200).send(xmlData);

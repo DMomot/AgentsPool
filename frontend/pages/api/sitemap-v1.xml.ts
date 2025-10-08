@@ -14,9 +14,8 @@ export default async function handler(
     
     const xmlData = await response.text();
     
-    // Keep XML declaration - LIKE aiagentslist.com
-    
-    // Set headers: application/xml WITHOUT charset - LIKE aiagentslist.com
+    // Config: application/xml (no charset), WITH XML declaration
+    // Like aiagentslist.com
     res.setHeader('Content-Type', 'application/xml');
     res.setHeader('Cache-Control', 'max-age=0, s-maxage=3600');
     

@@ -17,8 +17,9 @@ export default async function handler(
     // Remove XML declaration
     xmlData = xmlData.replace(/<\?xml[^?]*\?>\s*/g, '');
     
-    // Set headers: application/json
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    // Config: application/xml; charset=utf-8 + nosniff, NO XML declaration
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
     
     res.status(200).send(xmlData);
