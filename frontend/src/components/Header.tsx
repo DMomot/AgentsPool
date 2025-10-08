@@ -41,9 +41,6 @@ export default function Header() {
             <Link href="/catalog" className="text-gray-700 hover:text-primary-600 font-medium">
               Catalog
             </Link>
-            <Link href="/categories" className="text-gray-700 hover:text-primary-600 font-medium">
-              Categories
-            </Link>
             <Link href="/agents" className="text-gray-700 hover:text-primary-600 font-medium">
               All Agents
             </Link>
@@ -81,9 +78,6 @@ export default function Header() {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
               <Link href="/catalog" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
                 Catalog
-              </Link>
-              <Link href="/categories" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
-                Categories
               </Link>
               <Link href="/fundraising" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
                 Fundraising
