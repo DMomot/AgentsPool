@@ -128,6 +128,33 @@ export default function AgentFundraisingPage({ agent, fundraising, error }: Page
     return `$${num}`;
   };
 
+  const extractDateFromNews = (fundraising: FundraisingData | null): Date | null => {
+    if (!fundraising || !fundraising.news || fundraising.news.length === 0) return null;
+    
+    const firstNews = fundraising.news[0];
+    const dateMatch = firstNews.snippet.match(/([A-Z][a-z]{2})\s+(\d{1,2}),\s+(\d{4})/);
+    
+    if (dateMatch) {
+      const [, month, day, year] = dateMatch;
+      const monthMap: Record<string, string> = {
+        'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+        'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+        'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+      };
+      const monthNum = monthMap[month];
+      if (monthNum) {
+        return new Date(`${year}-${monthNum}-${day.padStart(2, '0')}`);
+      }
+    }
+    return null;
+  };
+
+  const formatDate = (date: Date | null): string => {
+    if (!date) return 'N/A';
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
+
   return (
     <>
       <MetaTags
@@ -199,7 +226,7 @@ export default function AgentFundraisingPage({ agent, fundraising, error }: Page
           {fundraising ? (
             <>
               {/* Fundraising Overview */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <div className="bg-white rounded-lg shadow-sm p-6">
                   <div className="text-sm text-gray-600 mb-2">Latest Round</div>
                   <div className="text-3xl font-bold text-blue-600">
@@ -214,6 +241,14 @@ export default function AgentFundraisingPage({ agent, fundraising, error }: Page
                     {formatAmount(fundraising.total_funding, fundraising.total_funding_currency)}
                   </div>
                   <div className="text-sm text-gray-500 mt-1">All rounds</div>
+                </div>
+                
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                  <div className="text-sm text-gray-600 mb-2">Announced Date</div>
+                  <div className="text-2xl font-bold text-orange-600">
+                    {formatDate(extractDateFromNews(fundraising))}
+                  </div>
+                  <div className="text-sm text-gray-500 mt-1">Latest round</div>
                 </div>
                 
                 <div className="bg-white rounded-lg shadow-sm p-6">

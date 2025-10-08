@@ -29,7 +29,7 @@ export default function FundraisingPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [stageFilter, setStageFilter] = useState('');
-  const [sortBy, setSortBy] = useState<'amount' | 'date' | 'name'>('amount');
+  const [sortBy, setSortBy] = useState<'amount' | 'date' | 'name'>('date');
 
   useEffect(() => {
     loadCompanies();
@@ -59,6 +59,45 @@ export default function FundraisingPage() {
     return `$${num}`;
   };
 
+  const extractDateFromNews = (company: FundraisingCompany): Date | null => {
+    if (!company.news || company.news.length === 0) return null;
+    
+    // Try to extract date from first news snippet
+    const firstNews = company.news[0];
+    const dateMatch = firstNews.snippet.match(/([A-Z][a-z]{2})\s+(\d{1,2}),\s+(\d{4})/);
+    
+    if (dateMatch) {
+      const [, month, day, year] = dateMatch;
+      const monthMap: Record<string, string> = {
+        'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+        'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+        'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+      };
+      const monthNum = monthMap[month];
+      if (monthNum) {
+        return new Date(`${year}-${monthNum}-${day.padStart(2, '0')}`);
+      }
+    }
+    return null;
+  };
+
+  const formatDate = (date: Date | null): string => {
+    if (!date) return 'N/A';
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 30) {
+      return `${diffDays}d ago`;
+    } else if (diffDays < 365) {
+      const months = Math.floor(diffDays / 30);
+      return `${months}mo ago`;
+    }
+    
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short' };
+    return date.toLocaleDateString('en-US', options);
+  };
+
   const filteredCompanies = companies
     .filter(company => {
       const matchesSearch = !searchQuery || 
@@ -70,6 +109,13 @@ export default function FundraisingPage() {
     .sort((a, b) => {
       if (sortBy === 'amount') {
         return parseFloat(b.funding_amount.replace(/,/g, '')) - parseFloat(a.funding_amount.replace(/,/g, ''));
+      } else if (sortBy === 'date') {
+        const dateA = extractDateFromNews(a);
+        const dateB = extractDateFromNews(b);
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1;
+        if (!dateB) return -1;
+        return dateB.getTime() - dateA.getTime();
       } else if (sortBy === 'name') {
         return a.company_name.localeCompare(b.company_name);
       }
@@ -164,6 +210,16 @@ export default function FundraisingPage() {
             {/* Sort Buttons */}
             <div className="flex gap-2 mt-4">
               <button
+                onClick={() => setSortBy('date')}
+                className={`px-4 py-2 rounded-lg text-sm ${
+                  sortBy === 'date' 
+                    ? 'bg-blue-600 text-white' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Sort by Date
+              </button>
+              <button
                 onClick={() => setSortBy('amount')}
                 className={`px-4 py-2 rounded-lg text-sm ${
                   sortBy === 'amount' 
@@ -210,7 +266,7 @@ export default function FundraisingPage() {
                         Total Funding
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Location
+                        Date
                       </th>
                     </tr>
                   </thead>
@@ -246,7 +302,7 @@ export default function FundraisingPage() {
                           {formatAmount(company.total_funding, company.total_funding_currency)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {company.location.split(',')[0]}
+                          {formatDate(extractDateFromNews(company))}
                         </td>
                       </tr>
                     ))}
