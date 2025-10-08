@@ -85,6 +85,10 @@ const nextConfig = {
         destination: '/api/sitemap16.xml',
       },
       {
+        source: '/sitemap17.xml',
+        destination: '/api/sitemap17.xml',
+      },
+      {
         source: '/api/:path*',
         destination: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/:path*` : 'https://api.agentspool.ai/api/:path*',
       },
@@ -123,6 +127,7 @@ const nextConfig = {
         ],
       },
       {
+
         source: '/sitemap-full.xml',
         headers: [
           {
