@@ -26,6 +26,10 @@ NEXT_PUBLIC_ADMIN_PASSWORD=your-secure-admin-password-here
 - ✅ **No registration:** Admin-only access
 - ✅ **Route protection:** All admin routes secured
 - ✅ **SEO protection:** `noIndex` meta tag
+- ✅ **Hidden URL:** `/_internal_moderation` (not discoverable)
+- ✅ **No public links:** Removed from all navigation
+- ✅ **robots.txt:** Blocks crawling of admin paths
+- ✅ **Common URLs blocked:** /admin redirects to home
 
 ### **Security Best Practices:**
 - ✅ **Password masking:** Input type="password"
@@ -56,10 +60,17 @@ openssl rand -base64 24
 ## 🔧 Usage
 
 ### **Access Admin Panel:**
-1. Go to `/admin`
+1. Go to `/_internal_moderation` (hidden URL)
 2. Enter admin password
 3. Session valid for 24 hours
 4. Use logout button to end session
+
+### **Security Through Obscurity:**
+- Admin URL changed to `/_internal_moderation`
+- No links in public navigation
+- Not in sitemap
+- robots.txt blocks crawling
+- Common admin URLs blocked
 
 ### **Password Change:**
 1. Update `NEXT_PUBLIC_ADMIN_PASSWORD` in Railway

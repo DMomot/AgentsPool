@@ -53,9 +53,6 @@ export default function Header() {
             <Link href="/add-agent" className="text-gray-700 hover:text-primary-600 font-medium">
               Add Agent
             </Link>
-            <Link href="/admin" className="btn-primary">
-              Admin
-            </Link>
           </nav>
 
           {/* Mobile menu button */}
@@ -90,9 +87,6 @@ export default function Header() {
               </Link>
               <Link href="/add-agent" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
                 Add Agent
-              </Link>
-              <Link href="/admin" className="block w-full text-left px-3 py-2 btn-primary">
-                Admin
               </Link>
             </div>
           </div>
