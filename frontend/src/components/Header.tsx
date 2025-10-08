@@ -47,6 +47,9 @@ export default function Header() {
             <Link href="/agents" className="text-gray-700 hover:text-primary-600 font-medium">
               All Agents
             </Link>
+            <Link href="/fundraising" className="text-gray-700 hover:text-primary-600 font-medium">
+              Fundraising
+            </Link>
             <Link href="/about" className="text-gray-700 hover:text-primary-600 font-medium">
               About
             </Link>
@@ -81,6 +84,9 @@ export default function Header() {
               </Link>
               <Link href="/categories" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
                 Categories
+              </Link>
+              <Link href="/fundraising" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
+                Fundraising
               </Link>
               <Link href="/about" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
                 About
