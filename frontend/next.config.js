@@ -69,6 +69,91 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: '/sitemap-3.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/xml; charset=utf-8',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
+      {
+        source: '/sitemap-100.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/xml; charset=utf-8',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
+      {
+        source: '/sitemap-500.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/xml; charset=utf-8',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
+      {
+        source: '/sitemap-1000.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/xml; charset=utf-8',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
+      {
+        source: '/sitemap-full.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/xml; charset=utf-8',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
+      {
         source: '/robots.txt',
         headers: [
           {

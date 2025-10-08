@@ -19,4 +19,4 @@ User-agent: Googlebot-News
 Allow: /
 
 # Sitemap location
-Sitemap: https://agentspool.ai/sitemap-v1.xml
+Sitemap: https://agentspool.ai/sitemap-3.xml
