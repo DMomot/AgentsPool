@@ -21,7 +21,15 @@ interface FundraisingCompany {
     title: string;
     url: string;
     snippet: string;
+    date?: string;
   }>;
+  _raw_data?: {
+    'Last Funding Date'?: string;
+    'Founded Date'?: string;
+    'Industries'?: string;
+    'Full Description'?: string;
+    [key: string]: any;
+  };
 }
 
 export default function FundraisingPage() {
@@ -60,9 +68,17 @@ export default function FundraisingPage() {
   };
 
   const extractDateFromNews = (company: FundraisingCompany): Date | null => {
+    // First try to get date from _raw_data
+    if (company._raw_data?.['Last Funding Date']) {
+      const date = new Date(company._raw_data['Last Funding Date']);
+      if (!isNaN(date.getTime())) {
+        return date;
+      }
+    }
+    
+    // Fallback: try to extract date from first news snippet
     if (!company.news || company.news.length === 0) return null;
     
-    // Try to extract date from first news snippet
     const firstNews = company.news[0];
     const dateMatch = firstNews.snippet.match(/([A-Z][a-z]{2})\s+(\d{1,2}),\s+(\d{4})/);
     

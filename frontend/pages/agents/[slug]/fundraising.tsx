@@ -19,6 +19,7 @@ interface NewsItem {
   title: string;
   url: string;
   snippet: string;
+  date?: string;
 }
 
 interface FundraisingData {
@@ -35,6 +36,13 @@ interface FundraisingData {
   website: string;
   news_count: number;
   news: NewsItem[];
+  _raw_data?: {
+    'Last Funding Date'?: string;
+    'Founded Date'?: string;
+    'Industries'?: string;
+    'Full Description'?: string;
+    [key: string]: any;
+  };
 }
 
 interface PageProps {
@@ -129,7 +137,18 @@ export default function AgentFundraisingPage({ agent, fundraising, error }: Page
   };
 
   const extractDateFromNews = (fundraising: FundraisingData | null): Date | null => {
-    if (!fundraising || !fundraising.news || fundraising.news.length === 0) return null;
+    if (!fundraising) return null;
+    
+    // First try to get date from _raw_data
+    if (fundraising._raw_data?.['Last Funding Date']) {
+      const date = new Date(fundraising._raw_data['Last Funding Date']);
+      if (!isNaN(date.getTime())) {
+        return date;
+      }
+    }
+    
+    // Fallback: try to extract date from first news snippet
+    if (!fundraising.news || fundraising.news.length === 0) return null;
     
     const firstNews = fundraising.news[0];
     const dateMatch = firstNews.snippet.match(/([A-Z][a-z]{2})\s+(\d{1,2}),\s+(\d{4})/);
