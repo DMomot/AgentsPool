@@ -154,6 +154,23 @@ const nextConfig = {
         ],
       },
       {
+        source: '/sitemap-old.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/xml; charset=utf-8',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600',
+          },
+        ],
+      },
+      {
         source: '/urls.xml',
         headers: [
           {
