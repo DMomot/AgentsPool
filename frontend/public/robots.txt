@@ -20,5 +20,6 @@ Allow: /
 
 # Sitemap location
 Sitemap: https://agentspool.ai/sitemap2.xml
+Sitemap: https://agentspool.ai/sitemap22.xml
 Sitemap: https://agentspool.ai/sitemap-full.xml
 
