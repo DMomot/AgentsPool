@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import Header from '../../src/components/Header';
 import Footer from '../../src/components/Footer';
 import MetaTags from '../../src/components/MetaTags';
@@ -29,66 +28,56 @@ interface Agent {
   updated_at: string;
 }
 
-export default function AgentPage() {
-  const router = useRouter();
-  const { slug } = router.query;
-  const [agent, setAgent] = useState<Agent | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface AgentPageProps {
+  agent: Agent | null;
+  error?: string;
+}
 
-  useEffect(() => {
-    if (!slug || typeof slug !== 'string') return;
+export const getServerSideProps: GetServerSideProps<AgentPageProps> = async (context) => {
+  const { slug } = context.params as { slug: string };
 
-    const fetchAgent = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const response = await fetch(`/api/v1/agents/slug/${slug}`);
-        
-        if (!response.ok) {
-          if (response.status === 404) {
-            setError('Agent not found');
-            return;
-          }
-          throw new Error('Failed to fetch agent');
-        }
-
-        const agentData = await response.json();
-        setAgent(agentData);
-      } catch (err) {
-        console.error('Error fetching agent:', err);
-        setError('Failed to load agent');
-      } finally {
-        setLoading(false);
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.agentspool.ai';
+    const response = await fetch(`${apiUrl}/api/v1/agents/slug/${slug}`);
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        return {
+          notFound: true,
+        };
       }
+      throw new Error('Failed to fetch agent');
+    }
+
+    const agent = await response.json();
+
+    return {
+      props: {
+        agent,
+      },
     };
-
-    fetchAgent();
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
+  } catch (error) {
+    console.error('Error fetching agent:', error);
+    return {
+      props: {
+        agent: null,
+        error: 'Failed to load agent',
+      },
+    };
   }
+};
 
-  if (error) {
+export default function AgentPage({ agent, error }: AgentPageProps) {
+  const router = useRouter();
+
+  if (error || !agent) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Error</h1>
-            <p className="text-gray-600 mb-4">{error}</p>
+            <p className="text-gray-600 mb-4">{error || 'Agent not found'}</p>
             <button
               onClick={() => router.back()}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -100,10 +89,6 @@ export default function AgentPage() {
         <Footer />
       </div>
     );
-  }
-
-  if (!agent) {
-    return null;
   }
 
   return (
