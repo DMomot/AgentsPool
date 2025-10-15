@@ -51,25 +51,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     
-    - name: Install Railway CLI
-      run: |
-        curl -fsSL https://railway.app/install.sh | sh
-    
     - name: Deploy to Railway
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: |
-        railway up --service backend
-        echo "🚀 Deployment triggered on Railway!"
+      uses: bervProject/railway-deploy@main
+      with:
+        railway_token: ${{ secrets.RAILWAY_TOKEN }}
+        service: backend
     
-    - name: Wait for deployment
+    - name: Deployment triggered
       run: |
+        echo "🚀 Deployment triggered on Railway!"
         echo "⏳ Waiting 60 seconds for deployment to complete..."
         sleep 60
-    
-    - name: Verify deployment
-      run: |
-        echo "✅ Deployment complete! Check Railway dashboard for status."
+        echo "✅ Check Railway dashboard for deployment status."
   
   monitor-production:
     name: Monitor Production
