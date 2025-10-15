@@ -1,0 +1,48 @@
+name: API Tests on Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'  # Run every 6 hours to monitor production
+
+jobs:
+  test-production:
+    name: Test Production API
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        cd backend
+        pip install pytest pytest-asyncio requests
+    
+    - name: Wait for deployment (if pushed)
+      if: github.event_name == 'push'
+      run: sleep 60
+    
+    - name: Run API tests against production
+      env:
+        API_BASE_URL: https://agentspool.ai
+      run: |
+        cd backend
+        pytest test_api.py -v --tb=short
+      continue-on-error: false
+    
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "::error::API tests failed! Check the logs above."
+        exit 1
+
