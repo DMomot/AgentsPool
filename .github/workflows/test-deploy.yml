@@ -1,11 +1,10 @@
-name: Test and Deploy
+name: Test Production API
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
   schedule:
     - cron: '0 */6 * * *'  # Run every 6 hours to monitor production
 
@@ -13,7 +12,6 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     
     steps:
     - name: Checkout code
@@ -40,63 +38,4 @@ jobs:
     - name: Tests passed
       run: |
         echo "✅ All tests passed!"
-  
-  deploy:
-    name: Deploy to Railway
-    runs-on: ubuntu-latest
-    needs: test
-    if: github.event_name == 'workflow_dispatch'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Install Railway
-      run: npm i -g @railway/cli
-    
-    - name: Deploy to Railway
-      run: railway up --service Backend
-      working-directory: ./backend
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-    
-    - name: Deployment triggered
-      run: |
-        echo "🚀 Deployment triggered on Railway!"
-        echo "⏳ Waiting 60 seconds for deployment to complete..."
-        sleep 60
-        echo "✅ Check Railway dashboard for deployment status."
-  
-  monitor-production:
-    name: Monitor Production
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        cd backend
-        pip install pytest pytest-asyncio requests
-    
-    - name: Run API tests against production
-      env:
-        API_BASE_URL: https://agentspool.ai
-      run: |
-        cd backend
-        pytest test_api.py -v --tb=short
-      continue-on-error: false
-    
-    - name: Notify on failure
-      if: failure()
-      run: |
-        echo "::error::Production API tests failed! Check the logs above."
-        exit 1
 
