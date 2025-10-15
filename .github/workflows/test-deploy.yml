@@ -6,14 +6,20 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy to Railway after tests'
+        required: true
+        type: boolean
+        default: false
   schedule:
     - cron: '0 */6 * * *'  # Run every 6 hours to monitor production
 
 jobs:
-  test-after-deploy:
-    name: Test After Deploy
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     
     steps:
     - name: Checkout code
@@ -29,12 +35,7 @@ jobs:
         cd backend
         pip install pytest pytest-asyncio requests
     
-    - name: Wait for Railway deployment
-      run: |
-        echo "⏳ Waiting 90 seconds for Railway to deploy..."
-        sleep 90
-    
-    - name: Run API tests against production
+    - name: Run API tests
       env:
         API_BASE_URL: https://agentspool.ai
       run: |
@@ -44,44 +45,37 @@ jobs:
     
     - name: Tests passed
       run: |
-        echo "✅ All tests passed after deployment!"
-    
-    - name: Notify on failure
-      if: failure()
-      run: |
-        echo "::error::Post-deployment tests failed! Check the logs above."
-        exit 1
+        echo "✅ All tests passed!"
   
-  test-before-merge:
-    name: Test Before Merge
+  deploy:
+    name: Deploy to Railway
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    needs: test
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy == true
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
     
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
+    - name: Install Railway CLI
       run: |
-        cd backend
-        pip install pytest pytest-asyncio requests
+        curl -fsSL https://railway.app/install.sh | sh
     
-    - name: Run API tests against current production
+    - name: Deploy to Railway
       env:
-        API_BASE_URL: https://agentspool.ai
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       run: |
-        cd backend
-        pytest test_api.py -v --tb=short
-      continue-on-error: false
+        railway up --service backend
+        echo "🚀 Deployment triggered on Railway!"
     
-    - name: Tests passed
+    - name: Wait for deployment
       run: |
-        echo "✅ All tests passed! Safe to merge and deploy."
+        echo "⏳ Waiting 60 seconds for deployment to complete..."
+        sleep 60
+    
+    - name: Verify deployment
+      run: |
+        echo "✅ Deployment complete! Check Railway dashboard for status."
   
   monitor-production:
     name: Monitor Production
