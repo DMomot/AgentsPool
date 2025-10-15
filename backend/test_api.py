@@ -3,12 +3,8 @@ API Integration Tests
 Tests all endpoints to ensure they return 200 and valid data
 """
 import os
-import sys
 import pytest
 from urllib.parse import urljoin
-
-# Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Test against deployed API or local
 API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
