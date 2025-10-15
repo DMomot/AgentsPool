@@ -19,7 +19,7 @@ interface Agent {
   tags: string[];
   capabilities: string[];
   use_cases: string[];
-  demo_url: string;
+  url: string;
   documentation_url: string;
   github_url: string;
   website_url: string;

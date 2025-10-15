@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS agents (
     tags TEXT[], -- PostgreSQL array type
     capabilities TEXT[], -- PostgreSQL array type
     use_cases TEXT[], -- PostgreSQL array type
-    demo_url VARCHAR(500),
+    url VARCHAR(500),
     documentation_url VARCHAR(500),
     github_url VARCHAR(500),
     api_endpoint VARCHAR(500),

@@ -20,7 +20,7 @@ interface Agent {
   tags: string[];
   capabilities: string[];
   use_cases: string[];
-  demo_url: string;
+  url: string;
   documentation_url: string;
   github_url: string;
   api_endpoint: string;
@@ -154,9 +154,9 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
               
               {/* Action Buttons */}
               <div className="space-y-2">
-                {agent.demo_url && (
+                {agent.url && (
                   <a
-                    href={agent.demo_url}
+                    href={agent.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"

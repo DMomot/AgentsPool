@@ -45,7 +45,7 @@ class CreateAgentRequest(BaseModel):
     tags: List[str] = []
     capabilities: List[str] = []
     use_cases: List[str] = []
-    demo_url: Optional[str] = None
+    url: Optional[str] = None
     api_endpoint: Optional[str] = None
     documentation_url: Optional[str] = None
     github_url: Optional[str] = None
@@ -72,7 +72,7 @@ def convert_agent_data(agent):
         "slug": agent.slug,
         "created_at": agent.created_at.isoformat() if hasattr(agent.created_at, 'isoformat') else str(agent.created_at),
         "updated_at": agent.updated_at.isoformat() if hasattr(agent.updated_at, 'isoformat') else str(agent.updated_at),
-        "demo_url": agent.demo_url,
+        "url": agent.url,
         "documentation_url": agent.documentation_url,
         "github_url": agent.github_url,
         "api_endpoint": agent.api_endpoint,
@@ -246,7 +246,7 @@ async def get_agents_by_category_slug(
             SELECT 
                 a.id, a.name, a.description, a.short_description, a.category_id,
                 a.author, a.version, a.price, a.is_free, a.rating, a.downloads_count,
-                a.tags, a.capabilities, a.use_cases, a.demo_url, a.documentation_url,
+                a.tags, a.capabilities, a.use_cases, a.url, a.documentation_url,
                 a.github_url, a.api_endpoint, a.model_info, a.is_active, a.featured,
                 a.slug, a.created_at, a.updated_at
             FROM agents a
@@ -290,7 +290,7 @@ async def get_agents_by_category_slug(
                 "tags": agent[11] or [],
                 "capabilities": agent[12] or [],
                 "use_cases": agent[13] or [],
-                "demo_url": agent[14],
+                "url": agent[14],
                 "documentation_url": agent[15],
                 "github_url": agent[16],
                 "api_endpoint": agent[17],
@@ -495,7 +495,7 @@ async def get_featured_agents(
         sql_query = text("""
             SELECT id, name, description, short_description, category_id, author, version, 
                    price, is_free, rating, downloads_count, tags, capabilities, use_cases, 
-                   demo_url, documentation_url, github_url, api_endpoint, model_info, 
+                   url, documentation_url, github_url, api_endpoint, model_info, 
                    is_active, featured, slug, created_at, updated_at
             FROM agents 
             WHERE is_active = true AND featured = true 
@@ -539,13 +539,13 @@ async def check_agent_url(url: str, db: Session = Depends(get_db)):
         
         # Raw SQL query to find existing agents
         sql_query = text("""
-            SELECT id, name, demo_url, documentation_url, github_url 
+            SELECT id, name, url, documentation_url, github_url 
             FROM agents 
             WHERE 
-                demo_url ILIKE :domain_pattern OR 
+                url ILIKE :domain_pattern OR 
                 documentation_url ILIKE :domain_pattern OR 
                 github_url ILIKE :domain_pattern OR
-                demo_url ILIKE :url_pattern OR 
+                url ILIKE :url_pattern OR 
                 documentation_url ILIKE :url_pattern OR 
                 github_url ILIKE :url_pattern
             LIMIT 1
@@ -556,13 +556,13 @@ async def check_agent_url(url: str, db: Session = Depends(get_db)):
         
         # Create final SQL with substituted parameters for logging
         final_sql = f"""
-            SELECT id, name, demo_url, documentation_url, github_url 
+            SELECT id, name, url, documentation_url, github_url 
             FROM agents 
             WHERE 
-                demo_url ILIKE '{domain_pattern}' OR 
+                url ILIKE '{domain_pattern}' OR 
                 documentation_url ILIKE '{domain_pattern}' OR 
                 github_url ILIKE '{domain_pattern}' OR
-                demo_url ILIKE '{url_pattern}' OR 
+                url ILIKE '{url_pattern}' OR 
                 documentation_url ILIKE '{url_pattern}' OR 
                 github_url ILIKE '{url_pattern}'
             LIMIT 1
@@ -581,7 +581,7 @@ async def check_agent_url(url: str, db: Session = Depends(get_db)):
                 "agent_id": result[0],
                 "agent_name": result[1],
                 "matched_urls": {
-                    "demo_url": result[2],
+                    "url": result[2],
                     "documentation_url": result[3],
                     "github_url": result[4]
                 }
@@ -607,7 +607,7 @@ async def get_agent(agent_id: int, db: Session = Depends(get_db)):
         sql_query = text("""
             SELECT id, name, description, short_description, category_id, author, version, 
                    price, is_free, rating, downloads_count, tags, capabilities, use_cases, 
-                   demo_url, documentation_url, github_url, api_endpoint, model_info, 
+                   url, documentation_url, github_url, api_endpoint, model_info, 
                    is_active, featured, slug, created_at, updated_at
             FROM agents 
             WHERE id = :agent_id AND is_active = true
@@ -641,7 +641,7 @@ async def get_agent_by_slug(agent_slug: str, db: Session = Depends(get_db)):
         sql_query = text("""
             SELECT id, name, description, short_description, category_id, author, version, 
                    price, is_free, rating, downloads_count, tags, capabilities, use_cases, 
-                   demo_url, documentation_url, github_url, api_endpoint, model_info, 
+                   url, documentation_url, github_url, api_endpoint, model_info, 
                    is_active, featured, slug, created_at, updated_at
             FROM agents 
             WHERE slug = :agent_slug AND is_active = true
@@ -775,7 +775,7 @@ async def create_agent(agent_data: CreateAgentRequest, db: Session = Depends(get
             tags=agent_data.tags,
             capabilities=agent_data.capabilities,
             use_cases=agent_data.use_cases,
-            demo_url=agent_data.demo_url,
+            url=agent_data.url,
             api_endpoint=agent_data.api_endpoint,
             documentation_url=agent_data.documentation_url,
             github_url=agent_data.github_url,
@@ -949,7 +949,7 @@ async def auto_import_agents(
 
         # Get agents with incomplete data (empty description, no model_info, etc.)
         incomplete_agents_query = text("""
-            SELECT id, name, demo_url, description, short_description, model_info
+            SELECT id, name, url, description, short_description, model_info
             FROM agents
             WHERE is_active = true
             AND (

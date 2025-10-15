@@ -19,7 +19,7 @@ export default function AddAgentPage() {
     tags: '',
     capabilities: '',
     use_cases: '',
-    demo_url: '',
+    url: '',
     api_endpoint: '',
     documentation_url: '',
     github_url: '',
@@ -65,7 +65,7 @@ export default function AddAgentPage() {
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         capabilities: formData.capabilities.split(',').map(cap => cap.trim()).filter(cap => cap),
         use_cases: formData.use_cases.split(',').map(uc => uc.trim()).filter(uc => uc),
-        demo_url: formData.demo_url || undefined,
+        url: formData.url || undefined,
         api_endpoint: formData.api_endpoint || undefined,
         documentation_url: formData.documentation_url || undefined,
         github_url: formData.github_url || undefined,
@@ -275,14 +275,14 @@ export default function AddAgentPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="demo_url" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
                     Demo URL
                   </label>
                   <input
                     type="url"
-                    id="demo_url"
-                    name="demo_url"
-                    value={formData.demo_url}
+                    id="url"
+                    name="url"
+                    value={formData.url}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder="https://demo.example.com"
