@@ -87,6 +87,8 @@ class ApiClient {
     github_url?: string;
     website_url?: string;
     contact_email: string;
+    a2a?: string;
+    img_url?: string;
     logo_url?: string;
     screenshots: string[];
   }): Promise<{

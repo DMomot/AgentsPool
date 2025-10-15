@@ -24,6 +24,8 @@ interface Agent {
   github_url: string;
   website_url: string;
   api_endpoint: string;
+  a2a?: string;
+  img_url?: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;

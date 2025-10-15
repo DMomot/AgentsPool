@@ -26,6 +26,8 @@ export interface Agent {
   documentation_url?: string;
   github_url?: string;
   api_endpoint?: string;
+  a2a?: string;
+  img_url?: string;
   model_info?: Record<string, any>;
   is_active: boolean;
   featured: boolean;

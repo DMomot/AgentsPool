@@ -114,3 +114,35 @@ For schema changes:
 2. Create new DDL file in `DDL/`
 3. Update `setup.py` if needed
 4. Test locally before deploying
+
+## Testing
+
+### Quick Health Check
+```bash
+# Check production
+python quick_check.py
+
+# Check local
+python quick_check.py http://localhost:8000
+```
+
+### Full Test Suite
+```bash
+# Test production
+python run_tests.py
+
+# Test local
+python run_tests.py local
+
+# Run with pytest directly
+pytest test_api.py -v
+```
+
+### Automated Testing
+
+Tests run automatically via GitHub Actions:
+- ✅ On every push to main
+- ✅ On every Pull Request
+- ✅ Every 6 hours (monitoring)
+
+See `TESTING.md` for detailed testing documentation.
