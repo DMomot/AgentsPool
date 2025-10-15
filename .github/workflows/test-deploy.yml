@@ -1,6 +1,8 @@
 name: Test and Deploy
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -8,6 +10,48 @@ on:
     - cron: '0 */6 * * *'  # Run every 6 hours to monitor production
 
 jobs:
+  test-after-deploy:
+    name: Test After Deploy
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        cd backend
+        pip install pytest pytest-asyncio requests
+    
+    - name: Wait for Railway deployment
+      run: |
+        echo "⏳ Waiting 90 seconds for Railway to deploy..."
+        sleep 90
+    
+    - name: Run API tests against production
+      env:
+        API_BASE_URL: https://agentspool.ai
+      run: |
+        cd backend
+        pytest test_api.py -v --tb=short
+      continue-on-error: false
+    
+    - name: Tests passed
+      run: |
+        echo "✅ All tests passed after deployment!"
+    
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "::error::Post-deployment tests failed! Check the logs above."
+        exit 1
+  
   test-before-merge:
     name: Test Before Merge
     runs-on: ubuntu-latest
@@ -42,7 +86,7 @@ jobs:
   monitor-production:
     name: Monitor Production
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'schedule'
     
     steps:
     - name: Checkout code
