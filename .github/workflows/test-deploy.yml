@@ -6,12 +6,6 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
-    inputs:
-      deploy:
-        description: 'Deploy to Railway after tests'
-        required: true
-        type: boolean
-        default: false
   schedule:
     - cron: '0 */6 * * *'  # Run every 6 hours to monitor production
 
@@ -51,7 +45,7 @@ jobs:
     name: Deploy to Railway
     runs-on: ubuntu-latest
     needs: test
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy == true
+    if: github.event_name == 'workflow_dispatch'
     
     steps:
     - name: Checkout code
