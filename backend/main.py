@@ -40,7 +40,6 @@ class CreateAgentRequest(BaseModel):
     name: str
     description: str
     category_id: int
-    price: float = 0.0
     pricing_model: str = "free"
     tags: List[str] = []
     capabilities: List[str] = []
@@ -65,11 +64,6 @@ def convert_agent_data(agent):
         "short_description": agent.short_description,
         "category_id": agent.category_id,
         "author": agent.author,
-        "version": agent.version,
-        "price": float(agent.price),
-        "is_free": agent.is_free,
-        "rating": float(agent.rating),
-        "downloads_count": agent.downloads_count,
         "featured": agent.featured,
         "slug": agent.slug,
         "created_at": agent.created_at.isoformat() if hasattr(agent.created_at, 'isoformat') else str(agent.created_at),
@@ -249,8 +243,7 @@ async def get_agents_by_category_slug(
         agents_query = text("""
             SELECT 
                 a.id, a.name, a.description, a.short_description, a.category_id,
-                a.author, a.version, a.price, a.is_free, a.rating, a.downloads_count,
-                a.tags, a.capabilities, a.use_cases, a.url, a.documentation_url,
+                a.author, a.tags, a.capabilities, a.use_cases, a.url, a.documentation_url,
                 a.github_url, a.api_endpoint, a.a2a, a.img_url, a.model_info, a.is_active, a.featured,
                 a.slug, a.created_at, a.updated_at
             FROM agents a
@@ -286,11 +279,6 @@ async def get_agents_by_category_slug(
                 "short_description": agent["short_description"],
                 "category_id": agent["category_id"],
                 "author": agent["author"],
-                "version": agent["version"],
-                "price": float(agent["price"]) if agent["price"] else 0.0,
-                "is_free": agent["is_free"],
-                "rating": float(agent["rating"]) if agent["rating"] else 0.0,
-                "downloads_count": agent["downloads_count"],
                 "tags": agent["tags"] or [],
                 "capabilities": agent["capabilities"] or [],
                 "use_cases": agent["use_cases"] or [],
@@ -403,9 +391,7 @@ async def get_category(category_id: int, db: Session = Depends(get_db)):
 async def search_agents(
     q: Optional[str] = Query(None, description="Search query"),
     category_id: Optional[int] = Query(None, description="Filter by category"),
-    is_free: Optional[bool] = Query(None, description="Filter by free/paid"),
-    min_rating: Optional[float] = Query(None, description="Minimum rating", ge=0, le=5),
-    sort_by: str = Query("rating", description="Sort by: name, rating, downloads, price, created_at"),
+    sort_by: str = Query("created_at", description="Sort by: name, created_at"),
     sort_order: str = Query("desc", description="Sort order: asc, desc"),
     page: int = Query(1, description="Page number", ge=1),
     limit: int = Query(12, description="Items per page", ge=1, le=2000),
@@ -437,17 +423,9 @@ async def search_agents(
             sql_parts.append(f"AND category_id = {category_id}")
             query = query.filter(Agent.category_id == category_id)
         
-        if is_free is not None:
-            sql_parts.append(f"AND is_free = {is_free}")
-            query = query.filter(Agent.is_free == is_free)
-        
-        if min_rating is not None:
-            sql_parts.append(f"AND rating >= {min_rating}")
-            query = query.filter(Agent.rating >= min_rating)
-        
         # Apply sorting
         sql_parts.append(f"ORDER BY {sort_by} {'DESC' if sort_order.lower() == 'desc' else 'ASC'}")
-        sort_column = getattr(Agent, sort_by, Agent.rating)
+        sort_column = getattr(Agent, sort_by, Agent.created_at)
         if sort_order.lower() == "desc":
             query = query.order_by(desc(sort_column))
         else:
@@ -499,19 +477,19 @@ async def get_featured_agents(
     try:
         # Get featured agents using raw SQL
         sql_query = text("""
-            SELECT id, name, description, short_description, category_id, author, version, 
-                   price, is_free, rating, downloads_count, tags, capabilities, use_cases, 
-                   url, documentation_url, github_url, api_endpoint, model_info, 
+            SELECT id, name, description, short_description, category_id, author, 
+                   tags, capabilities, use_cases, 
+                   url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, 
                    is_active, featured, slug, created_at, updated_at
             FROM agents 
             WHERE is_active = true AND featured = true 
-            ORDER BY rating DESC 
+            ORDER BY created_at DESC 
             LIMIT :limit
         """)
         print(f"""SELECT * 
             FROM agents 
             WHERE is_active = true AND featured = true 
-            ORDER BY rating DESC 
+            ORDER BY created_at DESC 
             LIMIT {limit}""")
         
         result = db.execute(sql_query, {"limit": limit}).fetchall()
@@ -611,8 +589,8 @@ async def get_agent(agent_id: int, db: Session = Depends(get_db)):
     try:
         # Get agent by ID using raw SQL
         sql_query = text("""
-            SELECT id, name, description, short_description, category_id, author, version, 
-                   price, is_free, rating, downloads_count, tags, capabilities, use_cases, 
+            SELECT id, name, description, short_description, category_id, author, 
+                   tags, capabilities, use_cases, 
                    url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, 
                    is_active, featured, slug, created_at, updated_at
             FROM agents 
@@ -646,8 +624,8 @@ async def get_agent_by_slug(agent_slug: str, db: Session = Depends(get_db)):
     try:
         # Get agent by slug using raw SQL
         sql_query = text("""
-            SELECT id, name, description, short_description, category_id, author, version, 
-                   price, is_free, rating, downloads_count, tags, capabilities, use_cases, 
+            SELECT id, name, description, short_description, category_id, author, 
+                   tags, capabilities, use_cases, 
                    url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, 
                    is_active, featured, slug, created_at, updated_at
             FROM agents 
@@ -774,11 +752,6 @@ async def create_agent(agent_data: CreateAgentRequest, db: Session = Depends(get
             short_description=agent_data.description[:200] + "..." if len(agent_data.description) > 200 else agent_data.description,
             category_id=agent_data.category_id,
             author="User",  # In real app, get from authentication
-            version="1.0.0",
-            price=agent_data.price,
-            is_free=agent_data.price == 0.0,
-            rating=0.0,
-            downloads_count=0,
             featured=False,
             tags=agent_data.tags,
             capabilities=agent_data.capabilities,

@@ -9,11 +9,6 @@ interface Agent {
   description: string;
   short_description: string;
   author: string;
-  version: string;
-  price: number;
-  is_free: boolean;
-  rating: number;
-  downloads_count: number;
   featured: boolean;
   slug: string;
   tags: string[];
@@ -319,11 +314,6 @@ export default function AdminPanel() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{agent.author}</div>
-                        <div className="text-sm text-gray-500">v{agent.version}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">⭐ {agent.rating.toFixed(1)}</div>
-                        <div className="text-sm text-gray-500">↓ {agent.downloads_count}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="space-y-1">

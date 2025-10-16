@@ -10,11 +10,6 @@ interface Agent {
   description: string;
   short_description: string;
   author: string;
-  version: string;
-  price: number;
-  is_free: boolean;
-  rating: number;
-  downloads_count: number;
   featured: boolean;
   slug: string;
   tags: string[];
@@ -115,18 +110,8 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
               <p className="text-lg text-gray-600 mb-4">{agent.short_description}</p>
               
               <div className="flex items-center space-x-4 mb-4">
-                <div className="flex items-center">
-                  <span className="text-yellow-400">★</span>
-                  <span className="ml-1 text-sm text-gray-600">{agent.rating.toFixed(1)}</span>
-                </div>
-                <div className="text-sm text-gray-600">
-                  {agent.downloads_count.toLocaleString()} downloads
-                </div>
                 <div className="text-sm text-gray-600">
                   by {agent.author}
-                </div>
-                <div className="text-sm text-gray-600">
-                  v{agent.version}
                 </div>
               </div>
 
@@ -146,14 +131,6 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
             </div>
 
             <div className="ml-6">
-              <div className="text-right mb-4">
-                {agent.is_free ? (
-                  <span className="text-2xl font-bold text-green-600">Free</span>
-                ) : (
-                  <span className="text-2xl font-bold text-gray-900">${agent.price}</span>
-                )}
-              </div>
-              
               {/* Action Buttons */}
               <div className="space-y-2">
                 {agent.url && (

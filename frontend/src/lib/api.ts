@@ -76,7 +76,6 @@ class ApiClient {
     name: string;
     description: string;
     category_id: number;
-    price: number;
     pricing_model: string;
     tags: string[];
     capabilities: string[];

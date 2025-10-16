@@ -116,12 +116,6 @@ export default function LetterPage({ letter, agents, totalCount, availableLetter
                         <h3 className="font-semibold text-gray-900 text-lg leading-tight">
                           {agent.name}
                         </h3>
-                        <div className="flex items-center ml-3 flex-shrink-0">
-                          <span className="text-yellow-400">★</span>
-                          <span className="text-sm text-gray-600 ml-1">
-                            {agent.rating.toFixed(1)}
-                          </span>
-                        </div>
                       </div>
 
                       {agent.short_description && (
@@ -133,13 +127,6 @@ export default function LetterPage({ letter, agents, totalCount, availableLetter
                       <div className="flex items-center justify-between text-sm mb-3">
                         <span className="text-gray-500">
                           by {agent.author || 'Unknown'}
-                        </span>
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          agent.is_free 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-blue-100 text-blue-800'
-                        }`}>
-                          {agent.is_free ? 'Free' : 'Paid'}
                         </span>
                       </div>
 

@@ -14,7 +14,6 @@ export default function AddAgentPage() {
     name: '',
     description: '',
     category_id: '',
-    price: '',
     pricing_model: 'free',
     tags: '',
     capabilities: '',
@@ -60,7 +59,6 @@ export default function AddAgentPage() {
         name: formData.name,
         description: formData.description,
         category_id: parseInt(formData.category_id),
-        price: formData.price ? parseFloat(formData.price) : 0,
         pricing_model: formData.pricing_model,
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         capabilities: formData.capabilities.split(',').map(cap => cap.trim()).filter(cap => cap),
@@ -196,23 +194,6 @@ export default function AddAgentPage() {
                     <option value="one_time">One-time Payment</option>
                     <option value="usage_based">Usage-based</option>
                   </select>
-                </div>
-
-                <div>
-                  <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
-                    Price (USD)
-                  </label>
-                  <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    step="0.01"
-                    min="0"
-                    value={formData.price}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    placeholder="0.00"
-                  />
                 </div>
               </div>
             </div>
