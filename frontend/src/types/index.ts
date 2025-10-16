@@ -14,11 +14,6 @@ export interface Agent {
   short_description?: string;
   category_id: number;
   author?: string;
-  version: string;
-  price: number;
-  is_free: boolean;
-  rating: number;
-  downloads_count: number;
   tags?: string[];
   capabilities?: string[];
   use_cases?: string[];
@@ -48,10 +43,6 @@ export interface AgentList {
   name: string;
   short_description?: string;
   author?: string;
-  price: number;
-  is_free: boolean;
-  rating: number;
-  downloads_count: number;
   tags?: string[];
   featured: boolean;
   slug: string;
@@ -73,10 +64,8 @@ export interface Review {
 export interface AgentSearchParams {
   q?: string;
   category_id?: number;
-  is_free?: boolean;
-  min_rating?: number;
   tags?: string[];
-  sort_by?: 'rating' | 'downloads' | 'created_at' | 'name';
+  sort_by?: 'created_at' | 'name';
   sort_order?: 'asc' | 'desc';
   page?: number;
   limit?: number;

@@ -8,11 +8,6 @@ CREATE TABLE IF NOT EXISTS agents (
     short_description VARCHAR(500),
     category_id INTEGER REFERENCES categories(id),
     author VARCHAR(100),
-    version VARCHAR(20) DEFAULT '1.0.0',
-    price DECIMAL(10, 2) DEFAULT 0.00,
-    is_free BOOLEAN DEFAULT TRUE,
-    rating DECIMAL(3, 2) DEFAULT 0.00,
-    downloads_count INTEGER DEFAULT 0,
     tags TEXT[], -- PostgreSQL array type
     capabilities TEXT[], -- PostgreSQL array type
     use_cases TEXT[], -- PostgreSQL array type
@@ -31,9 +26,6 @@ CREATE TABLE IF NOT EXISTS agents (
 CREATE INDEX IF NOT EXISTS idx_agents_category_id ON agents(category_id);
 CREATE INDEX IF NOT EXISTS idx_agents_is_active ON agents(is_active);
 CREATE INDEX IF NOT EXISTS idx_agents_featured ON agents(featured);
-CREATE INDEX IF NOT EXISTS idx_agents_rating ON agents(rating);
-CREATE INDEX IF NOT EXISTS idx_agents_price ON agents(price);
-CREATE INDEX IF NOT EXISTS idx_agents_is_free ON agents(is_free);
 CREATE INDEX IF NOT EXISTS idx_agents_created_at ON agents(created_at);
 
 -- GIN indexes for array and JSONB columns for better search performance
