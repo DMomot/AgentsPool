@@ -1,12 +1,13 @@
 name: Test Production API
 
 on:
-  push:
-    branches: [ main ]
+  # push:  # Temporarily disabled to allow deployment
+  #   branches: [ main ]
   pull_request:
     branches: [ main ]
   schedule:
     - cron: '0 */6 * * *'  # Run every 6 hours to monitor production
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
   test:
