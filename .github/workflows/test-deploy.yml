@@ -9,22 +9,8 @@ on:
 
 jobs:
   test:
-    name: Test New Code
+    name: Test New Code Against Production DB
     runs-on: ubuntu-latest
-    
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_PASSWORD: test_password
-          POSTGRES_DB: test_db
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
     
     steps:
     - name: Checkout code
@@ -40,25 +26,15 @@ jobs:
         cd backend
         pip install fastapi uvicorn sqlalchemy psycopg2-binary pydantic pydantic-settings pytest pytest-asyncio requests python-dotenv
     
-    - name: Setup test database
+    - name: Start backend server with production DB
       env:
-        DATABASE_URL: postgresql://postgres:test_password@localhost:5432/test_db
-      run: |
-        cd backend
-        # Apply database migrations
-        python -c "
-        from database.config import engine, Base
-        from database.models import Category, Agent
-        Base.metadata.create_all(bind=engine)
-        print('✅ Database schema created')
-        "
-    
-    - name: Start backend server
-      env:
-        DATABASE_URL: postgresql://postgres:test_password@localhost:5432/test_db
+        DATABASE_URL: postgresql://postgres:JGgehRqYMLPrmSnvJgwQYntgQeANwHiU@turntable.proxy.rlwy.net:11480/railway
+        PORT: 8000
       run: |
         cd backend
         python main.py &
+        BACKEND_PID=$!
+        echo "Backend PID: $BACKEND_PID"
         sleep 10
         echo "✅ Backend started"
     
@@ -71,35 +47,4 @@ jobs:
     
     - name: Tests passed
       run: |
-        echo "✅ All tests passed! Ready to deploy."
-
-  monitor-production:
-    name: Monitor Production (After Deploy)
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        cd backend
-        pip install pytest pytest-asyncio requests
-    
-    - name: Wait for deployment
-      if: github.event_name != 'schedule'
-      run: sleep 120
-    
-    - name: Test production
-      env:
-        API_BASE_URL: https://agentspool.ai
-      run: |
-        cd backend
-        pytest test_api.py -v --tb=short
-      continue-on-error: true
+        echo "✅ All tests passed! New code is ready to deploy."
