@@ -33,20 +33,7 @@ def test_get_categories():
         assert "name" in category
         assert "slug" in category
 
-def test_get_category_by_id():
-    """Test GET /api/v1/categories/{id}"""
-    import requests
-    # First get all categories to get a valid ID
-    response = requests.get(urljoin(API_BASE_URL, "/api/v1/categories"))
-    categories = response.json()
-    
-    if categories:
-        category_id = categories[0]["id"]
-        response = requests.get(urljoin(API_BASE_URL, f"/api/v1/categories/{category_id}"))
-        assert response.status_code == 200
-        data = response.json()
-        assert data["id"] == category_id
-        assert "name" in data
+# test_get_category_by_id removed - endpoint doesn't exist, use slug instead
 
 def test_get_category_by_slug():
     """Test GET /api/v1/categories/slug/{slug}"""
@@ -109,17 +96,28 @@ def test_get_agent_by_slug():
     """Test GET /api/v1/agents/slug/{slug}"""
     import requests
     # First search for agents to get a valid slug
-    response = requests.get(urljoin(API_BASE_URL, "/api/v1/agents?page=1&limit=1"))
+    response = requests.get(urljoin(API_BASE_URL, "/api/v1/agents?page=1&limit=100"))
     data = response.json()
     
-    if data.get("agents") and len(data["agents"]) > 0:
-        agent_slug = data["agents"][0]["slug"]
+    # Find an agent with a slug
+    agent_slug = None
+    if data.get("agents"):
+        for agent in data["agents"]:
+            if agent.get("slug"):
+                agent_slug = agent["slug"]
+                break
+    
+    if agent_slug:
         response = requests.get(urljoin(API_BASE_URL, f"/api/v1/agents/slug/{agent_slug}"))
         assert response.status_code == 200
         agent_data = response.json()
         assert agent_data["slug"] == agent_slug
         assert "name" in agent_data
         assert "description" in agent_data
+    else:
+        # Skip test if no agents with slug found
+        import pytest
+        pytest.skip("No agents with slug found in database")
 
 def test_check_agent_url():
     """Test GET /api/v1/agents/check-url"""
