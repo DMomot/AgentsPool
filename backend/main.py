@@ -492,14 +492,15 @@ async def get_featured_agents(
             ORDER BY created_at DESC 
             LIMIT {limit}""")
         
-        result = db.execute(sql_query, {"limit": limit}).fetchall()
+        result = db.execute(sql_query, {"limit": limit}).mappings().all()
         
         # Convert to Agent objects for compatibility with convert_agent_data
         agents = []
         for row in result:
             agent = Agent()
-            for i, column in enumerate(Agent.__table__.columns):
-                setattr(agent, column.name, row[i])
+            for column in Agent.__table__.columns:
+                if column.name in row:
+                    setattr(agent, column.name, row[column.name])
             agents.append(agent)
         
         return [convert_agent_data(agent) for agent in agents]
