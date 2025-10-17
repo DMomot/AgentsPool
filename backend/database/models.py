@@ -90,3 +90,19 @@ class AgentStats(Base):
     
     # Relationships
     agent = relationship("Agent", back_populates="stats")
+
+class Fundraising(Base):
+    __tablename__ = "fundraising"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(Text, nullable=False)
+    canonical_name = Column(Text)
+    website = Column(Text)
+    last_funding_date = Column(Date)
+    funding_summary = Column(JSONB)
+    profile = Column(JSONB)
+    social_links = Column(JSONB)
+    metrics = Column(JSONB)
+    news = Column(JSONB)
+    extra_data = Column(JSONB)
+    created_at = Column(TIMESTAMP, server_default=func.now())

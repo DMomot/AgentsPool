@@ -15,7 +15,7 @@ from database.models import Agent, Category
 from config import settings
 
 # Import routers
-from api.routes import health, categories, agents, reviews
+from api.routes import health, categories, agents, reviews, fundraising
 
 # Create FastAPI app
 app = FastAPI(
@@ -40,6 +40,7 @@ app.include_router(health.router)  # No prefix for health endpoints
 app.include_router(categories.router, prefix=settings.api_v1_str)
 app.include_router(agents.router, prefix=settings.api_v1_str)
 app.include_router(reviews.router, prefix=settings.api_v1_str)
+app.include_router(fundraising.router, prefix=settings.api_v1_str)
 
 
 # Sitemap endpoint (keeping here as it's a special case)
