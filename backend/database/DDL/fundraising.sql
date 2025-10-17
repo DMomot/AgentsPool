@@ -13,8 +13,7 @@ CREATE TABLE fundraising (
     metrics JSONB,
     news JSONB,
     extra JSONB,
-    created_at TIMESTAMP DEFAULT now(),
-    updated_at TIMESTAMP DEFAULT now()
+    created_at TIMESTAMP DEFAULT now()
 );
 
 -- GIN indexes for JSONB fields
