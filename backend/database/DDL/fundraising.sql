@@ -5,6 +5,7 @@ CREATE TABLE fundraising (
     canonical_name TEXT,
     website TEXT,
     source_url TEXT,
+    our_description TEXT,
     last_funding_date DATE,
     funding_summary JSONB,
     company_profile JSONB,
