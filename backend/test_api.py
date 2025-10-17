@@ -149,6 +149,49 @@ def test_api_response_time():
     assert response.status_code == 200
     assert duration < 5.0  # Should respond within 5 seconds
 
+def test_get_fundraising_list():
+    """Test GET /api/v1/fundraising"""
+    import requests
+    response = requests.get(urljoin(API_BASE_URL, "/api/v1/fundraising?limit=10"))
+    assert response.status_code == 200
+    data = response.json()
+    assert "companies" in data
+    assert isinstance(data["companies"], list)
+    assert "total" in data
+    assert "page" in data
+    assert "limit" in data
+
+def test_get_fundraising_with_search():
+    """Test GET /api/v1/fundraising with search"""
+    import requests
+    response = requests.get(urljoin(API_BASE_URL, "/api/v1/fundraising?search=AI&limit=10"))
+    assert response.status_code == 200
+    data = response.json()
+    assert "companies" in data
+    assert isinstance(data["companies"], list)
+
+def test_get_fundraising_company():
+    """Test GET /api/v1/fundraising/{id}"""
+    import requests
+    # First get list to get a valid ID
+    list_response = requests.get(urljoin(API_BASE_URL, "/api/v1/fundraising?limit=1"))
+    if list_response.status_code == 200:
+        data = list_response.json()
+        if data.get("companies") and len(data["companies"]) > 0:
+            company_id = data["companies"][0]["id"]
+            response = requests.get(urljoin(API_BASE_URL, f"/api/v1/fundraising/{company_id}"))
+            assert response.status_code == 200
+            company = response.json()
+            assert "id" in company
+            assert "name" in company
+            assert company["id"] == company_id
+        else:
+            import pytest
+            pytest.skip("No fundraising companies found in database")
+    else:
+        import pytest
+        pytest.skip("Could not fetch fundraising list")
+
 if __name__ == "__main__":
     # Run tests
     pytest.main([__file__, "-v", "--tb=short"])
