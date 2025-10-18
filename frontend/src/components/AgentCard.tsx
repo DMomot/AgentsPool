@@ -8,6 +8,11 @@ interface AgentCardProps {
 }
 
 export default function AgentCard({ agent }: AgentCardProps) {
+  // Don't render if no slug (prevents /agents/null)
+  if (!agent.slug) {
+    return null;
+  }
+
   return (
     <div className="card group cursor-pointer">
       <Link href={`/agents/${agent.slug}`}>
