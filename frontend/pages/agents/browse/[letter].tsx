@@ -61,7 +61,7 @@ export default function LetterPage({ letter, agents, totalCount, availableLetter
             <div className="flex flex-wrap gap-2 justify-center">
               {/* Numbers button */}
               <Link
-                href="/agents/numbers"
+                href="/agents/browse/numbers"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   letter === 'numbers'
                     ? 'bg-blue-600 text-white'
@@ -118,9 +118,9 @@ export default function LetterPage({ letter, agents, totalCount, availableLetter
                         </h3>
                       </div>
 
-                      {agent.short_description && (
+                      {agent.description && (
                         <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                          {agent.short_description}
+                          {agent.description}
                         </p>
                       )}
 

@@ -99,7 +99,7 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
     <div className="min-h-screen bg-gray-50">
       <MetaTags
         title={`${agent.name} - AI Agent`}
-        description={agent.short_description || agent.description}
+        description={agent.description || agent.short_description}
         keywords={`${agent.name}, AI agent, ${agent.tags?.join(', ') || ''}, artificial intelligence, automation`}
         url={`https://agentspool.ai/agents/${agent.slug}`}
         canonicalUrl={`https://agentspool.ai/agents/${agent.slug}`}
@@ -115,7 +115,7 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
             {/* Left: Content */}
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{agent.name}</h1>
-              <p className="text-lg text-gray-600 mb-4">{agent.short_description}</p>
+              <p className="text-lg text-gray-600 mb-4">{agent.description}</p>
               
               <div className="flex items-center space-x-4 mb-4">
                 <div className="text-sm text-gray-600">

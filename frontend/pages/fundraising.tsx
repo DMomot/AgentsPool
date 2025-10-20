@@ -65,10 +65,11 @@ export default function FundraisingPage() {
   return (
     <>
       <MetaTags
-        title="AI Fundraising Tracker - Latest AI Startup Investments"
-        description="Track the latest funding rounds and investments in AI startups. View fundraising data, investors, and valuations for top artificial intelligence companies."
+        title="AI Startup Fundraising Tracker - Live Investment & Funding Data"
+        description="Track real-time AI startup funding rounds and VC investments. View funding amounts, investor lists, valuations, and deal history for AI companies."
         keywords="AI fundraising, AI investments, AI startup funding, venture capital, AI companies"
         url="https://agentspool.ai/fundraising"
+        canonicalUrl="https://agentspool.ai/fundraising"
       />
       <div className="min-h-screen bg-gray-50">
         <Header />

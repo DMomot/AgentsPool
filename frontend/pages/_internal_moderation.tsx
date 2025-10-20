@@ -308,7 +308,7 @@ export default function AdminPanel() {
                         <div className="flex items-center">
                           <div>
                             <div className="text-sm font-medium text-gray-900">{agent.name}</div>
-                            <div className="text-sm text-gray-500">{agent.short_description?.substring(0, 60)}...</div>
+                            <div className="text-sm text-gray-500">{agent.description?.substring(0, 60)}...</div>
                           </div>
                         </div>
                       </td>

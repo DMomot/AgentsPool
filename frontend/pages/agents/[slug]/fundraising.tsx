@@ -230,7 +230,7 @@ export default function AgentFundraisingPage({ agent, fundraising, error }: Page
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 mb-2">{agent.name}</h1>
-                  <p className="text-gray-600">{agent.short_description}</p>
+                  <p className="text-gray-600">{agent.description}</p>
                 </div>
               </div>
               <Link

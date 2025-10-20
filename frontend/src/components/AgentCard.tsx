@@ -48,7 +48,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
 
           {/* Description */}
           <p className="text-gray-600 text-sm line-clamp-3">
-            {agent.short_description || 'Описание не указано'}
+            {agent.description || 'Описание не указано'}
           </p>
 
           {/* Tags */}

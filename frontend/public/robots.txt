@@ -4,6 +4,8 @@ Disallow: /admin
 Disallow: /_internal_*
 Disallow: /api/
 Disallow: /_next/
+Disallow: /agents/null
+Disallow: /agents/numbers
 
 # Google specific
 User-agent: Googlebot
@@ -11,6 +13,8 @@ Allow: /
 Disallow: /admin
 Disallow: /_internal_*
 Disallow: /api/
+Disallow: /agents/null
+Disallow: /agents/numbers
 Crawl-delay: 0
 
 User-agent: Googlebot-Image
@@ -20,6 +24,8 @@ User-agent: Googlebot-Mobile
 Allow: /
 Disallow: /admin
 Disallow: /_internal_*
+Disallow: /agents/null
+Disallow: /agents/numbers
 
 User-agent: AdsBot-Google
 Allow: /
@@ -28,5 +34,5 @@ User-agent: Googlebot-News
 Allow: /
 
 # Sitemap location
-Sitemap: https://agentspool.ai/sitemap2.xml
+Sitemap: https://agentspool.ai/sitemap.xml
 

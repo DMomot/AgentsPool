@@ -5,6 +5,18 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Redirect www to non-www
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.agentspool.ai',
+          },
+        ],
+        destination: 'https://agentspool.ai/:path*',
+        permanent: true, // 301 redirect
+      },
       // Redirect from old domain primeagents.info to new domain agentspool.ai
       {
         source: '/:path*',
@@ -27,6 +39,17 @@ const nextConfig = {
         ],
         destination: 'https://agentspool.ai/:path*',
         permanent: true, // 301 redirect
+      },
+      // Fix incorrect routes
+      {
+        source: '/agents/numbers',
+        destination: '/agents/browse/numbers',
+        permanent: true,
+      },
+      {
+        source: '/agents/null',
+        destination: '/agents',
+        permanent: true,
       },
     ]
   },

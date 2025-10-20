@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import Head from 'next/head';
 import Link from 'next/link';
 import Header from '../src/components/Header';
 import Footer from '../src/components/Footer';
+import MetaTags from '../src/components/MetaTags';
 
 interface Category {
   id: number;
@@ -97,14 +97,13 @@ export default function CategoriesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Head>
-        <title>AI Agent Categories | AgentsPool</title>
-        <meta 
-          name="description" 
-          content="Browse AI agents by category. Find the perfect AI solution for your needs across different industries and use cases." 
-        />
-        <meta name="keywords" content="AI agents, categories, artificial intelligence, automation, business tools" />
-      </Head>
+      <MetaTags
+        title="Browse AI Agents by Category - Organized Solutions"
+        description="Explore AI agents organized by category. From productivity tools to customer service bots - find specialized solutions for every industry and use case."
+        keywords="AI agents, categories, artificial intelligence, automation, business tools"
+        url="https://agentspool.ai/categories"
+        canonicalUrl="https://agentspool.ai/categories"
+      />
 
       <Header />
 

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import Header from '../src/components/Header';
 import Footer from '../src/components/Footer';
 import AgentCard from '../src/components/AgentCard';
 import Pagination from '../src/components/Pagination';
+import MetaTags from '../src/components/MetaTags';
 import { AgentList } from '../src/types';
 
 interface Category {
@@ -122,14 +122,13 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Head>
-        <title>{category.name} - AI Agents | AgentsPool</title>
-        <meta 
-          name="description" 
-          content={`Discover ${total} AI agents in ${category.name}. ${category.description}`} 
-        />
-        <meta name="keywords" content={`AI agents, ${category.name}, artificial intelligence, automation`} />
-      </Head>
+      <MetaTags
+        title={`${category.name} - AI Agents`}
+        description={`Discover ${total} AI agents in ${category.name}. ${category.description}`}
+        keywords={`AI agents, ${category.name}, artificial intelligence, automation`}
+        url={`https://agentspool.ai/${categorySlug}`}
+        canonicalUrl={`https://agentspool.ai/${categorySlug}`}
+      />
 
       <Header />
 

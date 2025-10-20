@@ -41,6 +41,7 @@ export interface Agent {
 export interface AgentList {
   id: number;
   name: string;
+  description?: string;
   short_description?: string;
   author?: string;
   tags?: string[];

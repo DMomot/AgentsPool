@@ -7,8 +7,8 @@ export default function HelpPage() {
   return (
     <>
       <MetaTags
-        title="Help Center - AgentsPool"
-        description="Guide to using AgentsPool. How to add an agent, moderation process, requirements and frequently asked questions."
+        title="Help Center - Submit & List Your AI Agent on AgentsPool"
+        description="Complete guide to AgentsPool: learn how to submit agents, understand our moderation process, listing requirements, and get answers to FAQs."
         keywords="help, guide, FAQ, moderation, requirements, adding agents, support"
         url="https://agentspool.ai/help"
         canonicalUrl="https://agentspool.ai/help"

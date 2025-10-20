@@ -6,8 +6,8 @@ export default function AboutPage() {
   return (
     <>
       <MetaTags
-        title="About Us - AgentsPool"
-        description="Learn more about AgentsPool - the leading AI agents marketplace. Our mission, team, and vision for the future of artificial intelligence."
+        title="About AgentsPool - Leading AI Agents Marketplace Platform"
+        description="Learn about AgentsPool's mission to connect businesses with the best AI agents. Discover our team, values, and vision for the future of AI automation."
         keywords="about company, AgentsPool team, mission, vision, AI marketplace, artificial intelligence"
         url="https://agentspool.ai/about"
         canonicalUrl="https://agentspool.ai/about"

@@ -90,8 +90,8 @@ export default function AddAgentPage() {
   return (
     <>
       <MetaTags
-        title="Add Agent - AgentsPool"
-        description="Add your AI agent to the AgentsPool marketplace. Share your solution with the developer and user community."
+        title="Submit Your AI Agent - List on AgentsPool Marketplace"
+        description="Submit and showcase your AI agent to thousands of potential users. Free listing with detailed profile, analytics, and direct user connections."
         keywords="add AI agent, publish agent, AI marketplace, developers, artificial intelligence"
         url="https://agentspool.ai/add-agent"
         canonicalUrl="https://agentspool.ai/add-agent"

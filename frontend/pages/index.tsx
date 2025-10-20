@@ -49,10 +49,11 @@ export default function Home() {
   return (
     <>
       <MetaTags
-        title="AgentsPool - Best AI Agents Catalog"
-        description="Find the perfect AI agent for your business. 500+ verified artificial intelligence solutions with reviews, ratings, and demos."
+        title="AgentsPool - Discover the Best AI Agents & Autonomous Solutions"
+        description="Explore 500+ verified AI agents and autonomous solutions. Compare features, read reviews, and find the perfect AI agent for your business needs."
         keywords="AI agents, artificial intelligence, business automation, chatbots, machine learning, neural networks, AI catalog"
         url="https://agentspool.ai"
+        canonicalUrl="https://agentspool.ai"
         type="website"
       />
       <main className="min-h-screen bg-white">

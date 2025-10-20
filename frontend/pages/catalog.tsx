@@ -57,8 +57,8 @@ export default function CatalogPage() {
   return (
     <>
       <MetaTags
-        title="AI Agents Catalog - AgentsPool"
-        description={`Complete AI agents catalog with search and filtering. ${searchResponse?.total ? `${searchResponse.total} verified agents` : 'Find the perfect agent'} for your tasks.`}
+        title="Search AI Agents - Advanced Catalog with Filters"
+        description={`Search and filter through ${searchResponse?.total || 'hundreds of'} verified AI agents. Find solutions by category, features, pricing, and ratings with advanced search tools.`}
         keywords="AI agents catalog, artificial intelligence search, category filters, chatbots, automation, machine learning"
         url="https://agentspool.ai/catalog"
         canonicalUrl="https://agentspool.ai/catalog"

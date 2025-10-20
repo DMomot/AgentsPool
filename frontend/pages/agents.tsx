@@ -18,8 +18,8 @@ export default function AgentsPage({ totalCount, letterStats, availableLetters }
   return (
     <>
       <MetaTags
-        title="All AI Agents - Complete Directory"
-        description={`Browse all ${totalCount} AI agents in our directory. Find agents alphabetically organized from A to Z for easy navigation.`}
+        title="Complete AI Agents Directory A-Z - Full Alphabetical List"
+        description={`Browse all ${totalCount} AI agents alphabetically from A to Z. Complete directory with easy navigation to find any agent by name quickly.`}
         keywords="AI agents directory, all agents, alphabetical list, artificial intelligence catalog, agent index"
         url="https://agentspool.ai/agents"
         canonicalUrl="https://agentspool.ai/agents"
