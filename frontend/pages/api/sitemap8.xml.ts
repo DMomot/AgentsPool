@@ -34,14 +34,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     <priority>0.9</priority>
 `;
       
-      if (agent.img_url) {
-        xml += `    <image:image>
-      <image:loc>${agent.img_url}</image:loc>
+      const imageUrl = agent.img_url || `https://pub-cd507b944a95482a8deaa9b622cb1a6d.r2.dev/thumbnails/${agent.slug}_thumbnail.webp`;
+      xml += `    <image:image>
+      <image:loc>${imageUrl}</image:loc>
       <image:title>${agent.name}</image:title>
       <image:caption>${agent.short_description || agent.name}</image:caption>
     </image:image>
 `;
-      }
       
       xml += `  </url>
 `;

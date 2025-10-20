@@ -170,7 +170,7 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
             <div className="w-full md:w-96 flex-shrink-0">
               <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
                 <img
-                  src={agent.img_url || agent.model_info?.logo_url || '/16x9-placeholder.jpg'}
+                  src={agent.img_url || `https://pub-cd507b944a95482a8deaa9b622cb1a6d.r2.dev/thumbnails/${agent.slug}_thumbnail.webp`}
                   alt={agent.name}
                   className="w-full h-full object-cover"
                 />

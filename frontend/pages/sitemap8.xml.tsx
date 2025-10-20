@@ -45,15 +45,14 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     <priority>0.9</priority>
 `;
       
-      if (agent.img_url) {
-        const escapedDescription = (agent.short_description || agent.name).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        xml += `    <image:image>
-      <image:loc>${agent.img_url}</image:loc>
+      const escapedDescription = (agent.short_description || agent.name).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      const imageUrl = agent.img_url || `https://pub-cd507b944a95482a8deaa9b622cb1a6d.r2.dev/thumbnails/${agent.slug}_thumbnail.webp`;
+      xml += `    <image:image>
+      <image:loc>${imageUrl}</image:loc>
       <image:title>${agent.name}</image:title>
       <image:caption>${escapedDescription}</image:caption>
     </image:image>
 `;
-      }
       
       xml += `  </url>
 `;
