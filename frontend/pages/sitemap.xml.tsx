@@ -7,15 +7,29 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     const baseUrl = 'https://agentspool.ai';
     const now = new Date().toISOString();
 
-    // Fetch from API
-    const [categoriesRes, agentsRes] = await Promise.all([
-      fetch(`${apiUrl}/api/v1/categories`),
-      fetch(`${apiUrl}/api/v1/agents?limit=10000`),
-    ]);
-
+    // Fetch categories
+    const categoriesRes = await fetch(`${apiUrl}/api/v1/categories`);
     const categories = await categoriesRes.json();
-    const agentsData = await agentsRes.json();
-    const agents = agentsData.agents || [];
+
+    // Fetch ALL agents with pagination (API max limit is 2000)
+    const agents = [];
+    let page = 1;
+    const limit = 2000;
+    let hasMore = true;
+
+    while (hasMore) {
+      const agentsRes = await fetch(`${apiUrl}/api/v1/agents?limit=${limit}&page=${page}`);
+      const agentsData = await agentsRes.json();
+      const pageAgents = agentsData.agents || [];
+      
+      if (pageAgents.length > 0) {
+        agents.push(...pageAgents);
+        page++;
+        hasMore = agentsData.has_next || false;
+      } else {
+        hasMore = false;
+      }
+    }
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
