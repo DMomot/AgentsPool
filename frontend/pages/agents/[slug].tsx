@@ -111,6 +111,15 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Agent Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          {/* Hero Image */}
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100 mb-6">
+            <img
+              src={agent.img_url || agent.model_info?.logo_url || '/16x9-placeholder.jpg'}
+              alt={agent.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{agent.name}</h1>

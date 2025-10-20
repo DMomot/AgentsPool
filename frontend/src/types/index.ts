@@ -46,6 +46,14 @@ export interface AgentList {
   tags?: string[];
   featured: boolean;
   slug: string;
+  img_url?: string;
+  model_info?: {
+    logo_url?: string;
+    screenshots?: string[];
+    website_url?: string;
+    contact_email?: string;
+    pricing_model?: string;
+  };
   category?: Category;
 }
 

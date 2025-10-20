@@ -17,6 +17,16 @@ export default function AgentCard({ agent }: AgentCardProps) {
     <div className="card group cursor-pointer">
       <Link href={`/agents/${agent.slug}`}>
         <div className="space-y-4">
+          {/* Image */}
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+            <img
+              src={agent.img_url || agent.model_info?.logo_url || '/16x9-placeholder.jpg'}
+              alt={agent.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+          </div>
+
           {/* Header */}
           <div className="flex items-start justify-between">
             <div className="flex-1">
