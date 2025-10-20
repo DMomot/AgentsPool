@@ -28,9 +28,20 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
     // Individual company pages (if they exist)
     for (const company of companies) {
+      // Format date properly
+      let lastmod = now;
+      if (company.created_at) {
+        try {
+          const date = new Date(company.created_at);
+          lastmod = date.toISOString();
+        } catch (e) {
+          lastmod = now;
+        }
+      }
+      
       xml += `  <url>
     <loc>${baseUrl}/fundraising/${company.id}</loc>
-    <lastmod>${company.created_at || now}</lastmod>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

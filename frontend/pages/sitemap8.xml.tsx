@@ -27,9 +27,20 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     for (const agent of featured) {
       if (!agent.slug) continue;
       
+      // Format date properly
+      let lastmod = now;
+      if (agent.updated_at) {
+        try {
+          const date = new Date(agent.updated_at);
+          lastmod = date.toISOString();
+        } catch (e) {
+          lastmod = now;
+        }
+      }
+      
       xml += `  <url>
     <loc>${baseUrl}/agents/${agent.slug}</loc>
-    <lastmod>${agent.updated_at || now}</lastmod>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
 `;
@@ -52,9 +63,20 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     for (const agent of recent) {
       if (!agent.slug) continue;
       
+      // Format date properly
+      let lastmod = now;
+      if (agent.updated_at) {
+        try {
+          const date = new Date(agent.updated_at);
+          lastmod = date.toISOString();
+        } catch (e) {
+          lastmod = now;
+        }
+      }
+      
       xml += `  <url>
     <loc>${baseUrl}/agents/${agent.slug}</loc>
-    <lastmod>${agent.updated_at || now}</lastmod>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

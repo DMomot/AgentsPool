@@ -21,9 +21,20 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     for (const agent of agents) {
       if (!agent.slug) continue;
       
+      // Format date properly (remove microseconds, ensure ISO format)
+      let lastmod = now;
+      if (agent.updated_at) {
+        try {
+          const date = new Date(agent.updated_at);
+          lastmod = date.toISOString();
+        } catch (e) {
+          lastmod = now;
+        }
+      }
+      
       xml += `  <url>
     <loc>${baseUrl}/agents/${agent.slug}</loc>
-    <lastmod>${agent.updated_at || now}</lastmod>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
