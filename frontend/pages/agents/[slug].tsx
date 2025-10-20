@@ -111,40 +111,8 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Agent Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          {/* Hero Image */}
-          <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100 mb-4">
-            <img
-              src={agent.img_url || agent.model_info?.logo_url || '/16x9-placeholder.jpg'}
-              alt={agent.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          {/* Action Buttons - Mobile First */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {agent.url && (
-              <a
-                href={agent.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 min-w-[200px] bg-blue-600 text-white text-center px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-              >
-                🌐 Visit Website
-              </a>
-            )}
-            {agent.github_url && (
-              <a
-                href={agent.github_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 min-w-[200px] bg-gray-800 text-white text-center px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors font-medium"
-              >
-                <span className="inline-block mr-1">⭐</span> GitHub
-              </a>
-            )}
-          </div>
-
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Left: Content */}
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{agent.name}</h1>
               <p className="text-lg text-gray-600 mb-4">{agent.short_description}</p>
@@ -157,7 +125,7 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
 
               {/* Tags */}
               {agent.tags && agent.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2 mb-6">
                   {agent.tags.map((tag, index) => (
                     <span
                       key={index}
@@ -168,6 +136,41 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
                   ))}
                 </div>
               )}
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                {agent.url && (
+                  <a
+                    href={agent.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-blue-600 text-white text-center px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    🌐 Visit Website
+                  </a>
+                )}
+                {agent.github_url && (
+                  <a
+                    href={agent.github_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-gray-800 text-white text-center px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors font-medium"
+                  >
+                    ⭐ GitHub
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* Right: Image */}
+            <div className="w-full md:w-96 flex-shrink-0">
+              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+                <img
+                  src={agent.img_url || agent.model_info?.logo_url || '/16x9-placeholder.jpg'}
+                  alt={agent.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
