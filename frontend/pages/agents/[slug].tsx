@@ -137,27 +137,31 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
                 </div>
               )}
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3">
+              {/* Links */}
+              <div className="space-y-2">
                 {agent.url && (
-                  <a
-                    href={agent.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-blue-600 text-white text-center px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                  >
-                    🌐 Visit Website
-                  </a>
+                  <div>
+                    <a
+                      href={agent.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 underline break-all"
+                    >
+                      {agent.url}
+                    </a>
+                  </div>
                 )}
                 {agent.github_url && (
-                  <a
-                    href={agent.github_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-gray-800 text-white text-center px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors font-medium"
-                  >
-                    ⭐ GitHub
-                  </a>
+                  <div>
+                    <a
+                      href={agent.github_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 underline break-all"
+                    >
+                      {agent.github_url}
+                    </a>
+                  </div>
                 )}
               </div>
             </div>
