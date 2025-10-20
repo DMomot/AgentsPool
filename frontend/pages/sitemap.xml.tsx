@@ -1,4 +1,4 @@
-// Master Sitemap: All content in one file
+// Simple Sitemap: Categories + Agents from API
 import { GetServerSideProps } from 'next';
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
@@ -7,29 +7,21 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     const baseUrl = 'https://agentspool.ai';
     const now = new Date().toISOString();
 
-    // Fetch all data in parallel
-    const [categoriesRes, agentsRes, featuredRes, fundraisingRes] = await Promise.all([
+    // Fetch from API
+    const [categoriesRes, agentsRes] = await Promise.all([
       fetch(`${apiUrl}/api/v1/categories`),
-      fetch(`${apiUrl}/api/v1/agents?limit=1000`),
-      fetch(`${apiUrl}/api/v1/agents/featured?limit=50`),
-      fetch(`${apiUrl}/api/v1/fundraising?limit=500`),
+      fetch(`${apiUrl}/api/v1/agents?limit=10000`),
     ]);
 
     const categories = await categoriesRes.json();
     const agentsData = await agentsRes.json();
     const agents = agentsData.agents || [];
-    const featuredData = await featuredRes.json();
-    const featured = featuredData.agents || [];
-    const fundraisingData = await fundraisingRes.json();
-    const companies = fundraisingData.companies || [];
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 `;
 
-    // ===== MAIN PAGES (Highest Priority) =====
+    // Main pages
     const mainPages = [
       { url: '', priority: '1.0', changefreq: 'daily' },
       { url: '/catalog', priority: '0.9', changefreq: 'daily' },
@@ -37,7 +29,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
       { url: '/agents', priority: '0.9', changefreq: 'daily' },
       { url: '/fundraising', priority: '0.8', changefreq: 'weekly' },
       { url: '/about', priority: '0.7', changefreq: 'monthly' },
-      { url: '/add-agent', priority: '0.6', changefreq: 'monthly' },
     ];
 
     for (const page of mainPages) {
@@ -50,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 `;
     }
 
-    // ===== CATEGORIES =====
+    // Categories
     for (const category of categories) {
       xml += `  <url>
     <loc>${baseUrl}/${category.slug}</loc>
@@ -61,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 `;
     }
 
-    // ===== BROWSE BY LETTER PAGES =====
+    // Browse pages
     const letters = 'abcdefghijklmnopqrstuvwxyz0123456789'.split('');
     for (const letter of letters) {
       xml += `  <url>
@@ -73,46 +64,9 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 `;
     }
 
-    // ===== FEATURED AGENTS (with images) =====
-    const featuredSlugs = new Set();
-    for (const agent of featured) {
-      if (!agent.slug) continue;
-      featuredSlugs.add(agent.slug);
-      
-      let lastmod = now;
-      if (agent.updated_at) {
-        try {
-          lastmod = new Date(agent.updated_at).toISOString();
-        } catch (e) {
-          lastmod = now;
-        }
-      }
-      
-      xml += `  <url>
-    <loc>${baseUrl}/agents/${agent.slug}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-`;
-      
-      if (agent.img_url) {
-        const escapedName = (agent.name || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
-        const escapedDescription = (agent.short_description || agent.name || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
-        xml += `    <image:image>
-      <image:loc>${agent.img_url}</image:loc>
-      <image:title>${escapedName}</image:title>
-      <image:caption>${escapedDescription}</image:caption>
-    </image:image>
-`;
-      }
-      
-      xml += `  </url>
-`;
-    }
-
-    // ===== ALL OTHER AGENTS =====
+    // ALL Agents
     for (const agent of agents) {
-      if (!agent.slug || featuredSlugs.has(agent.slug)) continue;
+      if (!agent.slug) continue;
       
       let lastmod = now;
       if (agent.updated_at) {
@@ -123,31 +77,14 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
         }
       }
       
+      const priority = agent.featured ? '0.9' : '0.6';
+      const changefreq = agent.featured ? 'daily' : 'weekly';
+      
       xml += `  <url>
     <loc>${baseUrl}/agents/${agent.slug}</loc>
     <lastmod>${lastmod}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-`;
-    }
-
-    // ===== FUNDRAISING COMPANIES =====
-    for (const company of companies) {
-      let lastmod = now;
-      if (company.created_at) {
-        try {
-          lastmod = new Date(company.created_at).toISOString();
-        } catch (e) {
-          lastmod = now;
-        }
-      }
-      
-      xml += `  <url>
-    <loc>${baseUrl}/fundraising/${company.id}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
   </url>
 `;
     }
@@ -175,4 +112,3 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 export default function Sitemap() {
   return null;
 }
-
