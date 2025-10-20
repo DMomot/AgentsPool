@@ -21,6 +21,13 @@ interface Agent {
   api_endpoint: string;
   a2a?: string;
   img_url?: string;
+  model_info?: {
+    logo_url?: string;
+    screenshots?: string[];
+    website_url?: string;
+    contact_email?: string;
+    pricing_model?: string;
+  };
   created_at: string;
   updated_at: string;
 }
@@ -140,17 +147,7 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
                     rel="noopener noreferrer"
                     className="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    Try Demo
-                  </a>
-                )}
-                {agent.documentation_url && (
-                  <a
-                    href={agent.documentation_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full bg-gray-600 text-white text-center px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
-                  >
-                    Documentation
+                    Visit Website
                   </a>
                 )}
                 {agent.github_url && (
@@ -175,6 +172,25 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
             <p className="text-gray-700 whitespace-pre-line">{agent.description}</p>
           </div>
         </div>
+
+        {/* Screenshots */}
+        {agent.model_info?.screenshots && agent.model_info.screenshots.length > 0 && (
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Screenshots</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {agent.model_info.screenshots.map((screenshot, index) => (
+                <div key={index} className="relative rounded-lg overflow-hidden border border-gray-200">
+                  <img
+                    src={screenshot}
+                    alt={`${agent.name} screenshot ${index + 1}`}
+                    className="w-full h-auto object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Capabilities */}
         {agent.capabilities && agent.capabilities.length > 0 && (
