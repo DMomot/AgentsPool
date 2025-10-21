@@ -12,20 +12,26 @@ export default function FeaturedAgents() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchFeaturedAgents = async () => {
+    const fetchRandomAgents = async () => {
       try {
         setLoading(true);
-        const data = await apiClient.getFeaturedAgents(6);
-        setAgents(data);
+        const response = await apiClient.searchAgents({ limit: 20 });
+        const allAgents = response.agents;
+        
+        // Select 3 random agents
+        const shuffled = [...allAgents].sort(() => Math.random() - 0.5);
+        const randomAgents = shuffled.slice(0, 3);
+        
+        setAgents(randomAgents);
       } catch (err) {
-        setError('Failed to load featured agents');
-        console.error('Error fetching featured agents:', err);
+        setError('Failed to load agents');
+        console.error('Error fetching agents:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFeaturedAgents();
+    fetchRandomAgents();
   }, []);
 
   if (loading) {
@@ -34,15 +40,15 @@ export default function FeaturedAgents() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Featured Agents
+              Discover AI Agents
             </h2>
             <p className="text-lg text-gray-600">
-              Best AI agents selected by our experts
+              Explore random AI agents from our catalog
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, index) => (
+            {[...Array(3)].map((_, index) => (
               <div key={index} className="card animate-pulse">
                 <div className="space-y-4">
                   <div className="h-6 bg-gray-200 rounded w-3/4"></div>
@@ -73,12 +79,9 @@ export default function FeaturedAgents() {
               Loading Error
             </h2>
             <p className="text-red-600">{error}</p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="mt-4 btn-primary"
-            >
-              Try Again
-            </button>
+            <Link href="/catalog" className="mt-4 btn-primary inline-block">
+              View Catalog
+            </Link>
           </div>
         </div>
       </section>
@@ -90,14 +93,14 @@ export default function FeaturedAgents() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Featured Agents
+            Discover AI Agents
           </h2>
           <p className="text-lg text-gray-600">
-            Best AI agents selected by our experts
+            Explore random AI agents from our catalog
           </p>
         </div>
 
-        {agents.length > 0 ? (
+        {agents.length > 0 && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {agents.map((agent) => (
@@ -111,23 +114,6 @@ export default function FeaturedAgents() {
               </Link>
             </div>
           </>
-        ) : (
-          <div className="text-center py-12">
-            <div className="text-gray-500 mb-4">
-              <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No Featured Agents Found
-            </h3>
-            <p className="text-gray-600">
-              Try refreshing the page or go to the full catalog
-            </p>
-            <Link href="/catalog" className="btn-primary mt-4">
-              Open Catalog
-            </Link>
-          </div>
         )}
       </div>
     </section>

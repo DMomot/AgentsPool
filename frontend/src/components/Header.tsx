@@ -44,14 +44,8 @@ export default function Header() {
             <Link href="/agents" className="text-gray-700 hover:text-primary-600 font-medium">
               All Agents
             </Link>
-            <Link href="/fundraising" className="text-gray-700 hover:text-primary-600 font-medium">
-              Fundraising
-            </Link>
             <Link href="/about" className="text-gray-700 hover:text-primary-600 font-medium">
               About
-            </Link>
-            <Link href="/add-agent" className="text-gray-700 hover:text-primary-600 font-medium">
-              Add Agent
             </Link>
           </nav>
 
@@ -79,14 +73,8 @@ export default function Header() {
               <Link href="/catalog" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
                 Catalog
               </Link>
-              <Link href="/fundraising" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
-                Fundraising
-              </Link>
               <Link href="/about" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
                 About
-              </Link>
-              <Link href="/add-agent" className="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
-                Add Agent
               </Link>
             </div>
           </div>
