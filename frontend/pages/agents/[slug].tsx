@@ -116,12 +116,6 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{agent.name}</h1>
               <p className="text-lg text-gray-600 mb-4">{agent.description}</p>
-              
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="text-sm text-gray-600">
-                  by {agent.author}
-                </div>
-              </div>
 
               {/* Tags */}
               {agent.tags && agent.tags.length > 0 && (

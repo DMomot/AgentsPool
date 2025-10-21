@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import Header from '../src/components/Header';
 import Footer from '../src/components/Footer';
@@ -26,72 +26,65 @@ interface CategoryPageData {
   has_prev: boolean;
 }
 
-export default function CategoryPage() {
-  const router = useRouter();
-  const { category: categorySlug, page = '1' } = router.query;
-  
-  const [data, setData] = useState<CategoryPageData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  
-  // Skip static files like sitemap.xml, robots.txt, etc
-  if (categorySlug && typeof categorySlug === 'string' && categorySlug.includes('.')) {
-    return null;
+interface CategoryPageProps {
+  data: CategoryPageData | null;
+  error?: string;
+  categorySlug: string;
+}
+
+export const getServerSideProps: GetServerSideProps<CategoryPageProps> = async (context) => {
+  const { category: categorySlug, page = '1' } = context.query;
+
+  // Skip static files
+  if (typeof categorySlug === 'string' && categorySlug.includes('.')) {
+    return { notFound: true };
   }
 
-  useEffect(() => {
-    if (!categorySlug || typeof categorySlug !== 'string') return;
+  if (!categorySlug || typeof categorySlug !== 'string') {
+    return { notFound: true };
+  }
 
-    const fetchCategoryData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+  try {
+    const currentPage = parseInt(page as string) || 1;
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.agentspool.ai';
+    
+    const response = await fetch(
+      `${apiUrl}/api/v1/categories/${categorySlug}/agents?page=${currentPage}&limit=12`
+    );
 
-        const currentPage = parseInt(page as string) || 1;
-        
-        // Use Next.js API routes (proxy to backend)
-        const response = await fetch(
-          `/api/v1/categories/${categorySlug}/agents?page=${currentPage}&limit=12`
-        );
-
-        if (!response.ok) {
-          if (response.status === 404) {
-            setError('Category not found');
-            return;
-          }
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        const result = await response.json();
-        setData(result);
-      } catch (err) {
-        console.error('Error fetching category data:', err);
-        setError('Failed to load category data');
-      } finally {
-        setLoading(false);
+    if (!response.ok) {
+      if (response.status === 404) {
+        return { notFound: true };
       }
-    };
+      throw new Error(`HTTP ${response.status}`);
+    }
 
-    fetchCategoryData();
-  }, [categorySlug, page]);
+    const data = await response.json();
+
+    return {
+      props: {
+        data,
+        categorySlug,
+      },
+    };
+  } catch (err) {
+    console.error('Error fetching category data:', err);
+    return {
+      props: {
+        data: null,
+        error: 'Failed to load category data',
+        categorySlug: categorySlug as string,
+      },
+    };
+  }
+};
+
+export default function CategoryPage({ data, error, categorySlug }: CategoryPageProps) {
+  const router = useRouter();
 
   const handlePageChange = (newPage: number) => {
     router.push(`/${categorySlug}?page=${newPage}`);
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <main className="container mx-auto px-4 py-8">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-lg text-gray-600">Loading...</div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
 
   if (error || !data) {
     return (
@@ -99,9 +92,7 @@ export default function CategoryPage() {
         <Header />
         <main className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
-              {error === 'Category not found' ? 'Category Not Found' : 'Error'}
-            </h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Error</h1>
             <p className="text-gray-600 mb-8">
               {error || 'Something went wrong while loading the category.'}
             </p>
@@ -118,7 +109,7 @@ export default function CategoryPage() {
     );
   }
 
-  const { category, agents, total, page: currentPage, total_pages, has_next, has_prev } = data;
+  const { category, agents, total, page: currentPage, total_pages } = data;
 
   return (
     <div className="min-h-screen bg-gray-50">
