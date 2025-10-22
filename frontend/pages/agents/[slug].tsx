@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import Header from '../../src/components/Header';
 import Footer from '../../src/components/Footer';
 import MetaTags from '../../src/components/MetaTags';
@@ -137,8 +138,32 @@ const PricingCard = ({ plan }: { plan: PricingPlan }) => {
   );
 };
 
+const ImageModal = ({ imageUrl, onClose }: { imageUrl: string; onClose: () => void }) => {
+  return (
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-white text-4xl hover:text-gray-300 transition-colors z-10"
+        aria-label="Close"
+      >
+        ×
+      </button>
+      <img
+        src={imageUrl}
+        alt="Full size"
+        className="max-w-full max-h-full object-contain"
+        onClick={(e) => e.stopPropagation()}
+      />
+    </div>
+  );
+};
+
 export default function AgentPage({ agent, error }: AgentPageProps) {
   const router = useRouter();
+  const [modalImage, setModalImage] = useState<string | null>(null);
 
   if (error || !agent) {
     return (
@@ -228,7 +253,10 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
 
             {/* Right: Image */}
             <div className="w-full md:w-96 flex-shrink-0">
-              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">
+              <div 
+                className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100 cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => setModalImage(`https://pub-cd507b944a95482a8deaa9b622cb1a6d.r2.dev/screenshots/${agent.slug}.png`)}
+              >
                 <img
                   src={agent.img_url || `https://pub-cd507b944a95482a8deaa9b622cb1a6d.r2.dev/thumbnails/${agent.slug}_thumbnail.webp`}
                   alt={agent.name}
@@ -253,7 +281,11 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Screenshots</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {agent.model_info.screenshots.map((screenshot, index) => (
-                <div key={index} className="relative rounded-lg overflow-hidden border border-gray-200">
+                <div 
+                  key={index} 
+                  className="relative rounded-lg overflow-hidden border border-gray-200 cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={() => setModalImage(screenshot)}
+                >
                   <img
                     src={screenshot}
                     alt={`${agent.name} screenshot ${index + 1}`}
@@ -348,6 +380,14 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
       </main>
 
       <Footer />
+      
+      {/* Image Modal */}
+      {modalImage && (
+        <ImageModal 
+          imageUrl={modalImage} 
+          onClose={() => setModalImage(null)} 
+        />
+      )}
     </div>
   );
 }
