@@ -110,37 +110,50 @@ export default function LetterPage({ letter, agents, totalCount, availableLetter
                     <Link
                       key={agent.id}
                       href={`/agents/${agent.slug}`}
-                      className="block p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all duration-200"
+                      className="block border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all duration-200 overflow-hidden"
                     >
-                      <div className="flex items-start justify-between mb-3">
-                        <h3 className="font-semibold text-gray-900 text-lg leading-tight">
-                          {agent.name}
-                        </h3>
+                      {/* Image */}
+                      <div className="relative w-full aspect-video bg-gray-100">
+                        <img
+                          src={agent.img_url || `https://pub-cd507b944a95482a8deaa9b622cb1a6d.r2.dev/thumbnails/${agent.slug}_thumbnail.webp`}
+                          alt={agent.name}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
                       </div>
 
-                      {agent.description && (
-                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                          {agent.description}
-                        </p>
-                      )}
-
-                      {agent.tags && agent.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1">
-                          {agent.tags.slice(0, 3).map((tag, index) => (
-                            <span
-                              key={index}
-                              className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                          {agent.tags.length > 3 && (
-                            <span className="text-xs text-gray-500">
-                              +{agent.tags.length - 3} more
-                            </span>
-                          )}
+                      {/* Content */}
+                      <div className="p-4">
+                        <div className="mb-3">
+                          <h3 className="font-semibold text-gray-900 text-lg leading-tight">
+                            {agent.name}
+                          </h3>
                         </div>
-                      )}
+
+                        {agent.description && (
+                          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                            {agent.description}
+                          </p>
+                        )}
+
+                        {agent.tags && agent.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1">
+                            {agent.tags.slice(0, 3).map((tag, index) => (
+                              <span
+                                key={index}
+                                className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                            {agent.tags.length > 3 && (
+                              <span className="text-xs text-gray-500">
+                                +{agent.tags.length - 3} more
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </Link>
                   ))}
               </div>
