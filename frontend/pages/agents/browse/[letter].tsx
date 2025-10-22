@@ -124,12 +124,6 @@ export default function LetterPage({ letter, agents, totalCount, availableLetter
                         </p>
                       )}
 
-                      <div className="flex items-center justify-between text-sm mb-3">
-                        <span className="text-gray-500">
-                          by {agent.author || 'Unknown'}
-                        </span>
-                      </div>
-
                       {agent.tags && agent.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {agent.tags.slice(0, 3).map((tag, index) => (
