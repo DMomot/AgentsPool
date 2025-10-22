@@ -34,6 +34,20 @@ def convert_agent_data(agent):
         "img_url": agent.img_url,
     }
     
+    # Handle pricing (JSONB field)
+    if hasattr(agent, 'pricing') and agent.pricing:
+        if isinstance(agent.pricing, dict):
+            agent_dict["pricing"] = agent.pricing
+        elif isinstance(agent.pricing, str):
+            try:
+                agent_dict["pricing"] = json.loads(agent.pricing)
+            except:
+                agent_dict["pricing"] = None
+        else:
+            agent_dict["pricing"] = agent.pricing
+    else:
+        agent_dict["pricing"] = None
+    
     # Convert fields to proper types (PostgreSQL ARRAY fields are already lists)
     agent_dict["tags"] = agent.tags if isinstance(agent.tags, list) else (json.loads(agent.tags) if agent.tags else [])
     agent_dict["capabilities"] = agent.capabilities if isinstance(agent.capabilities, list) else (json.loads(agent.capabilities) if agent.capabilities else [])
@@ -154,7 +168,7 @@ async def get_featured_agents(
         sql_query = text("""
             SELECT id, name, description, short_description, category_id, author, 
                    tags, capabilities, use_cases, 
-                   url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, 
+                   url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, pricing,
                    is_active, featured, slug, created_at, updated_at
             FROM agents 
             WHERE is_active = true AND featured = true 
@@ -212,7 +226,7 @@ async def get_agent(agent_id: int, db: Session = Depends(get_db)):
         sql_query = text("""
             SELECT id, name, description, short_description, category_id, author, 
                    tags, capabilities, use_cases, 
-                   url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, 
+                   url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, pricing,
                    is_active, featured, slug, created_at, updated_at
             FROM agents 
             WHERE id = :agent_id AND is_active = true
@@ -249,7 +263,7 @@ async def get_agent_by_slug(agent_slug: str, db: Session = Depends(get_db)):
         sql_query = text("""
             SELECT id, name, description, short_description, category_id, author, 
                    tags, capabilities, use_cases, 
-                   url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, 
+                   url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, pricing,
                    is_active, featured, slug, created_at, updated_at
             FROM agents 
             WHERE slug = :agent_slug AND is_active = true

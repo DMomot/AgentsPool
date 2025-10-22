@@ -4,6 +4,21 @@ import Header from '../../src/components/Header';
 import Footer from '../../src/components/Footer';
 import MetaTags from '../../src/components/MetaTags';
 
+interface PricingPlan {
+  name: string;
+  price: string | null;
+  description: string | null;
+  features: string[];
+}
+
+interface PricingData {
+  pricing_url: string | null;
+  extracted_at: string;
+  plans_count: number;
+  has_free_plan: boolean;
+  plans: PricingPlan[];
+}
+
 interface Agent {
   id: number;
   name: string;
@@ -21,6 +36,7 @@ interface Agent {
   api_endpoint: string;
   a2a?: string;
   img_url?: string;
+  pricing?: PricingData | null;
   model_info?: {
     logo_url?: string;
     screenshots?: string[];
@@ -69,6 +85,56 @@ export const getServerSideProps: GetServerSideProps<AgentPageProps> = async (con
       },
     };
   }
+};
+
+const PricingCard = ({ plan }: { plan: PricingPlan }) => {
+  const isFree = plan.price && (
+    plan.price.toLowerCase().includes('free') ||
+    plan.price.toLowerCase().includes('$0') ||
+    plan.price.startsWith('0 ')
+  );
+  
+  const isContact = plan.price && (
+    plan.price.toLowerCase().includes('contact') ||
+    plan.price.toLowerCase().includes('sales') ||
+    plan.price.toLowerCase().includes('talk') ||
+    plan.price.toLowerCase().includes('custom')
+  );
+
+  return (
+    <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+      <div className="mb-4">
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">{plan.name}</h3>
+        {plan.price ? (
+          <div className="text-2xl font-bold text-blue-600">
+            {plan.price}
+            {isFree && <span className="ml-2 text-sm font-normal text-green-600">Free</span>}
+            {isContact && <span className="ml-2 text-sm font-normal text-gray-600">Custom</span>}
+          </div>
+        ) : (
+          <div className="text-2xl font-bold text-gray-500">N/A</div>
+        )}
+      </div>
+      
+      {plan.description && (
+        <p className="text-gray-600 text-sm mb-4">{plan.description}</p>
+      )}
+      
+      {plan.features.length > 0 && (
+        <div>
+          <h4 className="font-semibold text-gray-900 mb-2 text-sm">Features:</h4>
+          <ul className="space-y-2">
+            {plan.features.map((feature, idx) => (
+              <li key={idx} className="flex items-start text-sm">
+                <span className="text-green-500 mr-2 mt-0.5">✓</span>
+                <span className="text-gray-700">{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default function AgentPage({ agent, error }: AgentPageProps) {
@@ -197,6 +263,56 @@ export default function AgentPage({ agent, error }: AgentPageProps) {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Pricing */}
+        {agent.pricing && (
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-gray-900">Pricing Plans</h2>
+              {agent.pricing.has_free_plan && (
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  Free Plan Available
+                </span>
+              )}
+            </div>
+            
+            {agent.pricing.plans_count === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600 mb-2">No pricing information available</p>
+                {agent.pricing.pricing_url && (
+                  <a
+                    href={agent.pricing.pricing_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 underline"
+                  >
+                    Visit pricing page
+                  </a>
+                )}
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
+                  {agent.pricing.plans.map((plan, index) => (
+                    <PricingCard key={index} plan={plan} />
+                  ))}
+                </div>
+                {agent.pricing.pricing_url && (
+                  <div className="text-center pt-4 border-t border-gray-200">
+                    <a
+                      href={agent.pricing.pricing_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 underline text-sm"
+                    >
+                      View full pricing details →
+                    </a>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         )}
 

@@ -7,6 +7,21 @@ export interface Category {
   created_at: string;
 }
 
+export interface PricingPlan {
+  name: string;
+  price: string | null;
+  description: string | null;
+  features: string[];
+}
+
+export interface PricingData {
+  pricing_url: string | null;
+  extracted_at: string;
+  plans_count: number;
+  has_free_plan: boolean;
+  plans: PricingPlan[];
+}
+
 export interface Agent {
   id: number;
   name: string;
@@ -24,6 +39,7 @@ export interface Agent {
   a2a?: string;
   img_url?: string;
   model_info?: Record<string, any>;
+  pricing?: PricingData | null;
   is_active: boolean;
   featured: boolean;
   slug: string;
