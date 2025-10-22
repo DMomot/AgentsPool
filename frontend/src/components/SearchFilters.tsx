@@ -167,7 +167,7 @@ export default function SearchFilters({ onFiltersChange }: SearchFiltersProps) {
         {/* Sort */}
         <div>
           <label htmlFor="sort" className="block text-sm font-medium text-gray-700 mb-2">
-            Сортировка
+            Sort By
           </label>
           <select
             id="sort"
@@ -178,14 +178,14 @@ export default function SearchFilters({ onFiltersChange }: SearchFiltersProps) {
             }}
             className="w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           >
-            <option value="rating-desc">По рейтингу ↓</option>
-            <option value="rating-asc">По рейтингу ↑</option>
-            <option value="downloads-desc">По популярности ↓</option>
-            <option value="downloads-asc">По популярности ↑</option>
-            <option value="name-asc">По названию А-Я</option>
-            <option value="name-desc">По названию Я-А</option>
-            <option value="created_at-desc">Сначала новые</option>
-            <option value="created_at-asc">Сначала старые</option>
+            <option value="rating-desc">By Rating ↓</option>
+            <option value="rating-asc">By Rating ↑</option>
+            <option value="downloads-desc">By Popularity ↓</option>
+            <option value="downloads-asc">By Popularity ↑</option>
+            <option value="name-asc">By Name A-Z</option>
+            <option value="name-desc">By Name Z-A</option>
+            <option value="created_at-desc">Newest First</option>
+            <option value="created_at-asc">Oldest First</option>
           </select>
         </div>
       </div>
@@ -196,11 +196,11 @@ export default function SearchFilters({ onFiltersChange }: SearchFiltersProps) {
           onClick={clearFilters}
           className="text-sm text-gray-600 hover:text-primary-600 transition-colors"
         >
-          Сбросить фильтры
+          Clear Filters
         </button>
         
         <div className="text-sm text-gray-500">
-          Активные фильтры: {Object.values(filters).filter(v => v !== '' && v !== undefined).length}
+          Active Filters: {Object.values(filters).filter(v => v !== '' && v !== undefined).length}
         </div>
       </div>
     </div>
