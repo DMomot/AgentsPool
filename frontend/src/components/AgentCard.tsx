@@ -35,9 +35,6 @@ export default function AgentCard({ agent }: AgentCardProps) {
               <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
                 {agent.name}
               </h3>
-              {agent.author && (
-                <p className="text-sm text-gray-500 mt-1">by {agent.author}</p>
-              )}
             </div>
             {agent.featured && (
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
