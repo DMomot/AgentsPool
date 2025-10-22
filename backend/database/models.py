@@ -35,6 +35,7 @@ class Agent(Base):
     a2a = Column(String(500))
     img_url = Column(String(500))
     model_info = Column(JSONB)
+    pricing = Column(JSONB)
     is_active = Column(Boolean, default=True)
     featured = Column(Boolean, default=False)
     slug = Column(String(200), unique=True, nullable=False)

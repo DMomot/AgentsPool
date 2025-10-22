@@ -143,7 +143,7 @@ def test_api_response_time():
     import time
     
     start = time.time()
-    response = requests.get(urljoin(API_BASE_URL, "/status"))
+    response = requests.get(urljoin(API_BASE_URL, "/api/v1/categories"))
     duration = time.time() - start
     
     assert response.status_code == 200

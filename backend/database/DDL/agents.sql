@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS agents (
     github_url VARCHAR(500),
     api_endpoint VARCHAR(500),
     model_info JSONB, -- PostgreSQL JSONB type for flexible metadata
+    pricing JSONB, -- Pricing information
     is_active BOOLEAN DEFAULT TRUE,
     featured BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -33,6 +34,7 @@ CREATE INDEX IF NOT EXISTS idx_agents_tags ON agents USING GIN(tags);
 CREATE INDEX IF NOT EXISTS idx_agents_capabilities ON agents USING GIN(capabilities);
 CREATE INDEX IF NOT EXISTS idx_agents_use_cases ON agents USING GIN(use_cases);
 CREATE INDEX IF NOT EXISTS idx_agents_model_info ON agents USING GIN(model_info);
+CREATE INDEX IF NOT EXISTS idx_agents_pricing ON agents USING GIN(pricing);
 
 -- Full text search index for text fields
 CREATE INDEX IF NOT EXISTS idx_agents_text_search ON agents USING GIN(
