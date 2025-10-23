@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Header from '../src/components/Header';
@@ -78,6 +77,22 @@ export default function NewsPage({
       month: 'short', 
       day: 'numeric' 
     });
+  };
+
+  const decodeHtmlEntities = (text: string) => {
+    return text
+      .replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
+      .replace(/&quot;/g, '"')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&#x27;/g, "'")
+      .replace(/&#x2F;/g, '/')
+      .replace(/&#8216;/g, '\u2018')
+      .replace(/&#8217;/g, '\u2019')
+      .replace(/&#8220;/g, '\u201C')
+      .replace(/&#8221;/g, '\u201D')
+      .replace(/&#8230;/g, '\u2026');
   };
 
   return (
@@ -170,70 +185,87 @@ export default function NewsPage({
                   key={article.id}
                   className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
                 >
-                  <div className="flex justify-between items-start mb-3">
+                  <div className="flex gap-6">
+                    {/* Image */}
+                    {article.img_url && (
+                      <div className="flex-shrink-0 w-48 h-32">
+                        <img
+                          src={article.img_url}
+                          alt={decodeHtmlEntities(article.title)}
+                          className="w-full h-full object-cover rounded-lg"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Content */}
                     <div className="flex-1">
-                      <a
-                        href={article.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors"
-                      >
-                        {article.title}
-                      </a>
-                    </div>
-                  </div>
+                      <div className="mb-3">
+                        <a
+                          href={article.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors"
+                        >
+                          {decodeHtmlEntities(article.title)}
+                        </a>
+                      </div>
 
-                  {article.description && (
-                    <p className="text-gray-700 mb-4 line-clamp-3">
-                      {article.description}
-                    </p>
-                  )}
+                      {article.description && (
+                        <p className="text-gray-700 mb-4 line-clamp-3">
+                          {decodeHtmlEntities(article.description)}
+                        </p>
+                      )}
 
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
-                    <span className="font-medium text-blue-600">
-                      {article.source_name}
-                    </span>
-                    <span>•</span>
-                    <time>{formatDate(article.published_at)}</time>
-                    {article.companies && article.companies.length > 0 && (
-                      <>
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
+                        <span className="font-medium text-blue-600">
+                          {article.source_name}
+                        </span>
                         <span>•</span>
-                        <div className="flex flex-wrap gap-2">
-                          {article.companies.map((company, idx) => (
-                            <span key={idx} className="text-gray-700 font-medium">
-                              {company}
+                        <time>{formatDate(article.published_at)}</time>
+                        {article.companies && article.companies.length > 0 && (
+                          <>
+                            <span>•</span>
+                            <div className="flex flex-wrap gap-2">
+                              {article.companies.map((company, idx) => (
+                                <span key={idx} className="text-gray-700 font-medium">
+                                  {company}
+                                </span>
+                              ))}
+                            </div>
+                          </>
+                        )}
+                      </div>
+
+                      {article.tags && article.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {article.tags.map((tag, idx) => (
+                            <span
+                              key={idx}
+                              className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full"
+                            >
+                              {tag}
                             </span>
                           ))}
                         </div>
-                      </>
-                    )}
-                  </div>
+                      )}
 
-                  {article.tags && article.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {article.tags.map((tag, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full"
+                      <div>
+                        <a
+                          href={article.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-700 font-medium text-sm inline-flex items-center"
                         >
-                          {tag}
-                        </span>
-                      ))}
+                          Read More
+                          <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </a>
+                      </div>
                     </div>
-                  )}
-
-                  <div className="mt-4">
-                    <a
-                      href={article.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-700 font-medium text-sm inline-flex items-center"
-                    >
-                      Read More
-                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </a>
                   </div>
                 </article>
               ))

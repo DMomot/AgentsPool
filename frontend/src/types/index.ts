@@ -117,6 +117,7 @@ export interface NewsArticle {
   companies?: string[];
   companies_links?: string[];
   tags?: string[];
+  img_url?: string;
   insert_timestamp: string;
 }
 

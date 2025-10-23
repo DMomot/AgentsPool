@@ -3,6 +3,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from typing import List
+import requests
+from bs4 import BeautifulSoup
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 from api.dependencies import get_db
 
@@ -33,7 +37,10 @@ async def get_news(
             where_conditions.append("source_name = :source")
             params["source"] = source
         
-        where_clause = f"WHERE {' AND '.join(where_conditions)}" if where_conditions else ""
+        # Always filter by articles with tags
+        where_conditions.append("tags IS NOT NULL AND array_length(tags, 1) > 0")
+        
+        where_clause = f"WHERE {' AND '.join(where_conditions)}"
         
         news_query = text(f"""
             SELECT 
@@ -57,13 +64,42 @@ async def get_news(
         news_result = db.execute(news_query, params).mappings().all()
         total = db.execute(count_query, {k: v for k, v in params.items() if k not in ['limit', 'offset']}).scalar()
         
+        # Function to fetch og:image for a single article
+        def fetch_og_image(link):
+            try:
+                headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+                response = requests.get(link, headers=headers, timeout=2)
+                if response.status_code == 200:
+                    soup = BeautifulSoup(response.content, 'html.parser')
+                    og_image = soup.find('meta', property='og:image')
+                    if og_image and og_image.get('content'):
+                        return og_image['content']
+                    twitter_image = soup.find('meta', attrs={'name': 'twitter:image'})
+                    if twitter_image and twitter_image.get('content'):
+                        return twitter_image['content']
+            except Exception as e:
+                print(f"Error fetching og:image for {link}: {e}")
+            return None
+        
+        # Fetch images in parallel
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            links = [article["link"] for article in news_result]
+            images = list(executor.map(fetch_og_image, links))
+        
+        # Build articles with images
         articles = []
-        for article in news_result:
+        for idx, article in enumerate(news_result):
+            # Clean HTML from description
+            clean_description = article["description"]
+            if clean_description:
+                soup = BeautifulSoup(clean_description, 'html.parser')
+                clean_description = soup.get_text(separator=' ', strip=True)
+            
             articles.append({
                 "id": article["id"],
                 "title": article["title"],
                 "link": article["link"],
-                "description": article["description"],
+                "description": clean_description,
                 "content": article["content"],
                 "source_name": article["source_name"],
                 "source_domain": article["source_domain"],
@@ -72,6 +108,7 @@ async def get_news(
                 "companies": article["companies"] or [],
                 "companies_links": article["companies_links"] or [],
                 "tags": article["tags"] or [],
+                "img_url": images[idx],
                 "insert_timestamp": article["insert_timestamp"].isoformat() if article["insert_timestamp"] else None
             })
         
@@ -112,11 +149,34 @@ async def get_news_article(article_id: int, db: Session = Depends(get_db)):
         if not result:
             raise HTTPException(status_code=404, detail="Article not found")
         
+        # Fetch og:image
+        img_url = None
+        try:
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+            response = requests.get(result["link"], headers=headers, timeout=2)
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.content, 'html.parser')
+                og_image = soup.find('meta', property='og:image')
+                if og_image and og_image.get('content'):
+                    img_url = og_image['content']
+                else:
+                    twitter_image = soup.find('meta', attrs={'name': 'twitter:image'})
+                    if twitter_image and twitter_image.get('content'):
+                        img_url = twitter_image['content']
+        except Exception as e:
+            print(f"Error fetching og:image for {result['link']}: {e}")
+        
+        # Clean HTML from description
+        clean_description = result["description"]
+        if clean_description:
+            soup = BeautifulSoup(clean_description, 'html.parser')
+            clean_description = soup.get_text(separator=' ', strip=True)
+        
         return {
             "id": result["id"],
             "title": result["title"],
             "link": result["link"],
-            "description": result["description"],
+            "description": clean_description,
             "content": result["content"],
             "source_name": result["source_name"],
             "source_domain": result["source_domain"],
@@ -125,6 +185,7 @@ async def get_news_article(article_id: int, db: Session = Depends(get_db)):
             "companies": result["companies"] or [],
             "companies_links": result["companies_links"] or [],
             "tags": result["tags"] or [],
+            "img_url": img_url,
             "insert_timestamp": result["insert_timestamp"].isoformat() if result["insert_timestamp"] else None
         }
         
