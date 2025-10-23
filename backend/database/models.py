@@ -107,3 +107,20 @@ class Fundraising(Base):
     news = Column(JSONB)
     extra_data = Column(JSONB)
     created_at = Column(TIMESTAMP, server_default=func.now())
+
+class NewsArticle(Base):
+    __tablename__ = "news_articles"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(500), nullable=False)
+    link = Column(String(1000), unique=True, nullable=False)
+    description = Column(Text)
+    content = Column(Text)
+    source_name = Column(String(200), nullable=False)
+    source_domain = Column(String(200), nullable=False)
+    rss_url = Column(String(500), nullable=False)
+    published_at = Column(TIMESTAMP)
+    companies = Column(ARRAY(String))
+    companies_links = Column(ARRAY(String))
+    tags = Column(ARRAY(String))
+    insert_timestamp = Column(TIMESTAMP, server_default=func.now())

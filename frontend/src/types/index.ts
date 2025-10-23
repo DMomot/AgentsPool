@@ -103,3 +103,29 @@ export interface AgentSearchResponse {
   limit: number;
   total_pages: number;
 }
+
+export interface NewsArticle {
+  id: number;
+  title: string;
+  link: string;
+  description?: string;
+  content?: string;
+  source_name: string;
+  source_domain: string;
+  rss_url: string;
+  published_at?: string;
+  companies?: string[];
+  companies_links?: string[];
+  tags?: string[];
+  insert_timestamp: string;
+}
+
+export interface NewsResponse {
+  articles: NewsArticle[];
+  total: number;
+  page: number;
+  limit: number;
+  total_pages: number;
+  has_next: boolean;
+  has_prev: boolean;
+}

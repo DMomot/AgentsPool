@@ -192,6 +192,102 @@ def test_get_fundraising_company():
         import pytest
         pytest.skip("Could not fetch fundraising list")
 
+def test_get_news():
+    """Test GET /api/v1/news"""
+    import requests
+    response = requests.get(urljoin(API_BASE_URL, "/api/v1/news?page=1&limit=20"))
+    assert response.status_code == 200
+    data = response.json()
+    assert "articles" in data
+    assert isinstance(data["articles"], list)
+    assert "total" in data
+    assert "page" in data
+    assert "limit" in data
+    assert "total_pages" in data
+    assert "has_next" in data
+    assert "has_prev" in data
+
+def test_get_news_article():
+    """Test GET /api/v1/news/{id}"""
+    import requests
+    # First get news list to get a valid ID
+    list_response = requests.get(urljoin(API_BASE_URL, "/api/v1/news?limit=1"))
+    if list_response.status_code == 200:
+        data = list_response.json()
+        if data.get("articles") and len(data["articles"]) > 0:
+            article_id = data["articles"][0]["id"]
+            response = requests.get(urljoin(API_BASE_URL, f"/api/v1/news/{article_id}"))
+            assert response.status_code == 200
+            article = response.json()
+            assert "id" in article
+            assert "title" in article
+            assert "link" in article
+            assert "source_name" in article
+            assert article["id"] == article_id
+        else:
+            import pytest
+            pytest.skip("No news articles found in database")
+    else:
+        import pytest
+        pytest.skip("Could not fetch news list")
+
+def test_get_news_sources():
+    """Test GET /api/v1/news/sources/list"""
+    import requests
+    response = requests.get(urljoin(API_BASE_URL, "/api/v1/news/sources/list"))
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    # If there are sources, check structure
+    if data:
+        source = data[0]
+        assert "name" in source
+        assert "domain" in source
+
+def test_get_news_tags():
+    """Test GET /api/v1/news/tags/list"""
+    import requests
+    response = requests.get(urljoin(API_BASE_URL, "/api/v1/news/tags/list"))
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+
+def test_get_news_with_tag_filter():
+    """Test GET /api/v1/news with tag filter"""
+    import requests
+    # First get tags
+    tags_response = requests.get(urljoin(API_BASE_URL, "/api/v1/news/tags/list"))
+    if tags_response.status_code == 200:
+        tags = tags_response.json()
+        if tags:
+            test_tag = tags[0]
+            response = requests.get(urljoin(API_BASE_URL, f"/api/v1/news?tag={test_tag}&limit=10"))
+            assert response.status_code == 200
+            data = response.json()
+            assert "articles" in data
+            assert isinstance(data["articles"], list)
+        else:
+            import pytest
+            pytest.skip("No tags found in database")
+
+def test_get_news_with_source_filter():
+    """Test GET /api/v1/news with source filter"""
+    import requests
+    # First get sources
+    sources_response = requests.get(urljoin(API_BASE_URL, "/api/v1/news/sources/list"))
+    if sources_response.status_code == 200:
+        sources = sources_response.json()
+        if sources:
+            test_source = sources[0]["name"]
+            response = requests.get(urljoin(API_BASE_URL, f"/api/v1/news?source={test_source}&limit=10"))
+            assert response.status_code == 200
+            data = response.json()
+            assert "articles" in data
+            assert isinstance(data["articles"], list)
+        else:
+            import pytest
+            pytest.skip("No sources found in database")
+
 if __name__ == "__main__":
     # Run tests
     pytest.main([__file__, "-v", "--tb=short"])

@@ -1,4 +1,4 @@
-import { Agent, AgentList, AgentSearchParams, AgentSearchResponse, Category, Review } from '../types';
+import { Agent, AgentList, AgentSearchParams, AgentSearchResponse, Category, Review, NewsArticle, NewsResponse } from '../types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.agentspool.ai';
 
@@ -107,6 +107,39 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify(review),
     });
+  }
+
+  // News
+  async getNews(params: {
+    page?: number;
+    limit?: number;
+    tag?: string;
+    source?: string;
+  } = {}): Promise<NewsResponse> {
+    const searchParams = new URLSearchParams();
+    
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        searchParams.append(key, value.toString());
+      }
+    });
+
+    const queryString = searchParams.toString();
+    const endpoint = `/api/v1/news${queryString ? `?${queryString}` : ''}`;
+    
+    return this.request<NewsResponse>(endpoint);
+  }
+
+  async getNewsArticle(id: number): Promise<NewsArticle> {
+    return this.request<NewsArticle>(`/api/v1/news/${id}`);
+  }
+
+  async getNewsSources(): Promise<Array<{ name: string; domain: string }>> {
+    return this.request('/api/v1/news/sources/list');
+  }
+
+  async getNewsTags(): Promise<string[]> {
+    return this.request('/api/v1/news/tags/list');
   }
 }
 
