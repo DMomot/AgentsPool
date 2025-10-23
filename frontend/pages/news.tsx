@@ -59,6 +59,17 @@ export default function NewsPage({
     router.push('/news');
   };
 
+  const handlePageChange = (newPage: number) => {
+    const query: any = { page: newPage.toString() };
+    if (selectedTag) query.tag = selectedTag;
+    if (selectedSource) query.source = selectedSource;
+    
+    router.push({
+      pathname: '/news',
+      query,
+    });
+  };
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Recently';
     const date = new Date(dateString);
@@ -234,11 +245,9 @@ export default function NewsPage({
             <Pagination
               currentPage={page}
               totalPages={totalPages}
-              basePath="/news"
-              queryParams={{
-                ...(selectedTag && { tag: selectedTag }),
-                ...(selectedSource && { source: selectedSource }),
-              }}
+              totalItems={total}
+              itemsPerPage={limit}
+              onPageChange={handlePageChange}
             />
           )}
 
