@@ -34,5 +34,8 @@ Thumbs.db
 .env.local
 .env.*.local
 
+# Development rules (may contain sensitive info)
+DEVELOPMENT_RULES.md
+
 # Railway
 .railway/

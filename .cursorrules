@@ -1,0 +1,23 @@
+# Cursor AI Rules for AgentsPool Project
+
+## CRITICAL: Read Development Rules First
+**ALWAYS read DEVELOPMENT_RULES.md at the start of any development or testing task!**
+
+Location: `DEVELOPMENT_RULES.md` (in project root)
+
+This file contains critical information about:
+- Local development setup (frontend local, backend local, DB production)
+- Testing configuration
+- Database connection details
+
+Note: If DEVELOPMENT_RULES.md doesn't exist, copy from DEVELOPMENT_RULES.example.md and fill in credentials.
+
+## Project-Specific Rules
+- Strictly do only what is described in the prompt. No freedom
+- We don't need sh files
+- All comments in English
+- Always write short, convenient code. We making MVP, not prod.
+- Backend uses FastAPI + PostgreSQL
+- Frontend uses Next.js + TypeScript + Tailwind CSS
+- All local development connects to PRODUCTION database on Railway
+
