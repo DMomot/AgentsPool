@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         cd backend
-        pip install fastapi uvicorn sqlalchemy psycopg2-binary pydantic pydantic-settings pytest pytest-asyncio requests python-dotenv
+        pip install fastapi uvicorn sqlalchemy psycopg2-binary pydantic pydantic-settings pytest pytest-asyncio requests python-dotenv beautifulsoup4
     
     - name: Start backend server with production DB
       env:
