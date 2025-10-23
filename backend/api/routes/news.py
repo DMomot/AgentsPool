@@ -75,7 +75,7 @@ async def get_news(
                 "insert_timestamp": article["insert_timestamp"].isoformat() if article["insert_timestamp"] else None
             })
         
-        total_pages = (total + limit - 1) // limit
+        total_pages = (total + limit - 1) // limit if total > 0 else 0
         
         return {
             "articles": articles,
