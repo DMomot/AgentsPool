@@ -100,14 +100,13 @@ async def search_agents(
         
         # Apply filters
         if q:
-            sql_parts.append("AND (name ILIKE %s OR short_description ILIKE %s OR description ILIKE %s OR author ILIKE %s OR tags ILIKE %s)")
-            sql_params.extend([f"%{q}%"] * 5)
+            sql_parts.append("AND (name ILIKE %s OR short_description ILIKE %s OR description ILIKE %s OR author ILIKE %s)")
+            sql_params.extend([f"%{q}%"] * 4)
             search_filter = or_(
                 Agent.name.ilike(f"%{q}%"),
                 Agent.short_description.ilike(f"%{q}%"),
                 Agent.description.ilike(f"%{q}%"),
-                Agent.author.ilike(f"%{q}%"),
-                Agent.tags.ilike(f"%{q}%")
+                Agent.author.ilike(f"%{q}%")
             )
             query = query.filter(search_filter)
         
