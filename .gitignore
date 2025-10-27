@@ -37,5 +37,8 @@ Thumbs.db
 # Development rules (may contain sensitive info)
 DEVELOPMENT_RULES.md
 
+# Tests and utilities (migrations, temp scripts)
+tests/
+
 # Railway
 .railway/
