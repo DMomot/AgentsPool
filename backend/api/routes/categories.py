@@ -192,6 +192,7 @@ async def get_agents_by_category_slug(
             agents.append({
                 "id": agent["id"],
                 "name": agent["name"],
+                "slug": agent["slug"],
                 "description": agent["description"],
                 "short_description": agent["short_description"],
                 "category_id": agent["category_id"],
