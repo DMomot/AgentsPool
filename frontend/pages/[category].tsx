@@ -11,6 +11,8 @@ interface Category {
   id: number;
   name: string;
   description: string;
+  title?: string;
+  text?: string;
   icon: string;
   slug: string;
 }
@@ -146,6 +148,18 @@ export default function CategoryPage({ data, error, categorySlug }: CategoryPage
             </button>
           </div>
         </div>
+
+        {/* Category Text */}
+        {category.text && (
+          <div className="mb-12 bg-white rounded-lg shadow-sm p-8">
+            <div 
+              className="prose prose-lg max-w-none text-gray-700"
+              dangerouslySetInnerHTML={{ 
+                __html: category.text.replace(/\|\|/g, '<br/><br/>') 
+              }}
+            />
+          </div>
+        )}
 
         {/* Agents Grid */}
         {agents.length > 0 ? (

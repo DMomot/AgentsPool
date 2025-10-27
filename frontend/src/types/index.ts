@@ -2,6 +2,8 @@ export interface Category {
   id: number;
   name: string;
   description?: string;
+  title?: string;
+  text?: string;
   icon?: string;
   slug: string;
   created_at: string;
