@@ -18,6 +18,7 @@ def convert_agent_data(agent):
     agent_dict = {
         "id": agent.id,
         "name": agent.name,
+        "slug": agent.slug if hasattr(agent, 'slug') else None,
         "description": agent.description,
         "short_description": agent.short_description,
         "category_id": agent.category_id,
@@ -165,7 +166,7 @@ async def get_featured_agents(
     try:
         # Get featured agents using raw SQL
         sql_query = text("""
-            SELECT id, name, description, short_description, category_id, keywords,
+            SELECT id, name, slug, description, short_description, category_id, keywords,
                    url, documentation_url, github_url, api_endpoint, model_info, pricing, interability,
                    is_active, created_at, updated_at
             FROM agents 
@@ -222,7 +223,7 @@ async def get_agent(agent_id: int, db: Session = Depends(get_db)):
     try:
         # Get agent by ID using raw SQL
         sql_query = text("""
-            SELECT id, name, description, short_description, category_id, keywords,
+            SELECT id, name, slug, description, short_description, category_id, keywords,
                    url, documentation_url, github_url, api_endpoint, model_info, pricing, interability,
                    is_active, created_at, updated_at
             FROM agents 
@@ -258,11 +259,11 @@ async def get_agent_by_slug(agent_slug: str, db: Session = Depends(get_db)):
     try:
         # Get agent by slug using raw SQL
         sql_query = text("""
-            SELECT id, name, description, short_description, category_id, keywords,
+            SELECT id, name, slug, description, short_description, category_id, keywords,
                    url, documentation_url, github_url, api_endpoint, model_info, pricing, interability,
                    is_active, created_at, updated_at
             FROM agents 
-            WHERE name = :agent_slug AND is_active = true
+            WHERE slug = :agent_slug AND is_active = true
         """)
         print(f"""SELECT * 
             FROM agents 

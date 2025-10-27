@@ -4,6 +4,7 @@
 CREATE TABLE IF NOT EXISTS agents (
     id SERIAL PRIMARY KEY,
     name VARCHAR(200) NOT NULL,
+    slug VARCHAR(500) UNIQUE,
     description TEXT NOT NULL,
     vector_description VECTOR(768),
     short_description VARCHAR(500),
@@ -28,6 +29,7 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE INDEX IF NOT EXISTS idx_agents_category_id ON agents(category_id);
 CREATE INDEX IF NOT EXISTS idx_agents_is_active ON agents(is_active);
 CREATE INDEX IF NOT EXISTS idx_agents_created_at ON agents(created_at);
+CREATE INDEX IF NOT EXISTS idx_agents_slug ON agents(slug);
 
 -- GIN indexes for array and JSONB columns
 CREATE INDEX IF NOT EXISTS idx_agents_keywords ON agents USING GIN(keywords);

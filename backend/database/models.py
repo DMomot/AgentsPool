@@ -21,6 +21,7 @@ class Agent(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(200), nullable=False)
+    slug = Column(String(500), unique=True)
     description = Column(Text, nullable=False)
     short_description = Column(String(500))
     category_id = Column(Integer, ForeignKey("categories.id"))

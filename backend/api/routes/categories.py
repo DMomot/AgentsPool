@@ -159,7 +159,7 @@ async def get_agents_by_category_slug(
         
         agents_query = text("""
             SELECT 
-                a.id, a.name, a.description, a.short_description, a.category_id,
+                a.id, a.name, a.slug, a.description, a.short_description, a.category_id,
                 a.keywords, a.url, a.documentation_url,
                 a.github_url, a.api_endpoint, a.model_info, a.pricing, a.interability, a.is_active,
                 a.created_at, a.updated_at
