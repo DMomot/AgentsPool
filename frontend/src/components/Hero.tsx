@@ -15,8 +15,10 @@ export default function Hero() {
           </h1>
           
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Marketplace of the best AI agents for business automation, 
-            content creation, data analysis and much more
+            Comprehensive catalog of AI agents for business automation, 
+            content creation, data analysis and much more. 
+            A universal directory where both humans and AI agents can discover 
+            and connect with specialized autonomous solutions.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -31,16 +33,16 @@ export default function Hero() {
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 mb-2">500+</div>
+              <div className="text-3xl font-bold text-primary-600 mb-2">1,400+</div>
               <div className="text-gray-600">AI agents</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 mb-2">50k+</div>
-              <div className="text-gray-600">Happy users</div>
+              <div className="text-3xl font-bold text-primary-600 mb-2">22</div>
+              <div className="text-gray-600">Categories</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 mb-2">8</div>
-              <div className="text-gray-600">Categories</div>
+              <div className="text-3xl font-bold text-primary-600 mb-2">A2A Ready</div>
+              <div className="text-gray-600">Agent-to-agent discovery</div>
             </div>
           </div>
         </div>
