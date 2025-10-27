@@ -67,7 +67,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     }
 
     // Browse pages
-    const letters = 'abcdefghijklmnopqrstuvwxyz0123456789'.split('');
+    const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
     for (const letter of letters) {
       xml += `  <url>
     <loc>${baseUrl}/agents/browse/${letter}</loc>
@@ -77,6 +77,16 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   </url>
 `;
     }
+
+    // Numbers page
+    xml += `  <url>
+    <loc>${baseUrl}/agents/browse/numbers</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+`;
+
 
     // ALL Agents
     for (const agent of agents) {
