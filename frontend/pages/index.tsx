@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import Header from '../src/components/Header';
 import Hero from '../src/components/Hero';
 import FeaturedAgents from '../src/components/FeaturedAgents';
@@ -85,17 +86,17 @@ export default function Home() {
               ))
             ) : (
               topCategories.map((category) => (
-                <div
+                <Link
                   key={category.id}
-                  className="card text-center group cursor-pointer hover:shadow-lg transition-all duration-200"
-                  onClick={() => window.location.href = `/categories#category-${category.id}`}
+                  href={`/categories#category-${category.id}`}
+                  className="card text-center group cursor-pointer hover:shadow-lg transition-all duration-200 block no-underline"
                 >
                   <div className="text-4xl mb-3">{category.icon}</div>
                   <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
                     {category.name}
                   </h3>
                   <p className="text-sm text-gray-500">{category.count} agents</p>
-                </div>
+                </Link>
               ))
             )}
           </div>
