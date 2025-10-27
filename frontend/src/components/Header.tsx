@@ -41,8 +41,8 @@ export default function Header() {
             <Link href="/catalog" className="text-gray-700 hover:text-primary-600 font-medium">
               Catalog
             </Link>
-            <Link href="/agents" className="text-gray-700 hover:text-primary-600 font-medium">
-              All Agents
+            <Link href="/categories" className="text-gray-700 hover:text-primary-600 font-medium">
+              Categories
             </Link>
             <Link href="/about" className="text-gray-700 hover:text-primary-600 font-medium">
               About

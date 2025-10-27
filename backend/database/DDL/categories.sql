@@ -27,5 +27,5 @@ INSERT INTO categories (name, description, icon) VALUES
     ('Blockchain & Web3', 'Cryptocurrency, NFT, DeFi, smart contracts and blockchain-related AI tools', '⛓️'),
     ('Workflow', 'Workflow automation, process optimization and task management solutions', '⚡'),
     ('Security & Infrastructure', 'Cybersecurity, data protection, infrastructure monitoring and safety tools', '🔒'),
-    ('Other & Miscellaneous', 'Unique and experimental AI tools that don\'t fit standard categories', '🔧')
+    ('Other & Miscellaneous', 'Unique and experimental AI tools that do not fit standard categories', '🔧')
 ON CONFLICT (name) DO NOTHING;
