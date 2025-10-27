@@ -28,7 +28,7 @@ jobs:
     
     - name: Start backend server with production DB
       env:
-        DATABASE_URL: postgresql://postgres:JGgehRqYMLPrmSnvJgwQYntgQeANwHiU@turntable.proxy.rlwy.net:11480/railway
+        DATABASE_URL: postgresql://postgres:5gkWK_2~_enBlRC1o6Ci2ZUxMz_Th3Jb@yamanote.proxy.rlwy.net:25914/railway
         PORT: 8000
       run: |
         cd backend
