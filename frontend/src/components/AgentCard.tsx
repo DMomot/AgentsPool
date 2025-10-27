@@ -74,18 +74,6 @@ export default function AgentCard({ agent }: AgentCardProps) {
               <span className="text-sm text-gray-600">{agent.category.name}</span>
             </div>
           )}
-
-          {/* Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-            <div className="text-sm text-gray-500">
-              {agent.category?.name || 'Uncategorized'}
-            </div>
-            {agent.featured && (
-              <span className="px-2 py-1 text-xs font-medium text-primary-600 bg-primary-50 rounded">
-                Featured
-              </span>
-            )}
-          </div>
         </div>
       </Link>
     </div>
