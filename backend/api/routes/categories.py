@@ -160,12 +160,12 @@ async def get_agents_by_category_slug(
         agents_query = text("""
             SELECT 
                 a.id, a.name, a.description, a.short_description, a.category_id,
-                a.author, a.tags, a.capabilities, a.use_cases, a.url, a.documentation_url,
-                a.github_url, a.api_endpoint, a.a2a, a.img_url, a.model_info, a.is_active, a.featured,
-                a.slug, a.created_at, a.updated_at
+                a.keywords, a.url, a.documentation_url,
+                a.github_url, a.api_endpoint, a.model_info, a.pricing, a.interability, a.is_active,
+                a.created_at, a.updated_at
             FROM agents a
             WHERE a.category_id = :category_id AND a.is_active = true
-            ORDER BY a.featured DESC, a.created_at DESC
+            ORDER BY a.created_at DESC
             LIMIT :limit OFFSET :offset
         """)
         
@@ -195,20 +195,15 @@ async def get_agents_by_category_slug(
                 "description": agent["description"],
                 "short_description": agent["short_description"],
                 "category_id": agent["category_id"],
-                "author": agent["author"],
-                "tags": agent["tags"] or [],
-                "capabilities": agent["capabilities"] or [],
-                "use_cases": agent["use_cases"] or [],
+                "keywords": agent["keywords"] or [],
                 "url": agent["url"],
                 "documentation_url": agent["documentation_url"],
                 "github_url": agent["github_url"],
                 "api_endpoint": agent["api_endpoint"],
-                "a2a": agent.get("a2a"),
-                "img_url": agent.get("img_url"),
                 "model_info": agent["model_info"] or {},
+                "pricing": agent["pricing"] or {},
+                "interability": agent["interability"] or {},
                 "is_active": agent["is_active"],
-                "featured": agent["featured"],
-                "slug": agent["slug"],
                 "created_at": agent["created_at"].isoformat() if hasattr(agent["created_at"], 'isoformat') else str(agent["created_at"]) if agent["created_at"] else None,
                 "updated_at": agent["updated_at"].isoformat() if hasattr(agent["updated_at"], 'isoformat') else str(agent["updated_at"]) if agent["updated_at"] else None,
                 "category": category_info

@@ -21,17 +21,13 @@ def convert_agent_data(agent):
         "description": agent.description,
         "short_description": agent.short_description,
         "category_id": agent.category_id,
-        "author": agent.author,
-        "featured": agent.featured,
-        "slug": agent.slug,
+        "keywords": agent.keywords if hasattr(agent, 'keywords') else [],
         "created_at": agent.created_at.isoformat() if hasattr(agent.created_at, 'isoformat') else str(agent.created_at),
         "updated_at": agent.updated_at.isoformat() if hasattr(agent.updated_at, 'isoformat') else str(agent.updated_at),
         "url": agent.url,
         "documentation_url": agent.documentation_url,
         "github_url": agent.github_url,
         "api_endpoint": agent.api_endpoint,
-        "a2a": agent.a2a,
-        "img_url": agent.img_url,
     }
     
     # Handle pricing (JSONB field)
@@ -48,10 +44,14 @@ def convert_agent_data(agent):
     else:
         agent_dict["pricing"] = None
     
-    # Convert fields to proper types (PostgreSQL ARRAY fields are already lists)
-    agent_dict["tags"] = agent.tags if isinstance(agent.tags, list) else (json.loads(agent.tags) if agent.tags else [])
-    agent_dict["capabilities"] = agent.capabilities if isinstance(agent.capabilities, list) else (json.loads(agent.capabilities) if agent.capabilities else [])
-    agent_dict["use_cases"] = agent.use_cases if isinstance(agent.use_cases, list) else (json.loads(agent.use_cases) if agent.use_cases else [])
+    # Handle interability (JSONB field)
+    if hasattr(agent, 'interability') and agent.interability:
+        if isinstance(agent.interability, dict):
+            agent_dict["interability"] = agent.interability
+        else:
+            agent_dict["interability"] = None
+    else:
+        agent_dict["interability"] = None
     
     # Handle model_info (JSONB field)
     model_info = {}
@@ -165,12 +165,11 @@ async def get_featured_agents(
     try:
         # Get featured agents using raw SQL
         sql_query = text("""
-            SELECT id, name, description, short_description, category_id, author, 
-                   tags, capabilities, use_cases, 
-                   url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, pricing,
-                   is_active, featured, slug, created_at, updated_at
+            SELECT id, name, description, short_description, category_id, keywords,
+                   url, documentation_url, github_url, api_endpoint, model_info, pricing, interability,
+                   is_active, created_at, updated_at
             FROM agents 
-            WHERE is_active = true AND featured = true 
+            WHERE is_active = true
             ORDER BY created_at DESC 
             LIMIT :limit
         """)
@@ -223,10 +222,9 @@ async def get_agent(agent_id: int, db: Session = Depends(get_db)):
     try:
         # Get agent by ID using raw SQL
         sql_query = text("""
-            SELECT id, name, description, short_description, category_id, author, 
-                   tags, capabilities, use_cases, 
-                   url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, pricing,
-                   is_active, featured, slug, created_at, updated_at
+            SELECT id, name, description, short_description, category_id, keywords,
+                   url, documentation_url, github_url, api_endpoint, model_info, pricing, interability,
+                   is_active, created_at, updated_at
             FROM agents 
             WHERE id = :agent_id AND is_active = true
         """)
@@ -260,12 +258,11 @@ async def get_agent_by_slug(agent_slug: str, db: Session = Depends(get_db)):
     try:
         # Get agent by slug using raw SQL
         sql_query = text("""
-            SELECT id, name, description, short_description, category_id, author, 
-                   tags, capabilities, use_cases, 
-                   url, documentation_url, github_url, api_endpoint, a2a, img_url, model_info, pricing,
-                   is_active, featured, slug, created_at, updated_at
+            SELECT id, name, description, short_description, category_id, keywords,
+                   url, documentation_url, github_url, api_endpoint, model_info, pricing, interability,
+                   is_active, created_at, updated_at
             FROM agents 
-            WHERE slug = :agent_slug AND is_active = true
+            WHERE name = :agent_slug AND is_active = true
         """)
         print(f"""SELECT * 
             FROM agents 
@@ -295,40 +292,23 @@ async def get_agent_by_slug(agent_slug: str, db: Session = Depends(get_db)):
 async def create_agent(agent_data: CreateAgentRequest, db: Session = Depends(get_db)):
     """Create a new agent"""
     try:
-        # Generate slug from name
-        base_slug = generate_slug(agent_data.name)
-        slug = base_slug
-        
-        # Check if slug exists and make it unique
-        counter = 1
-        while db.query(Agent).filter(Agent.slug == slug).first():
-            slug = f"{base_slug}-{counter}"
-            counter += 1
-        
         # Create new agent (only using fields that exist in the model)
         new_agent = Agent(
             name=agent_data.name,
             description=agent_data.description,
             short_description=agent_data.description[:200] + "..." if len(agent_data.description) > 200 else agent_data.description,
             category_id=agent_data.category_id,
-            author="User",  # In real app, get from authentication
-            featured=False,
-            tags=agent_data.tags,
-            capabilities=agent_data.capabilities,
-            use_cases=agent_data.use_cases,
+            keywords=agent_data.tags if hasattr(agent_data, 'tags') else [],
             url=agent_data.url,
-            api_endpoint=agent_data.api_endpoint,
-            documentation_url=agent_data.documentation_url,
-            github_url=agent_data.github_url,
-            a2a=agent_data.a2a,
-            img_url=agent_data.img_url,
-            slug=slug,
+            api_endpoint=agent_data.api_endpoint if hasattr(agent_data, 'api_endpoint') else None,
+            documentation_url=agent_data.documentation_url if hasattr(agent_data, 'documentation_url') else None,
+            github_url=agent_data.github_url if hasattr(agent_data, 'github_url') else None,
             model_info={
-                "pricing_model": agent_data.pricing_model,
-                "logo_url": agent_data.logo_url,
-                "screenshots": agent_data.screenshots,
-                "website_url": agent_data.website_url,
-                "contact_email": agent_data.contact_email
+                "pricing_model": agent_data.pricing_model if hasattr(agent_data, 'pricing_model') else None,
+                "logo_url": agent_data.logo_url if hasattr(agent_data, 'logo_url') else None,
+                "screenshots": agent_data.screenshots if hasattr(agent_data, 'screenshots') else [],
+                "website_url": agent_data.website_url if hasattr(agent_data, 'website_url') else None,
+                "contact_email": agent_data.contact_email if hasattr(agent_data, 'contact_email') else None
             }
         )
         
