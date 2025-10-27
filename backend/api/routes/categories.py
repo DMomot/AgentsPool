@@ -13,11 +13,11 @@ router = APIRouter(prefix="/categories", tags=["categories"])
 async def get_categories(db: Session = Depends(get_db)):
     """Get all categories"""
     sql_query = text("""
-        SELECT id, name, description, icon, slug, created_at 
+        SELECT id, name, title, description, text, icon, slug, img_url, created_at 
         FROM categories 
         ORDER BY name
     """)
-    print("""SELECT id, name, description, icon, slug, created_at 
+    print("""SELECT id, name, title, description, text, icon, slug, img_url, created_at 
         FROM categories 
         ORDER BY name""")
     
@@ -27,9 +27,12 @@ async def get_categories(db: Session = Depends(get_db)):
         {
             "id": row["id"],
             "name": row["name"],
+            "title": row["title"],
             "description": row["description"],
+            "text": row["text"],
             "icon": row["icon"],
             "slug": row["slug"],
+            "img_url": row["img_url"],
             "created_at": row["created_at"].isoformat() if row["created_at"] else None
         }
         for row in result
@@ -87,7 +90,7 @@ async def get_category_by_slug(slug: str, db: Session = Depends(get_db)):
     """Get category by slug"""
     try:
         category_query = text("""
-            SELECT id, name, description, icon, slug, created_at 
+            SELECT id, name, title, description, text, icon, slug, img_url, created_at 
             FROM categories 
             WHERE slug = :slug
         """)
@@ -102,9 +105,12 @@ async def get_category_by_slug(slug: str, db: Session = Depends(get_db)):
         return {
             "id": result["id"],
             "name": result["name"],
+            "title": result["title"],
             "description": result["description"],
+            "text": result["text"],
             "icon": result["icon"],
             "slug": result["slug"],
+            "img_url": result["img_url"],
             "created_at": result["created_at"].isoformat() if result["created_at"] else None
         }
         
@@ -126,7 +132,7 @@ async def get_agents_by_category_slug(
     try:
         # First find category by slug
         category_query = text("""
-            SELECT id, name, description, icon, slug, created_at 
+            SELECT id, name, title, description, text, icon, slug, img_url, created_at 
             FROM categories 
             WHERE slug = :slug
         """)
@@ -140,9 +146,12 @@ async def get_agents_by_category_slug(
         category_info = {
             "id": category_result["id"],
             "name": category_result["name"],
+            "title": category_result["title"],
             "description": category_result["description"],
+            "text": category_result["text"],
             "icon": category_result["icon"],
-            "slug": category_result["slug"]
+            "slug": category_result["slug"],
+            "img_url": category_result["img_url"]
         }
         
         # Get agents for this category
