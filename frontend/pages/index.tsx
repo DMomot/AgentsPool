@@ -88,7 +88,7 @@ export default function Home() {
               topCategories.map((category) => (
                 <Link
                   key={category.id}
-                  href={`/categories#category-${category.id}`}
+                  href={`/${category.slug}`}
                   className="card text-center group cursor-pointer hover:shadow-lg transition-all duration-200 block no-underline"
                 >
                   <div className="text-4xl mb-3">{category.icon}</div>
