@@ -375,12 +375,12 @@ async def create_agent(agent_data: CreateAgentRequest, db: Session = Depends(get
 
 @router.post("/search-ai")
 async def ai_search_agents(request: AISearchRequest, db: Session = Depends(get_db)):
-    """Two-stage AI search: Vector retrieval (top 20) → Reranking (top 3)"""
+    """Two-stage AI search: Vector retrieval (top 6) → Reranking (top 3)"""
     try:
         query = request.query
         print(f"AI Search query: {query}")
         
-        # Stage 1: Vector retrieval - Get top 20 candidates using PGVector
+        # Stage 1: Vector retrieval - Get top 6 candidates using PGVector
         model = get_embedding_model()
         query_embedding = model.encode(query).tolist()
         
@@ -394,7 +394,7 @@ async def ai_search_agents(request: AISearchRequest, db: Session = Depends(get_d
             LEFT JOIN categories c ON a.category_id = c.id
             WHERE a.is_active = true AND a.vector_description IS NOT NULL
             ORDER BY a.vector_description <=> :query_vector
-            LIMIT 20
+            LIMIT 6
         """)
         
         query_vector_str = '[' + ','.join(map(str, query_embedding)) + ']'
@@ -408,7 +408,7 @@ async def ai_search_agents(request: AISearchRequest, db: Session = Depends(get_d
         
         print(f"Stage 1: Retrieved {len(results)} candidates")
         
-        # Stage 2: Reranking - Use cross-encoder to rerank top 20 → get top 3
+        # Stage 2: Reranking - Use cross-encoder to rerank top 6 → get top 3
         reranker = get_reranker_model()
         
         # Prepare query-document pairs for reranking
