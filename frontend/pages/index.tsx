@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Header from '../src/components/Header';
 import Hero from '../src/components/Hero';
 import FeaturedAgents from '../src/components/FeaturedAgents';
+import Statistics from '../src/components/Statistics';
 import Footer from '../src/components/Footer';
 import MetaTags from '../src/components/MetaTags';
 import { apiClient } from '../src/lib/api';
@@ -60,7 +61,10 @@ export default function Home() {
       <main className="min-h-screen bg-white">
         <Header />
         <Hero />
+
         <FeaturedAgents />
+
+        <Statistics />
       
       {/* Categories Preview */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">

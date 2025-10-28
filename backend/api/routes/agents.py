@@ -2,8 +2,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import text, desc, asc, or_
-from typing import Optional
+from typing import Optional, List
+from pydantic import BaseModel
 import json
+from sentence_transformers import SentenceTransformer, CrossEncoder
+import numpy as np
 
 from api.dependencies import get_db
 from schemas.agent import CreateAgentRequest
@@ -11,6 +14,36 @@ from database.models import Agent
 from utils.slug import generate_slug
 
 router = APIRouter(prefix="/agents", tags=["agents"])
+
+
+class AISearchRequest(BaseModel):
+    query: str
+
+
+class AISearchResponse(BaseModel):
+    message: str
+    agents: List[dict]
+
+
+# Global model instances
+_embedding_model = None
+_reranker_model = None
+
+def get_embedding_model():
+    global _embedding_model
+    if _embedding_model is None:
+        print("Loading embedding model (sentence-t5-base)...")
+        _embedding_model = SentenceTransformer('sentence-t5-base')  # 768 dims
+        print("Embedding model loaded!")
+    return _embedding_model
+
+def get_reranker_model():
+    global _reranker_model
+    if _reranker_model is None:
+        print("Loading reranker model...")
+        _reranker_model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-12-v2')
+        print("Reranker model loaded!")
+    return _reranker_model
 
 
 def convert_agent_data(agent):
@@ -338,4 +371,100 @@ async def create_agent(agent_data: CreateAgentRequest, db: Session = Depends(get
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Failed to create agent: {str(e)}")
+
+
+@router.post("/search-ai")
+async def ai_search_agents(request: AISearchRequest, db: Session = Depends(get_db)):
+    """Two-stage AI search: Vector retrieval (top 20) → Reranking (top 3)"""
+    try:
+        query = request.query
+        print(f"AI Search query: {query}")
+        
+        # Stage 1: Vector retrieval - Get top 20 candidates using PGVector
+        model = get_embedding_model()
+        query_embedding = model.encode(query).tolist()
+        
+        # Use HNSW index for fast vector search
+        agents_query = text("""
+            SELECT 
+                a.id, a.name, a.slug, a.description, a.short_description, 
+                a.category_id, a.keywords, a.url,
+                c.name as category_name, c.icon as category_icon
+            FROM agents a
+            LEFT JOIN categories c ON a.category_id = c.id
+            WHERE a.is_active = true AND a.vector_description IS NOT NULL
+            ORDER BY a.vector_description <=> :query_vector
+            LIMIT 20
+        """)
+        
+        query_vector_str = '[' + ','.join(map(str, query_embedding)) + ']'
+        results = db.execute(agents_query, {"query_vector": query_vector_str}).mappings().all()
+        
+        if len(results) == 0:
+            return AISearchResponse(
+                message="I couldn't find any agents matching your request. Try rephrasing or use different keywords.",
+                agents=[]
+            )
+        
+        print(f"Stage 1: Retrieved {len(results)} candidates")
+        
+        # Stage 2: Reranking - Use cross-encoder to rerank top 20 → get top 3
+        reranker = get_reranker_model()
+        
+        # Prepare query-document pairs for reranking
+        pairs = [[query, r['description'][:1000]] for r in results]
+        rerank_scores = reranker.predict(pairs)
+        
+        # Attach scores to results
+        candidates = []
+        for i, result in enumerate(results):
+            candidate = dict(result)
+            candidate['rerank_score'] = float(rerank_scores[i])
+            candidates.append(candidate)
+        
+        # Sort by rerank score and take top 3
+        candidates.sort(key=lambda x: x['rerank_score'], reverse=True)
+        top_results = candidates[:3]
+        
+        print(f"Stage 2: Top 3 after reranking: {[(r['name'], round(r['rerank_score'], 3)) for r in top_results]}")
+        
+        # Build response with top 3 reranked agents
+        agents = []
+        for result in top_results:
+            agent_data = {
+                "id": result["id"],
+                "name": result["name"],
+                "slug": result["slug"],
+                "description": result["description"],
+                "short_description": result["short_description"],
+                "category_id": result["category_id"],
+                "url": result["url"],
+                "tags": result["keywords"] or [],
+            }
+            
+            if result.get("category_name"):
+                agent_data["category"] = {
+                    "name": result["category_name"],
+                    "icon": result["category_icon"]
+                }
+            
+            agents.append(agent_data)
+        
+        if len(agents) == 0:
+            message = "I couldn't find any agents matching your request. Try rephrasing or use different keywords."
+        elif len(agents) == 1:
+            message = f"I found 1 agent that might help:"
+        else:
+            message = f"I found {len(agents)} agents that might help:"
+        
+        return AISearchResponse(
+            message=message,
+            agents=agents
+        )
+        
+    except Exception as e:
+        print(f"Error in AI search: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
 
