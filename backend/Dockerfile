@@ -50,6 +50,9 @@ COPY . .
 ENV CHROME_BIN=/usr/bin/google-chrome-stable \
     CHROME_PATH=/usr/bin/google-chrome-stable
 
+# Create cache directory for HuggingFace models (will be mounted as volume)
+RUN mkdir -p /app/.cache/huggingface
+
 # Create non-root user
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser

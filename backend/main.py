@@ -3,6 +3,11 @@
 AgentsPool API - Refactored Production Backend
 AI Agent Catalog and Marketplace
 """
+import os
+
+# Set HuggingFace cache directory for Railway volume persistence
+os.environ['TRANSFORMERS_CACHE'] = '/app/.cache/huggingface'
+os.environ['HF_HOME'] = '/app/.cache/huggingface'
 
 from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -49,28 +54,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Startup event - preload AI models
+# Startup event - preload AI models (disabled for faster startup in CI/CD)
 @app.on_event("startup")
 async def startup_event():
-    """Load AI models on server startup for faster first request"""
-    print("🤖 Loading AI models...")
-    try:
-        from api.routes.agents import get_embedding_model, get_reranker_model
-        
-        # Preload embedding model
-        print("  📦 Loading embedding model (sentence-t5-base)...")
-        get_embedding_model()
-        print("  ✅ Embedding model loaded")
-        
-        # Preload reranker model
-        print("  📦 Loading reranker model (cross-encoder)...")
-        get_reranker_model()
-        print("  ✅ Reranker model loaded")
-        
-        print("🎉 All AI models loaded successfully!")
-    except Exception as e:
-        print(f"⚠️  Warning: Failed to preload AI models: {e}")
-        print("   Models will be loaded on first search request")
+    """Models will be loaded lazily on first AI search request"""
+    print("🚀 Server starting up...")
+    print("⚠️  AI models will load on first search request (lazy loading)")
+    print("   This makes startup faster, especially in CI/CD")
 
 # Include routers
 app.include_router(health.router)  # No prefix for health endpoints
