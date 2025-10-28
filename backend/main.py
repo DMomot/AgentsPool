@@ -4,10 +4,17 @@ AgentsPool API - Refactored Production Backend
 AI Agent Catalog and Marketplace
 """
 import os
+from pathlib import Path
 
-# Set HuggingFace cache directory for Railway volume persistence
-os.environ['TRANSFORMERS_CACHE'] = '/app/.cache/huggingface'
-os.environ['HF_HOME'] = '/app/.cache/huggingface'
+# Set HuggingFace cache directory for Railway volume persistence (only if directory exists)
+cache_dir = Path('/app/.cache')
+if cache_dir.exists():
+    os.environ['TRANSFORMERS_CACHE'] = '/app/.cache/huggingface'
+    os.environ['HF_HOME'] = '/app/.cache/huggingface'
+    print(f"📦 Using model cache: /app/.cache/huggingface")
+else:
+    # In CI/CD use default cache (~/.cache/huggingface)
+    print(f"📦 Using default model cache location")
 
 from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
