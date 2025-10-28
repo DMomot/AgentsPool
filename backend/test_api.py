@@ -1,29 +1,28 @@
 """
 API Integration Tests
-Tests all endpoints using FastAPI TestClient (no server needed)
+Tests all endpoints against production API
 """
+import os
 import pytest
-from fastapi.testclient import TestClient
-from main import app
+import requests
 
-# Create test client - no need to run server!
-client = TestClient(app)
+# Test against production API by default
+API_BASE_URL = os.getenv("API_BASE_URL", "https://api.agentspool.ai")
 
 def test_api_available():
     """Test that API is available"""
-    response = client.get("/api/v1/categories")
+    response = requests.get(f"{API_BASE_URL}/api/v1/categories")
     assert response.status_code == 200
     data = response.json()
-    assert isinstance(data, list)  # Should return array of categories
+    assert isinstance(data, list)
 
 def test_get_categories():
     """Test GET /api/v1/categories"""
-    response = client.get("/api/v1/categories")
+    response = requests.get(f"{API_BASE_URL}/api/v1/categories")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
     assert len(data) > 0
-    # Check structure of first category
     if data:
         category = data[0]
         assert "id" in category
@@ -32,13 +31,12 @@ def test_get_categories():
 
 def test_get_category_by_slug():
     """Test GET /api/v1/categories/slug/{slug}"""
-    # First get all categories to get a valid slug
-    response = client.get("/api/v1/categories")
+    response = requests.get(f"{API_BASE_URL}/api/v1/categories")
     categories = response.json()
     
     if categories:
         category_slug = categories[0]["slug"]
-        response = client.get(f"/api/v1/categories/slug/{category_slug}")
+        response = requests.get(f"{API_BASE_URL}/api/v1/categories/slug/{category_slug}")
         assert response.status_code == 200
         data = response.json()
         assert data["slug"] == category_slug
@@ -46,25 +44,23 @@ def test_get_category_by_slug():
 
 def test_get_agents_by_category():
     """Test GET /api/v1/categories/{slug}/agents"""
-    # First get all categories
-    response = client.get("/api/v1/categories")
+    response = requests.get(f"{API_BASE_URL}/api/v1/categories")
     categories = response.json()
     
     if categories:
         category_slug = categories[0]["slug"]
-        response = client.get(f"/api/v1/categories/{category_slug}/agents")
+        response = requests.get(f"{API_BASE_URL}/api/v1/categories/{category_slug}/agents")
         assert response.status_code == 200
         data = response.json()
         assert "agents" in data
         assert isinstance(data["agents"], list)
-        # Check pagination fields (not nested in "pagination" key)
         assert "total" in data
         assert "page" in data
         assert "limit" in data
 
 def test_get_category_stats():
     """Test GET /api/v1/categories/stats"""
-    response = client.get("/api/v1/categories/stats")
+    response = requests.get(f"{API_BASE_URL}/api/v1/categories/stats")
     assert response.status_code == 200
     data = response.json()
     assert "category_stats" in data
@@ -73,23 +69,20 @@ def test_get_category_stats():
 
 def test_search_agents():
     """Test GET /api/v1/agents (search)"""
-    response = client.get("/api/v1/agents?page=1&limit=10")
+    response = requests.get(f"{API_BASE_URL}/api/v1/agents?page=1&limit=10")
     assert response.status_code == 200
     data = response.json()
     assert "agents" in data
     assert isinstance(data["agents"], list)
-    # Check pagination fields (not nested in "pagination" key)
     assert "total" in data
     assert "page" in data
     assert "limit" in data
 
 def test_get_agent_by_slug():
     """Test GET /api/v1/agents/slug/{slug}"""
-    # First search for agents to get a valid slug
-    response = client.get("/api/v1/agents?page=1&limit=100")
+    response = requests.get(f"{API_BASE_URL}/api/v1/agents?page=1&limit=100")
     data = response.json()
     
-    # Find an agent with a slug
     agent_slug = None
     if data.get("agents"):
         for agent in data["agents"]:
@@ -98,45 +91,41 @@ def test_get_agent_by_slug():
                 break
     
     if agent_slug:
-        response = client.get(f"/api/v1/agents/slug/{agent_slug}")
+        response = requests.get(f"{API_BASE_URL}/api/v1/agents/slug/{agent_slug}")
         assert response.status_code == 200
         agent_data = response.json()
         assert agent_data["slug"] == agent_slug
         assert "name" in agent_data
         assert "description" in agent_data
     else:
-        # Skip test if no agents with slug found
         pytest.skip("No agents with slug found in database")
 
 def test_check_agent_url():
     """Test GET /api/v1/agents/check-url"""
-    response = client.get("/api/v1/agents/check-url?url=https://example.com")
+    response = requests.get(f"{API_BASE_URL}/api/v1/agents/check-url?url=https://example.com")
     assert response.status_code == 200
     data = response.json()
     assert "exists" in data
 
 def test_cors_headers():
     """Test that CORS headers are present"""
-    response = client.get("/api/v1/categories")
+    response = requests.get(f"{API_BASE_URL}/api/v1/categories")
     assert response.status_code == 200
-    # Check CORS headers are present in response
-    # Note: CORS headers might be set by proxy/CDN, so this is optional
-    assert response.status_code == 200  # At least API is accessible
 
 def test_api_response_time():
     """Test that API responds within acceptable time"""
     import time
     
     start = time.time()
-    response = client.get("/api/v1/categories")
+    response = requests.get(f"{API_BASE_URL}/api/v1/categories")
     duration = time.time() - start
     
     assert response.status_code == 200
-    assert duration < 5.0  # Should respond within 5 seconds
+    assert duration < 5.0
 
 def test_get_fundraising_list():
     """Test GET /api/v1/fundraising"""
-    response = client.get("/api/v1/fundraising?limit=10")
+    response = requests.get(f"{API_BASE_URL}/api/v1/fundraising?limit=10")
     assert response.status_code == 200
     data = response.json()
     assert "companies" in data
@@ -147,7 +136,7 @@ def test_get_fundraising_list():
 
 def test_get_fundraising_with_search():
     """Test GET /api/v1/fundraising with search"""
-    response = client.get("/api/v1/fundraising?search=AI&limit=10")
+    response = requests.get(f"{API_BASE_URL}/api/v1/fundraising?search=AI&limit=10")
     assert response.status_code == 200
     data = response.json()
     assert "companies" in data
@@ -155,13 +144,12 @@ def test_get_fundraising_with_search():
 
 def test_get_fundraising_company():
     """Test GET /api/v1/fundraising/{id}"""
-    # First get list to get a valid ID
-    list_response = client.get("/api/v1/fundraising?limit=1")
+    list_response = requests.get(f"{API_BASE_URL}/api/v1/fundraising?limit=1")
     if list_response.status_code == 200:
         data = list_response.json()
         if data.get("companies") and len(data["companies"]) > 0:
             company_id = data["companies"][0]["id"]
-            response = client.get(f"/api/v1/fundraising/{company_id}")
+            response = requests.get(f"{API_BASE_URL}/api/v1/fundraising/{company_id}")
             assert response.status_code == 200
             company = response.json()
             assert "id" in company
@@ -174,7 +162,7 @@ def test_get_fundraising_company():
 
 def test_get_news():
     """Test GET /api/v1/news"""
-    response = client.get("/api/v1/news?page=1&limit=20")
+    response = requests.get(f"{API_BASE_URL}/api/v1/news?page=1&limit=20")
     assert response.status_code == 200
     data = response.json()
     assert "articles" in data
@@ -188,13 +176,12 @@ def test_get_news():
 
 def test_get_news_article():
     """Test GET /api/v1/news/{id}"""
-    # First get news list to get a valid ID
-    list_response = client.get("/api/v1/news?limit=1")
+    list_response = requests.get(f"{API_BASE_URL}/api/v1/news?limit=1")
     if list_response.status_code == 200:
         data = list_response.json()
         if data.get("articles") and len(data["articles"]) > 0:
             article_id = data["articles"][0]["id"]
-            response = client.get(f"/api/v1/news/{article_id}")
+            response = requests.get(f"{API_BASE_URL}/api/v1/news/{article_id}")
             assert response.status_code == 200
             article = response.json()
             assert "id" in article
@@ -209,11 +196,10 @@ def test_get_news_article():
 
 def test_get_news_sources():
     """Test GET /api/v1/news/sources/list"""
-    response = client.get("/api/v1/news/sources/list")
+    response = requests.get(f"{API_BASE_URL}/api/v1/news/sources/list")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
-    # If there are sources, check structure
     if data:
         source = data[0]
         assert "name" in source
@@ -221,20 +207,19 @@ def test_get_news_sources():
 
 def test_get_news_tags():
     """Test GET /api/v1/news/tags/list"""
-    response = client.get("/api/v1/news/tags/list")
+    response = requests.get(f"{API_BASE_URL}/api/v1/news/tags/list")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
 
 def test_get_news_with_tag_filter():
     """Test GET /api/v1/news with tag filter"""
-    # First get tags
-    tags_response = client.get("/api/v1/news/tags/list")
+    tags_response = requests.get(f"{API_BASE_URL}/api/v1/news/tags/list")
     if tags_response.status_code == 200:
         tags = tags_response.json()
         if tags:
             test_tag = tags[0]
-            response = client.get(f"/api/v1/news?tag={test_tag}&limit=10")
+            response = requests.get(f"{API_BASE_URL}/api/v1/news?tag={test_tag}&limit=10")
             assert response.status_code == 200
             data = response.json()
             assert "articles" in data
@@ -244,13 +229,12 @@ def test_get_news_with_tag_filter():
 
 def test_get_news_with_source_filter():
     """Test GET /api/v1/news with source filter"""
-    # First get sources
-    sources_response = client.get("/api/v1/news/sources/list")
+    sources_response = requests.get(f"{API_BASE_URL}/api/v1/news/sources/list")
     if sources_response.status_code == 200:
         sources = sources_response.json()
         if sources:
             test_source = sources[0]["name"]
-            response = client.get(f"/api/v1/news?source={test_source}&limit=10")
+            response = requests.get(f"{API_BASE_URL}/api/v1/news?source={test_source}&limit=10")
             assert response.status_code == 200
             data = response.json()
             assert "articles" in data
@@ -259,6 +243,4 @@ def test_get_news_with_source_filter():
             pytest.skip("No sources found in database")
 
 if __name__ == "__main__":
-    # Run tests
     pytest.main([__file__, "-v", "--tb=short"])
-
