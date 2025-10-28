@@ -38,16 +38,16 @@ jobs:
         echo "Backend PID: $BACKEND_PID"
         echo "Waiting for server to start (loading AI models)..."
         
-        # Wait for server with retries (up to 120 seconds for AI model loading)
-        for i in {1..24}; do
+        # Wait for server with retries (up to 180 seconds for AI model loading)
+        for i in {1..36}; do
           sleep 5
           if curl -s http://localhost:8000/status > /dev/null; then
-            echo "✅ Backend started successfully (attempt $i)"
+            echo "✅ Backend started successfully after $(($i * 5)) seconds"
             break
           fi
-          echo "Waiting... (attempt $i/24)"
-          if [ $i -eq 24 ]; then
-            echo "❌ Server failed to start after 120 seconds"
+          echo "Waiting for AI models to load... ($(($i * 5))s / 180s)"
+          if [ $i -eq 36 ]; then
+            echo "❌ Server failed to start after 180 seconds"
             kill $BACKEND_PID
             exit 1
           fi

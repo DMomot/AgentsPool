@@ -242,5 +242,28 @@ def test_get_news_with_source_filter():
         else:
             pytest.skip("No sources found in database")
 
+def test_ai_search_agents():
+    """Test POST /api/v1/agents/search-ai"""
+    payload = {"query": "blockchain DeFi assistant"}
+    response = requests.post(
+        f"{API_BASE_URL}/api/v1/agents/search-ai",
+        json=payload,
+        headers={"Content-Type": "application/json"}
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert "message" in data
+    assert "agents" in data
+    assert isinstance(data["agents"], list)
+    # Should return up to 3 agents
+    assert len(data["agents"]) <= 3
+    # Each agent should have required fields
+    if data["agents"]:
+        agent = data["agents"][0]
+        assert "id" in agent
+        assert "name" in agent
+        assert "slug" in agent
+        assert "description" in agent
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
