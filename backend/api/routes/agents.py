@@ -375,30 +375,47 @@ async def create_agent(agent_data: CreateAgentRequest, db: Session = Depends(get
 
 @router.post("/search-ai")
 async def ai_search_agents(request: AISearchRequest, db: Session = Depends(get_db)):
-    """Two-stage AI search: Vector retrieval (top 6) → Reranking (top 3)"""
+    """AI search: Vector retrieval only (optimized for speed)"""
     try:
+        import time
+        start_time = time.time()
+        
         query = request.query
         print(f"AI Search query: {query}")
         
-        # Stage 1: Vector retrieval - Get top 6 candidates using PGVector
+        # Stage 1: Vector retrieval - Get top candidates using PGVector
+        stage1_start = time.time()
         model = get_embedding_model()
-        query_embedding = model.encode(query).tolist()
+        model_load_time = time.time() - stage1_start
+        print(f"⏱️  Model load: {model_load_time:.2f}s")
         
-        # Use HNSW index for fast vector search
+        encode_start = time.time()
+        query_embedding = model.encode(query).tolist()
+        encode_time = time.time() - encode_start
+        print(f"⏱️  Query encode: {encode_time:.2f}s")
+        
+        # Vector search - get top matches
         agents_query = text("""
             SELECT 
                 a.id, a.name, a.slug, a.description, a.short_description, 
-                a.category_id, a.keywords, a.url,
+                a.category_id, a.keywords, a.url, a.is_active,
                 c.name as category_name, c.icon as category_icon
             FROM agents a
             LEFT JOIN categories c ON a.category_id = c.id
-            WHERE a.is_active = true AND a.vector_description IS NOT NULL
+            WHERE a.vector_description IS NOT NULL
             ORDER BY a.vector_description <=> :query_vector
-            LIMIT 6
+            LIMIT 10
         """)
         
         query_vector_str = '[' + ','.join(map(str, query_embedding)) + ']'
+        
+        db_start = time.time()
         results = db.execute(agents_query, {"query_vector": query_vector_str}).mappings().all()
+        db_time = time.time() - db_start
+        print(f"⏱️  DB vector search: {db_time:.2f}s")
+        
+        # Filter only active agents and take top 3
+        results = [r for r in results if r.get('is_active', True)][:3]
         
         if len(results) == 0:
             return AISearchResponse(
@@ -406,31 +423,11 @@ async def ai_search_agents(request: AISearchRequest, db: Session = Depends(get_d
                 agents=[]
             )
         
-        print(f"Stage 1: Retrieved {len(results)} candidates")
+        print(f"Retrieved {len(results)} active agents (vector search only)")
         
-        # Stage 2: Reranking - Use cross-encoder to rerank top 6 → get top 3
-        reranker = get_reranker_model()
-        
-        # Prepare query-document pairs for reranking
-        pairs = [[query, r['description'][:1000]] for r in results]
-        rerank_scores = reranker.predict(pairs)
-        
-        # Attach scores to results
-        candidates = []
-        for i, result in enumerate(results):
-            candidate = dict(result)
-            candidate['rerank_score'] = float(rerank_scores[i])
-            candidates.append(candidate)
-        
-        # Sort by rerank score and take top 3
-        candidates.sort(key=lambda x: x['rerank_score'], reverse=True)
-        top_results = candidates[:3]
-        
-        print(f"Stage 2: Top 3 after reranking: {[(r['name'], round(r['rerank_score'], 3)) for r in top_results]}")
-        
-        # Build response with top 3 reranked agents
+        # Build response with top 3 agents from vector search
         agents = []
-        for result in top_results:
+        for result in results:
             agent_data = {
                 "id": result["id"],
                 "name": result["name"],
@@ -456,6 +453,9 @@ async def ai_search_agents(request: AISearchRequest, db: Session = Depends(get_d
             message = f"I found 1 agent that might help:"
         else:
             message = f"I found {len(agents)} agents that might help:"
+        
+        total_time = time.time() - start_time
+        print(f"⏱️  TOTAL TIME: {total_time:.2f}s")
         
         return AISearchResponse(
             message=message,
