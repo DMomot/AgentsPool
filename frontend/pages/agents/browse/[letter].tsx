@@ -31,15 +31,23 @@ export default function LetterPage({ letter, agents, totalCount, availableLetter
         <Header />
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Breadcrumb */}
-          <nav className="mb-6">
+          {/* Breadcrumbs */}
+          <nav className="mb-4">
             <ol className="flex items-center space-x-2 text-sm text-gray-600">
               <li>
-                <Link href="/agents" className="hover:text-blue-600">
+                <a href="/" className="hover:text-primary-600 transition-colors">Home</a>
+              </li>
+              <li>
+                <span className="mx-2">›</span>
+              </li>
+              <li>
+                <Link href="/agents" className="hover:text-primary-600 transition-colors">
                   All Agents
                 </Link>
               </li>
-              <li className="text-gray-400">/</li>
+              <li>
+                <span className="mx-2">›</span>
+              </li>
               <li className="text-gray-900 font-medium">{displayLetter}</li>
             </ol>
           </nav>
@@ -109,7 +117,7 @@ export default function LetterPage({ letter, agents, totalCount, availableLetter
                   .map(agent => (
                     <Link
                       key={agent.id}
-                      href={`/agents/${agent.slug}`}
+                      href={`/${agent.slug}`}
                       className="block border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all duration-200 overflow-hidden"
                     >
                       {/* Image */}

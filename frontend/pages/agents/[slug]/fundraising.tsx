@@ -207,7 +207,7 @@ export default function AgentFundraisingPage({ agent, fundraising, error }: Page
               <li>
                 <div className="flex items-center">
                   <span className="mx-2 text-gray-400">/</span>
-                  <Link href={`/agents/${agent.slug}`} className="text-gray-700 hover:text-blue-600">
+                  <Link href={`/${agent.slug}`} className="text-gray-700 hover:text-blue-600">
                     {agent.name}
                   </Link>
                 </div>
@@ -234,7 +234,7 @@ export default function AgentFundraisingPage({ agent, fundraising, error }: Page
                 </div>
               </div>
               <Link
-                href={`/agents/${agent.slug}`}
+                href={`/${agent.slug}`}
                 className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
               >
                 View Agent

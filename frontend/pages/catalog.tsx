@@ -68,6 +68,21 @@ export default function CatalogPage() {
         <Header />
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Breadcrumbs */}
+          <nav className="mb-4">
+            <ol className="flex items-center space-x-2 text-sm text-gray-600">
+              <li>
+                <a href="/" className="hover:text-primary-600 transition-colors">Home</a>
+              </li>
+              <li>
+                <span className="mx-2">›</span>
+              </li>
+              <li className="text-gray-900 font-medium">
+                Catalog
+              </li>
+            </ol>
+          </nav>
+
           {/* Page Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
@@ -76,14 +91,6 @@ export default function CatalogPage() {
             <p className="text-lg text-gray-600">
               Search and filter through {searchResponse?.total || 'many'} AI agents to find the perfect solution
             </p>
-            <div className="mt-4">
-              <a 
-                href="/categories" 
-                className="text-primary-600 hover:text-primary-700 font-medium"
-              >
-                ← Browse by Categories
-              </a>
-            </div>
           </div>
 
           {/* Search and Filters */}

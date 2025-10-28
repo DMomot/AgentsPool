@@ -108,6 +108,21 @@ export default function CategoriesPage() {
       <Header />
 
       <main className="container mx-auto px-4 py-8">
+        {/* Breadcrumbs */}
+        <nav className="mb-4">
+          <ol className="flex items-center space-x-2 text-sm text-gray-600">
+            <li>
+              <a href="/" className="hover:text-primary-600 transition-colors">Home</a>
+            </li>
+            <li>
+              <span className="mx-2">›</span>
+            </li>
+            <li className="text-gray-900 font-medium">
+              Categories
+            </li>
+          </ol>
+        </nav>
+
         {/* Page Header */}
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">AI Agent Categories</h1>

@@ -257,13 +257,15 @@ async def get_agent(agent_id: int, db: Session = Depends(get_db)):
 async def get_agent_by_slug(agent_slug: str, db: Session = Depends(get_db)):
     """Get agent by slug"""
     try:
-        # Get agent by slug using raw SQL
+        # Get agent by slug with category info using raw SQL
         sql_query = text("""
-            SELECT id, name, slug, description, short_description, category_id, keywords,
-                   url, documentation_url, github_url, api_endpoint, model_info, pricing, interability,
-                   is_active, created_at, updated_at
-            FROM agents 
-            WHERE slug = :agent_slug AND is_active = true
+            SELECT a.id, a.name, a.slug, a.description, a.short_description, a.category_id, a.keywords,
+                   a.url, a.documentation_url, a.github_url, a.api_endpoint, a.model_info, a.pricing, a.interability,
+                   a.is_active, a.created_at, a.updated_at,
+                   c.id as category__id, c.name as category__name, c.slug as category__slug, c.icon as category__icon
+            FROM agents a
+            LEFT JOIN categories c ON a.category_id = c.id
+            WHERE a.slug = :agent_slug AND a.is_active = true
         """)
         print(f"""SELECT * 
             FROM agents 
@@ -280,7 +282,18 @@ async def get_agent_by_slug(agent_slug: str, db: Session = Depends(get_db)):
             if column.name in result:
                 setattr(agent, column.name, result[column.name])
         
-        return convert_agent_data(agent)
+        agent_data = convert_agent_data(agent)
+        
+        # Add category info if available
+        if result.get("category__id"):
+            agent_data["category"] = {
+                "id": result["category__id"],
+                "name": result["category__name"],
+                "slug": result["category__slug"],
+                "icon": result["category__icon"]
+            }
+        
+        return agent_data
         
     except HTTPException:
         raise

@@ -17,7 +17,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
   
   return (
     <div className="card group cursor-pointer">
-      <Link href={`/agents/${agent.slug}`}>
+      <Link href={`/${agent.slug}`}>
         <div className="space-y-4">
           {/* Image */}
           <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-100">

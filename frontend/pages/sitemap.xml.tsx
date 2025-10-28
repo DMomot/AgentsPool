@@ -105,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
       const changefreq = agent.featured ? 'daily' : 'weekly';
       
       xml += `  <url>
-    <loc>${baseUrl}/agents/${agent.slug}</loc>
+    <loc>${baseUrl}/${agent.slug}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
