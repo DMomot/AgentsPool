@@ -36,10 +36,23 @@ jobs:
         python main.py &
         BACKEND_PID=$!
         echo "Backend PID: $BACKEND_PID"
-        echo "Waiting for server to start..."
-        sleep 15
-        curl -s http://localhost:8000/status || (echo "❌ Server not responding" && kill $BACKEND_PID && exit 1)
-        echo "✅ Backend started successfully"
+        echo "Waiting for server to start (loading AI models)..."
+        
+        # Wait for server with retries (up to 120 seconds for AI model loading)
+        for i in {1..24}; do
+          sleep 5
+          if curl -s http://localhost:8000/status > /dev/null; then
+            echo "✅ Backend started successfully (attempt $i)"
+            break
+          fi
+          echo "Waiting... (attempt $i/24)"
+          if [ $i -eq 24 ]; then
+            echo "❌ Server failed to start after 120 seconds"
+            kill $BACKEND_PID
+            exit 1
+          fi
+        done
+        
         pytest test_api.py -v --tb=short
         TEST_RESULT=$?
         kill $BACKEND_PID
