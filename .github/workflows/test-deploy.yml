@@ -26,24 +26,24 @@ jobs:
         cd backend
         pip install -r requirements.txt
     
-    - name: Start backend server with production DB
+    - name: Start backend server and run tests
       env:
         DATABASE_URL: postgresql://postgres:5gkWK_2~_enBlRC1o6Ci2ZUxMz_Th3Jb@yamanote.proxy.rlwy.net:25914/railway
         PORT: 8000
+        API_BASE_URL: http://localhost:8000
       run: |
         cd backend
         python main.py &
         BACKEND_PID=$!
         echo "Backend PID: $BACKEND_PID"
-        sleep 10
-        echo "✅ Backend started"
-    
-    - name: Run API tests
-      env:
-        API_BASE_URL: http://localhost:8000
-      run: |
-        cd backend
+        echo "Waiting for server to start..."
+        sleep 15
+        curl -s http://localhost:8000/status || (echo "❌ Server not responding" && kill $BACKEND_PID && exit 1)
+        echo "✅ Backend started successfully"
         pytest test_api.py -v --tb=short
+        TEST_RESULT=$?
+        kill $BACKEND_PID
+        exit $TEST_RESULT
     
     - name: Tests passed
       run: |
