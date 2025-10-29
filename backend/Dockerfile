@@ -1,41 +1,28 @@
 # Backend Dockerfile for AgentsPool (Railway deployment)
-# Optimized for maximum layer caching
-
-# === BASE STAGE ===
-FROM python:3.11-slim as base
+FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies (cached until OS changes)
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     postgresql-client \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# === DEPENDENCIES STAGE ===
-FROM base as dependencies
-
-# Copy ONLY requirements.txt first (layer cached until requirements change)
+# Copy requirements FIRST (layer cached until requirements.txt changes)
 COPY requirements.txt .
 
 # Install Python dependencies
-# This layer is REUSED if requirements.txt doesn't change
-# PyTorch (~800MB) will be downloaded ONCE and cached in this layer
+# This layer is cached until requirements.txt changes
+# PyTorch (~800MB) downloads ONCE
 RUN pip install --no-cache-dir -r requirements.txt
 
-# === RUNTIME STAGE ===
-FROM base as runtime
-
-# Copy installed packages from dependencies stage
-COPY --from=dependencies /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
-COPY --from=dependencies /usr/local/bin /usr/local/bin
-
-# Create cache directory for HuggingFace models (will be mounted as volume)
-RUN mkdir -p /app/.cache/huggingface
-
-# Copy application code (this layer changes frequently - but it's small and fast!)
+# Copy application code (fast layer, changes frequently)
 COPY . .
+
+# Create cache directory for HuggingFace models
+RUN mkdir -p /app/.cache/huggingface
 
 # Create non-root user
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
