@@ -13,10 +13,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy requirements FIRST (layer cached until requirements.txt changes)
 COPY requirements.txt .
 
-# Install Python dependencies
-# This layer is cached until requirements.txt changes
-# PyTorch (~800MB) downloads ONCE
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies with BuildKit cache
+# BuildKit будет кешировать /root/.cache/pip между билдами
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install -r requirements.txt
 
 # Copy application code (fast layer, changes frequently)
 COPY . .
