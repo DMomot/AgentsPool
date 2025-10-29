@@ -46,10 +46,10 @@ async def get_news(
             SELECT 
                 id, title, link, description, content, source_name, 
                 source_domain, rss_url, published_at, companies, 
-                companies_links, tags, insert_timestamp
+                companies_links, tags, insert_timestamp, img_url
             FROM news_articles
             {where_clause}
-            ORDER BY published_at DESC NULLS LAST, insert_timestamp DESC
+            ORDER BY insert_timestamp DESC
             LIMIT :limit OFFSET :offset
         """)
         
@@ -64,31 +64,9 @@ async def get_news(
         news_result = db.execute(news_query, params).mappings().all()
         total = db.execute(count_query, {k: v for k, v in params.items() if k not in ['limit', 'offset']}).scalar()
         
-        # Function to fetch og:image for a single article
-        def fetch_og_image(link):
-            try:
-                headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-                response = requests.get(link, headers=headers, timeout=2)
-                if response.status_code == 200:
-                    soup = BeautifulSoup(response.content, 'html.parser')
-                    og_image = soup.find('meta', property='og:image')
-                    if og_image and og_image.get('content'):
-                        return og_image['content']
-                    twitter_image = soup.find('meta', attrs={'name': 'twitter:image'})
-                    if twitter_image and twitter_image.get('content'):
-                        return twitter_image['content']
-            except Exception as e:
-                print(f"Error fetching og:image for {link}: {e}")
-            return None
-        
-        # Fetch images in parallel
-        with ThreadPoolExecutor(max_workers=10) as executor:
-            links = [article["link"] for article in news_result]
-            images = list(executor.map(fetch_og_image, links))
-        
-        # Build articles with images
+        # Build articles (use img_url from DB if available)
         articles = []
-        for idx, article in enumerate(news_result):
+        for article in news_result:
             # Clean HTML from description
             clean_description = article["description"]
             if clean_description:
@@ -108,7 +86,7 @@ async def get_news(
                 "companies": article["companies"] or [],
                 "companies_links": article["companies_links"] or [],
                 "tags": article["tags"] or [],
-                "img_url": images[idx],
+                "img_url": article["img_url"],
                 "insert_timestamp": article["insert_timestamp"].isoformat() if article["insert_timestamp"] else None
             })
         
@@ -139,7 +117,7 @@ async def get_news_article(article_id: int, db: Session = Depends(get_db)):
             SELECT 
                 id, title, link, description, content, source_name, 
                 source_domain, rss_url, published_at, companies, 
-                companies_links, tags, insert_timestamp
+                companies_links, tags, insert_timestamp, img_url
             FROM news_articles
             WHERE id = :article_id
         """)
@@ -148,23 +126,6 @@ async def get_news_article(article_id: int, db: Session = Depends(get_db)):
         
         if not result:
             raise HTTPException(status_code=404, detail="Article not found")
-        
-        # Fetch og:image
-        img_url = None
-        try:
-            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-            response = requests.get(result["link"], headers=headers, timeout=2)
-            if response.status_code == 200:
-                soup = BeautifulSoup(response.content, 'html.parser')
-                og_image = soup.find('meta', property='og:image')
-                if og_image and og_image.get('content'):
-                    img_url = og_image['content']
-                else:
-                    twitter_image = soup.find('meta', attrs={'name': 'twitter:image'})
-                    if twitter_image and twitter_image.get('content'):
-                        img_url = twitter_image['content']
-        except Exception as e:
-            print(f"Error fetching og:image for {result['link']}: {e}")
         
         # Clean HTML from description
         clean_description = result["description"]
@@ -185,7 +146,7 @@ async def get_news_article(article_id: int, db: Session = Depends(get_db)):
             "companies": result["companies"] or [],
             "companies_links": result["companies_links"] or [],
             "tags": result["tags"] or [],
-            "img_url": img_url,
+            "img_url": result["img_url"],
             "insert_timestamp": result["insert_timestamp"].isoformat() if result["insert_timestamp"] else None
         }
         

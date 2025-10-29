@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '../src/components/Header';
 import Footer from '../src/components/Footer';
@@ -16,9 +17,13 @@ interface NewsPageProps {
   totalPages: number;
   hasNext: boolean;
   hasPrev: boolean;
+  companies: string[];
+  newsTypes: string[];
+  technologies: string[];
   sources: Array<{ name: string; domain: string }>;
-  tags: string[];
-  selectedTag?: string;
+  selectedCompany?: string;
+  selectedNewsType?: string;
+  selectedTechnology?: string;
   selectedSource?: string;
 }
 
@@ -30,22 +35,57 @@ export default function NewsPage({
   totalPages,
   hasNext,
   hasPrev,
+  companies,
+  newsTypes,
+  technologies,
   sources,
-  tags,
-  selectedTag,
+  selectedCompany,
+  selectedNewsType,
+  selectedTechnology,
   selectedSource,
 }: NewsPageProps) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFilterChange = (filterType: 'tag' | 'source', value: string) => {
+  useEffect(() => {
+    const handleRouteChangeStart = () => setIsLoading(true);
+    const handleRouteChangeComplete = () => setIsLoading(false);
+    const handleRouteChangeError = () => setIsLoading(false);
+
+    router.events.on('routeChangeStart', handleRouteChangeStart);
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+    router.events.on('routeChangeError', handleRouteChangeError);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChangeStart);
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+      router.events.off('routeChangeError', handleRouteChangeError);
+    };
+  }, [router]);
+
+  const handleFilterChange = (filterType: 'company' | 'news' | 'tech' | 'source', value: string) => {
     const query: any = { page: '1' };
     
-    if (filterType === 'tag') {
-      if (value) query.tag = value;
+    if (filterType === 'company') {
+      if (value) query.company = value;
+      if (selectedNewsType) query.news = selectedNewsType;
+      if (selectedTechnology) query.tech = selectedTechnology;
+      if (selectedSource) query.source = selectedSource;
+    } else if (filterType === 'news') {
+      if (value) query.news = value;
+      if (selectedCompany) query.company = selectedCompany;
+      if (selectedTechnology) query.tech = selectedTechnology;
+      if (selectedSource) query.source = selectedSource;
+    } else if (filterType === 'tech') {
+      if (value) query.tech = value;
+      if (selectedCompany) query.company = selectedCompany;
+      if (selectedNewsType) query.news = selectedNewsType;
       if (selectedSource) query.source = selectedSource;
     } else {
       if (value) query.source = value;
-      if (selectedTag) query.tag = selectedTag;
+      if (selectedCompany) query.company = selectedCompany;
+      if (selectedNewsType) query.news = selectedNewsType;
+      if (selectedTechnology) query.tech = selectedTechnology;
     }
     
     router.push({
@@ -60,7 +100,9 @@ export default function NewsPage({
 
   const handlePageChange = (newPage: number) => {
     const query: any = { page: newPage.toString() };
-    if (selectedTag) query.tag = selectedTag;
+    if (selectedCompany) query.company = selectedCompany;
+    if (selectedNewsType) query.news = selectedNewsType;
+    if (selectedTechnology) query.tech = selectedTechnology;
     if (selectedSource) query.source = selectedSource;
     
     router.push({
@@ -72,10 +114,12 @@ export default function NewsPage({
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Recently';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
+    return date.toLocaleString('en-US', { 
       year: 'numeric', 
       month: 'short', 
-      day: 'numeric' 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -121,35 +165,77 @@ export default function NewsPage({
 
           {/* Filters */}
           <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <div className="grid md:grid-cols-2 gap-4">
-              {/* Tag Filter */}
+            <div className="grid md:grid-cols-4 gap-4">
+              {/* Companies Filter */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Filter by Tag
+                  Companies
                 </label>
                 <select
-                  value={selectedTag || ''}
-                  onChange={(e) => handleFilterChange('tag', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={selectedCompany || ''}
+                  onChange={(e) => handleFilterChange('company', e.target.value)}
+                  disabled={isLoading}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <option value="">All Tags</option>
-                  {tags.map((tag) => (
-                    <option key={tag} value={tag}>
-                      {tag}
+                  <option value="">All Companies</option>
+                  {companies.map((company) => (
+                    <option key={company} value={company}>
+                      {company}
                     </option>
                   ))}
                 </select>
               </div>
 
-              {/* Source Filter */}
+              {/* News Filter */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Filter by Source
+                  News
+                </label>
+                <select
+                  value={selectedNewsType || ''}
+                  onChange={(e) => handleFilterChange('news', e.target.value)}
+                  disabled={isLoading}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <option value="">All News Types</option>
+                  {newsTypes.map((newsType) => (
+                    <option key={newsType} value={newsType}>
+                      {newsType}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Technology Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Technology
+                </label>
+                <select
+                  value={selectedTechnology || ''}
+                  onChange={(e) => handleFilterChange('tech', e.target.value)}
+                  disabled={isLoading}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <option value="">All Technologies</option>
+                  {technologies.map((tech) => (
+                    <option key={tech} value={tech}>
+                      {tech}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Sources Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Sources
                 </label>
                 <select
                   value={selectedSource || ''}
                   onChange={(e) => handleFilterChange('source', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  disabled={isLoading}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <option value="">All Sources</option>
                   {sources.map((source) => (
@@ -161,11 +247,12 @@ export default function NewsPage({
               </div>
             </div>
 
-            {(selectedTag || selectedSource) && (
+            {(selectedCompany || selectedNewsType || selectedTechnology || selectedSource) && (
               <div className="mt-4">
                 <button
                   onClick={clearFilters}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  disabled={isLoading}
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Clear Filters
                 </button>
@@ -173,8 +260,18 @@ export default function NewsPage({
             )}
           </div>
 
+          {/* Loading Spinner */}
+          {isLoading && (
+            <div className="bg-white rounded-lg shadow-sm p-12 text-center mb-8">
+              <div className="flex flex-col items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+                <p className="text-gray-600">Loading news...</p>
+              </div>
+            </div>
+          )}
+
           {/* News Articles */}
-          <div className="space-y-6 mb-8">
+          <div className={`space-y-6 mb-8 ${isLoading ? 'opacity-50 pointer-events-none' : ''}`}>
             {articles.length === 0 ? (
               <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                 <p className="text-gray-600">No news articles found.</p>
@@ -187,18 +284,16 @@ export default function NewsPage({
                 >
                   <div className="flex gap-6">
                     {/* Image */}
-                    {article.img_url && (
-                      <div className="flex-shrink-0 w-48 h-32">
-                        <img
-                          src={article.img_url}
-                          alt={decodeHtmlEntities(article.title)}
-                          className="w-full h-full object-cover rounded-lg"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none';
-                          }}
-                        />
-                      </div>
-                    )}
+                    <div className="flex-shrink-0 w-[500px] h-[350px]">
+                      <img
+                        src={article.img_url || '/agents_pool.webp'}
+                        alt={decodeHtmlEntities(article.title)}
+                        className="w-full h-full object-cover rounded-lg"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/agents_pool.webp';
+                        }}
+                      />
+                    </div>
 
                     {/* Content */}
                     <div className="flex-1">
@@ -214,7 +309,7 @@ export default function NewsPage({
                       </div>
 
                       {article.description && (
-                        <p className="text-gray-700 mb-4 line-clamp-3">
+                        <p className="text-gray-700 mb-4 line-clamp-2">
                           {decodeHtmlEntities(article.description)}
                         </p>
                       )}
@@ -225,30 +320,29 @@ export default function NewsPage({
                         </span>
                         <span>•</span>
                         <time>{formatDate(article.published_at)}</time>
-                        {article.companies && article.companies.length > 0 && (
-                          <>
-                            <span>•</span>
-                            <div className="flex flex-wrap gap-2">
-                              {article.companies.map((company, idx) => (
-                                <span key={idx} className="text-gray-700 font-medium">
-                                  {company}
-                                </span>
-                              ))}
-                            </div>
-                          </>
-                        )}
                       </div>
 
                       {article.tags && article.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-3">
-                          {article.tags.map((tag, idx) => (
-                            <span
-                              key={idx}
-                              className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full"
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                          {article.tags
+                            .map((tag) => {
+                              // Parse format: Category|TagName|Weight
+                              const parts = tag.split('|');
+                              if (parts.length === 3) {
+                                const tagName = parts[1];
+                                return tagName;
+                              }
+                              return null;
+                            })
+                            .filter((tagName) => tagName !== null)
+                            .map((tagName, idx) => (
+                              <span
+                                key={idx}
+                                className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full"
+                              >
+                                {tagName}
+                              </span>
+                            ))}
                         </div>
                       )}
 
@@ -257,10 +351,10 @@ export default function NewsPage({
                           href={article.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-700 font-medium text-sm inline-flex items-center"
+                          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium text-sm rounded-lg hover:bg-blue-700 transition-colors"
                         >
                           Read More
-                          <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </a>
@@ -297,22 +391,59 @@ export default function NewsPage({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const { page = '1', tag, source } = context.query;
+    const { page = '1', company, news, tech, source } = context.query;
     const pageNum = parseInt(page as string, 10);
+
+    // Build tag filter - combine all selected filters
+    let tagFilter = '';
+    const filters = [];
+    if (company) filters.push(`Firm|${company}|`);
+    if (news) filters.push(`News|${news}|`);
+    if (tech) filters.push(`Tech|${tech}|`);
+    
+    if (filters.length > 0) {
+      tagFilter = filters[0].split('|')[0] + '|' + filters[0].split('|')[1]; // Use first filter
+    }
 
     // Fetch news articles
     const newsResponse = await apiClient.getNews({
       page: pageNum,
       limit: 20,
-      tag: tag as string,
-      source: source as string,
+      tag: tagFilter || undefined,
+      source: source as string || undefined,
     });
 
-    // Fetch sources and tags for filters
-    const [sources, tags] = await Promise.all([
-      apiClient.getNewsSources(),
+    // Fetch tags and sources for filters
+    const [tags, sources] = await Promise.all([
       apiClient.getNewsTags(),
+      apiClient.getNewsSources(),
     ]);
+    
+    // Parse and categorize tags: Format is "Category|TagName|Weight"
+    const companiesSet = new Set<string>();
+    const newsTypesSet = new Set<string>();
+    const technologiesSet = new Set<string>();
+    
+    tags.forEach((tag: string) => {
+      const parts = tag.split('|');
+      if (parts.length === 3) {
+        const category = parts[0];
+        const tagName = parts[1];
+        
+        if (category === 'Firm') {
+          companiesSet.add(tagName);
+        } else if (category === 'News') {
+          newsTypesSet.add(tagName);
+        } else if (category === 'Tech') {
+          technologiesSet.add(tagName);
+        }
+      }
+    });
+
+    // Convert sets to sorted arrays
+    const companies = Array.from(companiesSet).sort();
+    const newsTypes = Array.from(newsTypesSet).sort();
+    const technologies = Array.from(technologiesSet).sort();
 
     return {
       props: {
@@ -323,10 +454,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         totalPages: newsResponse.total_pages,
         hasNext: newsResponse.has_next,
         hasPrev: newsResponse.has_prev,
+        companies,
+        newsTypes,
+        technologies,
         sources,
-        tags,
-        selectedTag: tag || null,
-        selectedSource: source || null,
+        selectedCompany: company as string || null,
+        selectedNewsType: news as string || null,
+        selectedTechnology: tech as string || null,
+        selectedSource: source as string || null,
       },
     };
   } catch (error) {
@@ -341,9 +476,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         totalPages: 0,
         hasNext: false,
         hasPrev: false,
+        companies: [],
+        newsTypes: [],
+        technologies: [],
         sources: [],
-        tags: [],
-        selectedTag: null,
+        selectedCompany: null,
+        selectedNewsType: null,
+        selectedTechnology: null,
         selectedSource: null,
       },
     };
