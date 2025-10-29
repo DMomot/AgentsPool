@@ -21,7 +21,7 @@ COPY requirements.txt .
 
 # Install Python dependencies with BuildKit cache mount
 # This layer is REUSED if requirements.txt doesn't change
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
     pip install --no-cache-dir -r requirements.txt
 
 # === RUNTIME STAGE ===
