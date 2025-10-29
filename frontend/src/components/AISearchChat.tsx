@@ -56,7 +56,7 @@ export default function AISearchChat() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-6 max-w-3xl mx-auto">
+    <div className="bg-white rounded-2xl shadow-xl p-6 max-w-5xl mx-auto">
       <div className="flex items-center mb-4">
         <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center">
           <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
