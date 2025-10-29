@@ -28,11 +28,13 @@ name = "pip-cache"
 
 **Решение:**
 ```dockerfile
-# Использовать BuildKit cache mount
-RUN --mount=type=cache,target=/root/.cache/pip \
+# Использовать BuildKit cache mount (Railway формат)
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
     pip install -r requirements.txt
 ```
 BuildKit кеширует между билдами автоматически!
+
+**⚠️ ВАЖНО:** Railway требует параметр `id=<cache-id>` в cache mount!
 
 ---
 
@@ -233,7 +235,26 @@ Downloading torch-2.9.0-cp311-cp311-linux_x86_64.whl (800 MB)
 
 ## 🐛 ПОТЕНЦИАЛЬНЫЕ ПРОБЛЕМЫ
 
-### Проблема: Railway не поддерживает --mount=type=cache
+### Проблема: Railway требует id parameter в cache mount
+
+**Симптом:**
+```
+Cache mounts MUST be in the format --mount=type=cache,id=<cache-id>
+```
+
+**Решение:** ✅ УЖЕ ИСПРАВЛЕНО
+```dockerfile
+# Railway требует ПОЛНЫЙ формат с id=
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
+    pip install -r requirements.txt
+```
+
+**Важно:** Railway имеет СВОИ требования:
+- ОБЯЗАТЕЛЕН параметр `id=<название>`
+- Стандартный `--mount=type=cache,target=...` НЕ работает
+- Нужен ПОЛНЫЙ формат: `id=X,target=Y`
+
+### Проблема: Railway не поддерживает BuildKit
 
 **Симптом:**
 ```
@@ -241,13 +262,7 @@ failed to solve: failed to process "--mount=type=cache"
 ```
 
 **Решение:**
-Railway использует BuildKit по умолчанию, но если ошибка:
-```dockerfile
-# Fallback без cache mount
-RUN pip install -r requirements.txt
-```
-
-Тогда сразу переходим к Base Image.
+Сразу переходим к Шагу 2 (CPU PyTorch) или Шагу 3 (Base Image).
 
 ### Проблема: CPU PyTorch медленнее
 
