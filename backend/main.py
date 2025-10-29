@@ -2,6 +2,7 @@
 """
 AgentsPool API - Refactored Production Backend
 AI Agent Catalog and Marketplace
+Version: 2.0 (optimized deployment)
 """
 import os
 from pathlib import Path
