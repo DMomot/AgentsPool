@@ -4,6 +4,7 @@ import Header from '../src/components/Header';
 import Hero from '../src/components/Hero';
 import FeaturedAgents from '../src/components/FeaturedAgents';
 import Statistics from '../src/components/Statistics';
+import NewsSection from '../src/components/NewsSection';
 import Footer from '../src/components/Footer';
 import MetaTags from '../src/components/MetaTags';
 import { apiClient } from '../src/lib/api';
@@ -65,9 +66,11 @@ export default function Home() {
         <FeaturedAgents />
 
         <Statistics />
+
+        <NewsSection />
       
       {/* Categories Preview */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
