@@ -13,10 +13,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy requirements FIRST (layer cached until requirements.txt changes)
 COPY requirements.txt .
 
-# Install Python dependencies with BuildKit cache
-# Railway требует формат: --mount=type=cache,id=<cache-id>
-RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
-    pip install -r requirements.txt
+# Install Python dependencies
+# Railway BuildKit cache НЕ РАБОТАЕТ (специфичные требования к id)
+# Переходим к Base Image подходу
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code (fast layer, changes frequently)
 COPY . .
