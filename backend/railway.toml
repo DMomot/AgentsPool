@@ -1,5 +1,6 @@
 [build]
-builder = "NIXPACKS"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
 
 [deploy]
 startCommand = "python main.py"
@@ -8,6 +9,12 @@ healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
+# HuggingFace models cache (all-MiniLM-L6-v2)
 [[deploy.volumes]]
 mountPath = "/app/.cache"
 name = "model-cache"
+
+# Pip/PyTorch cache (reuse between deployments)
+[[deploy.volumes]]
+mountPath = "/root/.cache/pip"
+name = "pip-cache"

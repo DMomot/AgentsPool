@@ -75,22 +75,17 @@ async def startup_event():
     
     print("🤖 Loading AI models...")
     try:
-        from api.routes.agents import get_embedding_model, get_reranker_model
+        from api.routes.agents import get_embedding_model
         
         # Preload embedding model
-        print("  📦 Loading embedding model (sentence-t5-base)...")
+        print("  📦 Loading embedding model (all-MiniLM-L6-v2)...")
         get_embedding_model()
         print("  ✅ Embedding model loaded")
         
-        # Preload reranker model
-        print("  📦 Loading reranker model (cross-encoder)...")
-        get_reranker_model()
-        print("  ✅ Reranker model loaded")
-        
-        print("🎉 All AI models loaded successfully!")
+        print("🎉 AI model loaded successfully!")
     except Exception as e:
-        print(f"⚠️  Warning: Failed to preload AI models: {e}")
-        print("   Models will be loaded on first search request")
+        print(f"⚠️  Warning: Failed to preload AI model: {e}")
+        print("   Model will be loaded on first search request")
 
 # Include routers
 app.include_router(health.router)  # No prefix for health endpoints
