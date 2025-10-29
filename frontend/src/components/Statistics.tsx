@@ -1,19 +1,17 @@
 'use client';
 
-import Link from 'next/link';
-
 export default function Statistics() {
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <Link href="/catalog" className="btn-primary text-lg px-8 py-3">
-            Browse Catalog
-          </Link>
-          <Link href="/categories" className="btn-secondary text-lg px-8 py-3">
-            Agent Categories
-          </Link>
+        {/* Title */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Join the <span className="text-primary-600">AI Revolution</span>
+          </h2>
+          <p className="text-lg text-gray-600">
+            Thousands of agents, unlimited possibilities
+          </p>
         </div>
 
         {/* Stats */}
