@@ -46,7 +46,7 @@ async def get_news(
             SELECT 
                 id, title, link, description, content, source_name, 
                 source_domain, rss_url, published_at, companies, 
-                companies_links, tags, insert_timestamp, img_url
+                companies_links, tags, insert_timestamp
             FROM news_articles
             {where_clause}
             ORDER BY insert_timestamp DESC
@@ -64,7 +64,7 @@ async def get_news(
         news_result = db.execute(news_query, params).mappings().all()
         total = db.execute(count_query, {k: v for k, v in params.items() if k not in ['limit', 'offset']}).scalar()
         
-        # Build articles (use img_url from DB if available)
+        # Build articles
         articles = []
         for article in news_result:
             # Clean HTML from description
@@ -86,7 +86,7 @@ async def get_news(
                 "companies": article["companies"] or [],
                 "companies_links": article["companies_links"] or [],
                 "tags": article["tags"] or [],
-                "img_url": article["img_url"],
+                "img_url": None,
                 "insert_timestamp": article["insert_timestamp"].isoformat() if article["insert_timestamp"] else None
             })
         
@@ -117,7 +117,7 @@ async def get_news_article(article_id: int, db: Session = Depends(get_db)):
             SELECT 
                 id, title, link, description, content, source_name, 
                 source_domain, rss_url, published_at, companies, 
-                companies_links, tags, insert_timestamp, img_url
+                companies_links, tags, insert_timestamp
             FROM news_articles
             WHERE id = :article_id
         """)
@@ -146,7 +146,7 @@ async def get_news_article(article_id: int, db: Session = Depends(get_db)):
             "companies": result["companies"] or [],
             "companies_links": result["companies_links"] or [],
             "tags": result["tags"] or [],
-            "img_url": result["img_url"],
+            "img_url": None,
             "insert_timestamp": result["insert_timestamp"].isoformat() if result["insert_timestamp"] else None
         }
         
