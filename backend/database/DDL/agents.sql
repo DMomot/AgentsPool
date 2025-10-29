@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS agents (
     name VARCHAR(200) NOT NULL,
     slug VARCHAR(500) UNIQUE,
     description TEXT NOT NULL,
-    vector_description VECTOR(768),
+    vector_description VECTOR(384),  -- Changed from 768 to 384 (all-MiniLM-L6-v2)
     short_description VARCHAR(500),
     category_id INTEGER REFERENCES categories(id),
     keywords TEXT[],

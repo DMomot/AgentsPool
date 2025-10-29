@@ -32,8 +32,8 @@ _reranker_model = None
 def get_embedding_model():
     global _embedding_model
     if _embedding_model is None:
-        print("Loading embedding model (sentence-t5-base)...")
-        _embedding_model = SentenceTransformer('sentence-t5-base')  # 768 dims
+        print("Loading embedding model (all-MiniLM-L6-v2 - CPU optimized, 384 dims)...")
+        _embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # 384 dims, 10-15x faster on CPU
         print("Embedding model loaded!")
     return _embedding_model
 
