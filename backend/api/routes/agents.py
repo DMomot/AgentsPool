@@ -5,8 +5,7 @@ from sqlalchemy import text, desc, asc, or_
 from typing import Optional, List
 from pydantic import BaseModel
 import json
-from sentence_transformers import SentenceTransformer, CrossEncoder
-import numpy as np
+from sentence_transformers import SentenceTransformer
 
 from api.dependencies import get_db
 from schemas.agent import CreateAgentRequest
@@ -25,9 +24,8 @@ class AISearchResponse(BaseModel):
     agents: List[dict]
 
 
-# Global model instances
+# Global model instance
 _embedding_model = None
-_reranker_model = None
 
 def get_embedding_model():
     global _embedding_model
@@ -36,14 +34,6 @@ def get_embedding_model():
         _embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # 384 dims, 10-15x faster on CPU
         print("Embedding model loaded!")
     return _embedding_model
-
-def get_reranker_model():
-    global _reranker_model
-    if _reranker_model is None:
-        print("Loading reranker model...")
-        _reranker_model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-12-v2')
-        print("Reranker model loaded!")
-    return _reranker_model
 
 
 def convert_agent_data(agent):
@@ -195,7 +185,7 @@ async def get_featured_agents(
     limit: int = Query(10, description="Number of featured agents", ge=1, le=100),
     db: Session = Depends(get_db)
 ):
-    """Get featured agents"""
+    """Get featured agents (marked as featured=true)"""
     try:
         # Get featured agents using raw SQL
         sql_query = text("""
@@ -203,15 +193,10 @@ async def get_featured_agents(
                    url, documentation_url, github_url, api_endpoint, model_info, pricing, interability,
                    is_active, created_at, updated_at
             FROM agents 
-            WHERE is_active = true
+            WHERE is_active = true AND featured = true
             ORDER BY created_at DESC 
             LIMIT :limit
         """)
-        print(f"""SELECT * 
-            FROM agents 
-            WHERE is_active = true AND featured = true 
-            ORDER BY created_at DESC 
-            LIMIT {limit}""")
         
         result = db.execute(sql_query, {"limit": limit}).mappings().all()
         
@@ -228,26 +213,6 @@ async def get_featured_agents(
     except Exception as e:
         print(f"Error in featured agents: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/check-url")
-async def check_agent_url(url: str = Query(..., description="Agent URL to check"), db: Session = Depends(get_db)):
-    """Check if agent URL already exists"""
-    try:
-        sql_query = text("""
-            SELECT COUNT(*) as count
-            FROM agents
-            WHERE url = :url
-        """)
-        
-        result = db.execute(sql_query, {"url": url}).mappings().first()
-        exists = result["count"] > 0 if result else False
-        
-        return {"exists": exists, "url": url}
-        
-    except Exception as e:
-        print(f"Error checking agent URL: {e}")
-        raise HTTPException(status_code=500, detail="Failed to check URL")
 
 
 @router.get("/{agent_id}")

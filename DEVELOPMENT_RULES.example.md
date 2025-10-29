@@ -21,12 +21,34 @@
 
 ## Running Tests
 
+### Quick Test (Recommended)
+```bash
+cd backend
+python run_tests.py local  # Starts backend + runs tests + cleanup
+```
+
+### Manual Test
 ```bash
 cd backend
 source venv/bin/activate
 python3 main.py &  # Start backend locally
 pytest test_api.py -v
 ```
+
+### ⚠️ IMPORTANT: Pre-Commit Testing
+**ALWAYS run tests before committing:**
+
+```bash
+cd backend
+python run_tests.py local
+# ✅ Wait for all tests to pass
+# ❌ Never commit if tests fail!
+```
+
+This ensures:
+- All endpoints work correctly
+- No breaking changes
+- Production API remains stable
 
 ## Database Migrations
 

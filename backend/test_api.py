@@ -100,13 +100,6 @@ def test_get_agent_by_slug():
     else:
         pytest.skip("No agents with slug found in database")
 
-def test_check_agent_url():
-    """Test GET /api/v1/agents/check-url"""
-    response = requests.get(f"{API_BASE_URL}/api/v1/agents/check-url?url=https://example.com")
-    assert response.status_code == 200
-    data = response.json()
-    assert "exists" in data
-
 def test_cors_headers():
     """Test that CORS headers are present"""
     response = requests.get(f"{API_BASE_URL}/api/v1/categories")
