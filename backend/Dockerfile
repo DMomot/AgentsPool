@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 
 # Install Python dependencies with BuildKit cache
-# BuildKit будет кешировать /root/.cache/pip между билдами
-RUN --mount=type=cache,target=/root/.cache/pip \
+# Railway требует формат: --mount=type=cache,id=<cache-id>
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
     pip install -r requirements.txt
 
 # Copy application code (fast layer, changes frequently)
