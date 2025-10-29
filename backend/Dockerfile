@@ -19,10 +19,10 @@ FROM base as dependencies
 # Copy ONLY requirements.txt first (layer cached until requirements change)
 COPY requirements.txt .
 
-# Install Python dependencies with BuildKit cache mount
+# Install Python dependencies
 # This layer is REUSED if requirements.txt doesn't change
-RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
-    pip install --no-cache-dir -r requirements.txt
+# PyTorch (~800MB) will be downloaded ONCE and cached in this layer
+RUN pip install --no-cache-dir -r requirements.txt
 
 # === RUNTIME STAGE ===
 FROM base as runtime
