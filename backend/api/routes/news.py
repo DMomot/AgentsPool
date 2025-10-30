@@ -193,11 +193,27 @@ async def get_news_by_agent_url(
     """Get news articles related to an agent by URL"""
     try:
         # Generate both www and non-www versions
-        agent_url_variants = [agent_url]
-        if 'www.' in agent_url:
-            agent_url_variants.append(agent_url.replace('www.', ''))
+        from urllib.parse import urlparse, urlunparse
+        
+        parsed = urlparse(agent_url)
+        
+        # Always create both variants
+        agent_url_variants = []
+        
+        # Variant 1: Original URL
+        agent_url_variants.append(agent_url)
+        
+        # Variant 2: Toggle www
+        if parsed.netloc.startswith('www.'):
+            # Remove www
+            new_netloc = parsed.netloc[4:]  # Remove 'www.'
+            variant = urlunparse((parsed.scheme, new_netloc, parsed.path, parsed.params, parsed.query, parsed.fragment))
+            agent_url_variants.append(variant)
         else:
-            agent_url_variants.append(agent_url.replace('://', '://www.'))
+            # Add www
+            new_netloc = 'www.' + parsed.netloc
+            variant = urlunparse((parsed.scheme, new_netloc, parsed.path, parsed.params, parsed.query, parsed.fragment))
+            agent_url_variants.append(variant)
         
         print(f"Searching for agent URLs: {agent_url_variants}")
         
