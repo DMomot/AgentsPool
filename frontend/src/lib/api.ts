@@ -115,6 +115,7 @@ class ApiClient {
     limit?: number;
     tag?: string;
     source?: string;
+    search?: string;
   } = {}): Promise<NewsResponse> {
     const searchParams = new URLSearchParams();
     
@@ -140,6 +141,18 @@ class ApiClient {
 
   async getNewsTags(): Promise<string[]> {
     return this.request('/api/v1/news/tags/list');
+  }
+
+  async getNewsByAgentUrl(agentUrl: string, limit: number = 5): Promise<{
+    articles: NewsArticle[];
+    total: number;
+    agent_url: string;
+  }> {
+    const searchParams = new URLSearchParams({
+      agent_url: agentUrl,
+      limit: limit.toString()
+    });
+    return this.request(`/api/v1/news/by-agent-url?${searchParams.toString()}`);
   }
 }
 

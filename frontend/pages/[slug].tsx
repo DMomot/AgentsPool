@@ -6,6 +6,7 @@ import Footer from '../src/components/Footer';
 import AgentCard from '../src/components/AgentCard';
 import Pagination from '../src/components/Pagination';
 import MetaTags from '../src/components/MetaTags';
+import RelatedNews from '../src/components/RelatedNews';
 import { AgentList } from '../src/types';
 
 // Category interfaces
@@ -589,6 +590,8 @@ function AgentPage({ agent }: { agent: Agent }) {
             </ul>
           </div>
         )}
+
+        <RelatedNews agentUrl={agent.url} />
       </main>
 
       <Footer />

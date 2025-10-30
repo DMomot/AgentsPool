@@ -80,6 +80,7 @@ async def get_news(
     limit: int = Query(20, ge=1, le=100),
     tag: str = Query(None),
     source: str = Query(None),
+    search: str = Query(None),
     db: Session = Depends(get_db)
 ):
     """Get news articles with pagination"""
@@ -91,12 +92,19 @@ async def get_news(
         params = {"limit": limit, "offset": offset}
         
         if tag:
-            where_conditions.append(":tag = ANY(tags)")
-            params["tag"] = tag
+            # Search for tags like "Firm|OpenAI|Score" by prefix "Firm|OpenAI|"
+            tag_pattern = f"{tag}|%"
+            where_conditions.append("EXISTS (SELECT 1 FROM unnest(tags) AS t WHERE t LIKE :tag)")
+            params["tag"] = tag_pattern
+            print(f"DEBUG: Searching for tag pattern: {tag_pattern}")
             
         if source:
             where_conditions.append("source_name = :source")
             params["source"] = source
+        
+        if search:
+            where_conditions.append("(title ILIKE :search OR description ILIKE :search)")
+            params["search"] = f"%{search}%"
         
         # Always filter by articles with tags
         where_conditions.append("tags IS NOT NULL AND array_length(tags, 1) > 0")
@@ -171,6 +179,82 @@ async def get_news(
         
     except Exception as e:
         print(f"Error fetching news: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail="Failed to fetch news")
+
+
+@router.get("/by-agent-url")
+async def get_news_by_agent_url(
+    agent_url: str = Query(..., description="Agent URL to search for"),
+    limit: int = Query(5, ge=1, le=20),
+    db: Session = Depends(get_db)
+):
+    """Get news articles related to an agent by URL"""
+    try:
+        # Generate both www and non-www versions
+        agent_url_variants = [agent_url]
+        if 'www.' in agent_url:
+            agent_url_variants.append(agent_url.replace('www.', ''))
+        else:
+            agent_url_variants.append(agent_url.replace('://', '://www.'))
+        
+        print(f"Searching for agent URLs: {agent_url_variants}")
+        
+        news_query = text("""
+            SELECT 
+                id, title, link, description, source_name, 
+                source_domain, published_at, tags, insert_timestamp
+            FROM news_articles
+            WHERE (
+                :agent_url1 = ANY(main_links) OR 
+                :agent_url2 = ANY(main_links)
+            )
+            AND tags IS NOT NULL AND array_length(tags, 1) > 0
+            ORDER BY insert_timestamp DESC
+            LIMIT :limit
+        """)
+        
+        result = db.execute(news_query, {
+            "agent_url1": agent_url_variants[0], 
+            "agent_url2": agent_url_variants[1],
+            "limit": limit
+        }).mappings().all()
+        
+        # Get og:images in parallel
+        with ThreadPoolExecutor(max_workers=3) as executor:
+            article_links = [article["link"] for article in result]
+            og_images = list(executor.map(get_og_image, article_links))
+        
+        articles = []
+        for idx, article in enumerate(result):
+            # Clean HTML from description
+            clean_description = article["description"]
+            if clean_description:
+                soup = BeautifulSoup(clean_description, 'html.parser')
+                clean_description = soup.get_text(separator=' ', strip=True)
+            
+            articles.append({
+                "id": article["id"],
+                "title": article["title"],
+                "link": article["link"],
+                "description": clean_description,
+                "source_name": article["source_name"],
+                "source_domain": article["source_domain"],
+                "published_at": article["published_at"].isoformat() if article["published_at"] else None,
+                "tags": article["tags"] or [],
+                "img_url": og_images[idx],
+                "insert_timestamp": article["insert_timestamp"].isoformat() if article["insert_timestamp"] else None
+            })
+        
+        return {
+            "articles": articles,
+            "total": len(articles),
+            "agent_url": agent_url
+        }
+        
+    except Exception as e:
+        print(f"Error fetching news by agent URL: {e}")
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="Failed to fetch news")

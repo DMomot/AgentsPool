@@ -13,17 +13,25 @@ interface SearchFiltersProps {
     sort_by?: string;
     sort_order?: string;
   }) => void;
+  initialFilters?: {
+    q?: string;
+    category_id?: number;
+    is_free?: boolean;
+    min_rating?: number;
+    sort_by?: string;
+    sort_order?: string;
+  };
 }
 
-export default function SearchFilters({ onFiltersChange }: SearchFiltersProps) {
+export default function SearchFilters({ onFiltersChange, initialFilters }: SearchFiltersProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [filters, setFilters] = useState({
-    q: '',
-    category_id: undefined as number | undefined,
-    is_free: undefined as boolean | undefined,
-    min_rating: undefined as number | undefined,
-    sort_by: 'rating',
-    sort_order: 'desc',
+    q: initialFilters?.q || '',
+    category_id: initialFilters?.category_id || undefined as number | undefined,
+    is_free: initialFilters?.is_free || undefined as boolean | undefined,
+    min_rating: initialFilters?.min_rating || undefined as number | undefined,
+    sort_by: initialFilters?.sort_by || 'rating',
+    sort_order: initialFilters?.sort_order || 'desc',
   });
 
   useEffect(() => {

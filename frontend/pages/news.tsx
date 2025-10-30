@@ -25,6 +25,7 @@ interface NewsPageProps {
   selectedNewsType?: string;
   selectedTechnology?: string;
   selectedSource?: string;
+  searchQuery?: string;
 }
 
 export default function NewsPage({
@@ -43,9 +44,11 @@ export default function NewsPage({
   selectedNewsType,
   selectedTechnology,
   selectedSource,
+  searchQuery,
 }: NewsPageProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [searchInput, setSearchInput] = useState(searchQuery || '');
 
   useEffect(() => {
     const handleRouteChangeStart = () => setIsLoading(true);
@@ -95,11 +98,28 @@ export default function NewsPage({
   };
 
   const clearFilters = () => {
+    setSearchInput('');
     router.push('/news');
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const query: any = { page: '1' };
+    if (searchInput.trim()) query.search = searchInput.trim();
+    if (selectedCompany) query.company = selectedCompany;
+    if (selectedNewsType) query.news = selectedNewsType;
+    if (selectedTechnology) query.tech = selectedTechnology;
+    if (selectedSource) query.source = selectedSource;
+    
+    router.push({
+      pathname: '/news',
+      query,
+    });
   };
 
   const handlePageChange = (newPage: number) => {
     const query: any = { page: newPage.toString() };
+    if (searchInput.trim()) query.search = searchInput.trim();
     if (selectedCompany) query.company = selectedCompany;
     if (selectedNewsType) query.news = selectedNewsType;
     if (selectedTechnology) query.tech = selectedTechnology;
@@ -161,6 +181,27 @@ export default function NewsPage({
             <p className="text-lg text-gray-600">
               Latest updates and developments in AI agents
             </p>
+          </div>
+
+          {/* Search Input */}
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
+            <form onSubmit={handleSearch}>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Search news by title or description (e.g., OpenAI, ChatGPT, AI agents)..."
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <button
+                  type="submit"
+                  className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
           </div>
 
           {/* Filters */}
@@ -247,14 +288,14 @@ export default function NewsPage({
               </div>
             </div>
 
-            {(selectedCompany || selectedNewsType || selectedTechnology || selectedSource) && (
+            {(searchInput || selectedCompany || selectedNewsType || selectedTechnology || selectedSource) && (
               <div className="mt-4">
                 <button
                   onClick={clearFilters}
                   disabled={isLoading}
                   className="text-sm text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Clear Filters
+                  Clear All Filters
                 </button>
               </div>
             )}
@@ -391,18 +432,18 @@ export default function NewsPage({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const { page = '1', company, news, tech, source } = context.query;
+    const { page = '1', company, news, tech, source, search } = context.query;
     const pageNum = parseInt(page as string, 10);
 
     // Build tag filter - combine all selected filters
     let tagFilter = '';
     const filters = [];
-    if (company) filters.push(`Firm|${company}|`);
-    if (news) filters.push(`News|${news}|`);
-    if (tech) filters.push(`Tech|${tech}|`);
+    if (company) filters.push(`Firm|${company}`);
+    if (news) filters.push(`News|${news}`);
+    if (tech) filters.push(`Tech|${tech}`);
     
     if (filters.length > 0) {
-      tagFilter = filters[0].split('|')[0] + '|' + filters[0].split('|')[1]; // Use first filter
+      tagFilter = filters[0]; // Use first filter (backend will add |% for LIKE search)
     }
 
     // Fetch news articles
@@ -411,6 +452,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       limit: 20,
       tag: tagFilter || undefined,
       source: source as string || undefined,
+      search: search as string || undefined,
     });
 
     // Fetch tags and sources for filters
@@ -462,6 +504,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         selectedNewsType: news as string || null,
         selectedTechnology: tech as string || null,
         selectedSource: source as string || null,
+        searchQuery: search as string || null,
       },
     };
   } catch (error) {
@@ -484,6 +527,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         selectedNewsType: null,
         selectedTechnology: null,
         selectedSource: null,
+        searchQuery: null,
       },
     };
   }

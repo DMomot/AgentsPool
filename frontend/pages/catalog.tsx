@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/router';
 import Header from '../src/components/Header';
 import Footer from '../src/components/Footer';
 import SearchFilters from '../src/components/SearchFilters';
@@ -11,12 +12,25 @@ import { AgentList, AgentSearchResponse } from '../src/types';
 import { apiClient } from '../src/lib/api';
 
 export default function CatalogPage() {
+  const router = useRouter();
   const [agents, setAgents] = useState<AgentList[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchResponse, setSearchResponse] = useState<AgentSearchResponse | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState<any>({});
+  const [initialized, setInitialized] = useState(false);
+
+  // Initialize filters from URL on mount
+  useEffect(() => {
+    if (router.isReady && !initialized) {
+      const { q } = router.query;
+      if (q && typeof q === 'string') {
+        setFilters({ q });
+      }
+      setInitialized(true);
+    }
+  }, [router.isReady, router.query, initialized]);
 
   const fetchAgents = useCallback(async (page: number = 1, searchFilters: any = {}) => {
     try {
@@ -41,8 +55,10 @@ export default function CatalogPage() {
   }, []);
 
   useEffect(() => {
-    fetchAgents(currentPage, filters);
-  }, [fetchAgents, currentPage, filters]);
+    if (initialized) {
+      fetchAgents(currentPage, filters);
+    }
+  }, [fetchAgents, currentPage, filters, initialized]);
 
   const handleFiltersChange = useCallback((newFilters: any) => {
     setFilters(newFilters);
@@ -94,7 +110,10 @@ export default function CatalogPage() {
           </div>
 
           {/* Search and Filters */}
-          <SearchFilters onFiltersChange={handleFiltersChange} />
+          <SearchFilters 
+            onFiltersChange={handleFiltersChange} 
+            initialFilters={filters}
+          />
 
           {/* Results */}
           {loading ? (
