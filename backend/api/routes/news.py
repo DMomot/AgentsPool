@@ -13,6 +13,67 @@ from api.dependencies import get_db
 router = APIRouter(prefix="/news", tags=["news"])
 
 
+def get_og_image(url: str) -> str | None:
+    """Extract og:image from article URL"""
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Referer': 'https://www.google.com/'
+        }
+        response = requests.get(url, headers=headers, timeout=3, allow_redirects=True)
+        if response.status_code == 403:
+            # Site blocks scraping - return None, frontend will show placeholder
+            return None
+        if response.status_code != 200:
+            return None
+            
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        # Try og:image first
+        og_image = soup.find('meta', property='og:image')
+        if og_image and og_image.get('content'):
+            return og_image['content']
+        
+        # Try twitter:image
+        twitter_image = soup.find('meta', attrs={'name': 'twitter:image'})
+        if twitter_image and twitter_image.get('content'):
+            return twitter_image['content']
+        
+        # Try twitter:image with property
+        twitter_image_prop = soup.find('meta', property='twitter:image')
+        if twitter_image_prop and twitter_image_prop.get('content'):
+            return twitter_image_prop['content']
+        
+        # Try article:image
+        article_image = soup.find('meta', property='article:image')
+        if article_image and article_image.get('content'):
+            return article_image['content']
+        
+        # Try first image in content
+        first_img = soup.find('img', src=True)
+        if first_img and first_img.get('src'):
+            img_src = first_img['src']
+            # Make absolute URL if relative
+            if img_src.startswith('//'):
+                return 'https:' + img_src
+            elif img_src.startswith('/'):
+                from urllib.parse import urlparse
+                parsed = urlparse(url)
+                return f"{parsed.scheme}://{parsed.netloc}{img_src}"
+            elif img_src.startswith('http'):
+                return img_src
+            
+        return None
+    except Exception as e:
+        print(f"Error fetching og:image from {url}: {e}")
+        return None
+
+
 @router.get("")
 async def get_news(
     page: int = Query(1, ge=1),
@@ -66,7 +127,13 @@ async def get_news(
         
         # Build articles
         articles = []
-        for article in news_result:
+        
+        # Get og:images in parallel for better performance
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            article_links = [article["link"] for article in news_result]
+            og_images = list(executor.map(get_og_image, article_links))
+        
+        for idx, article in enumerate(news_result):
             # Clean HTML from description
             clean_description = article["description"]
             if clean_description:
@@ -86,7 +153,7 @@ async def get_news(
                 "companies": article["companies"] or [],
                 "companies_links": article["companies_links"] or [],
                 "tags": article["tags"] or [],
-                "img_url": None,
+                "img_url": og_images[idx],
                 "insert_timestamp": article["insert_timestamp"].isoformat() if article["insert_timestamp"] else None
             })
         
@@ -133,6 +200,9 @@ async def get_news_article(article_id: int, db: Session = Depends(get_db)):
             soup = BeautifulSoup(clean_description, 'html.parser')
             clean_description = soup.get_text(separator=' ', strip=True)
         
+        # Get og:image for the article
+        og_image_url = get_og_image(result["link"])
+        
         return {
             "id": result["id"],
             "title": result["title"],
@@ -146,7 +216,7 @@ async def get_news_article(article_id: int, db: Session = Depends(get_db)):
             "companies": result["companies"] or [],
             "companies_links": result["companies_links"] or [],
             "tags": result["tags"] or [],
-            "img_url": None,
+            "img_url": og_image_url,
             "insert_timestamp": result["insert_timestamp"].isoformat() if result["insert_timestamp"] else None
         }
         
