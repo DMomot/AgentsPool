@@ -13,6 +13,7 @@ CREATE TABLE news_articles (
     companies_links TEXT[],
     tags TEXT[],
     insert_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    main_links TEXT[] DEFAULT '{}'::text[],
     
     CONSTRAINT unique_article_link UNIQUE(link)
 );
@@ -22,4 +23,7 @@ CREATE INDEX idx_news_published_at ON news_articles(published_at DESC);
 
 -- Index for source queries
 CREATE INDEX idx_news_source_name ON news_articles(source_name);
+
+-- Index for main_links queries
+CREATE INDEX idx_news_articles_main_links ON news_articles(main_links);
 
