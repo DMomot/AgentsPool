@@ -15,7 +15,7 @@ const MetaTags: React.FC<MetaTagsProps> = ({
   title = 'AgentsPool - AI Agents Catalog',
   description = 'Find the best AI agents for your business. Catalog of verified artificial intelligence solutions with reviews and ratings.',
   keywords = 'AI agents, artificial intelligence, automation, chatbots, machine learning',
-  image = 'https://agentspool.ai/og-image.jpg',
+  image = 'https://agentspool.ai/agents_pool_vision.webp',
   url = 'https://agentspool.ai',
   type = 'website',
   noIndex = false,
@@ -54,6 +54,9 @@ const MetaTags: React.FC<MetaTagsProps> = ({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={optimizedDescription} />
       <meta property="og:image" content={image} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={fullTitle} />
       <meta property="og:url" content={ogUrl} />
       <meta property="og:site_name" content="AgentsPool" />
       <meta property="og:locale" content="en_US" />
