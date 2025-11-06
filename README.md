@@ -72,6 +72,7 @@ AgentsPool/
 ├── DEVELOPMENT_RULES.example.md       # Template for dev rules
 ├── ADMIN_SECURITY.md                  # Admin panel documentation
 ├── DOMAIN_SETUP.md                    # Domain configuration guide
+├── DOCKER_OPTIMIZATION.md             # Docker build optimization guide
 ├── .cursorrules                       # Cursor AI rules
 ├── railway.toml                       # Railway deployment config
 │
@@ -118,12 +119,6 @@ AgentsPool/
 │   ├── package.json                  # Node dependencies
 │   ├── Dockerfile                    # Frontend container
 │   └── railway.toml                  # Frontend Railway config
-│
-└── tests/                            # Testing & migrations
-    ├── README.md                     # Tests documentation
-    ├── migrate_to_minilm_safe.py    # 768d→384d migration script
-    └── migrations/                   # SQL migrations
-        └── *.sql                     # Migration files
 ```
 
 ## 🚀 How It Works
@@ -266,6 +261,7 @@ See `DOMAIN_SETUP.md` for domain configuration details.
 - **DEVELOPMENT_RULES.md** - Local development setup, DB credentials, testing
 - **ADMIN_SECURITY.md** - Admin panel access, password management
 - **DOMAIN_SETUP.md** - Domain and DNS configuration for Railway
+- **DOCKER_OPTIMIZATION.md** - Docker build optimization guide (BuildKit cache, CPU PyTorch, Base Image)
 - **backend/README.md** - Backend API documentation
 - **backend/TESTING.md** - Detailed testing guide
 
@@ -327,5 +323,5 @@ MIT License - see LICENSE file for details.
 
 ---
 
-**Last Updated:** October 29, 2024
+**Last Updated:** November 5, 2025
 **Version:** 2.0 (384d embeddings, optimized AI search)
