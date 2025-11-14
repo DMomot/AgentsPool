@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, DECIMAL, TIMESTAMP, ForeignKey, ARRAY, Date
+from sqlalchemy import Column, Integer, String, Text, Boolean, DECIMAL, TIMESTAMP, ForeignKey, ARRAY, Date, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -119,3 +119,5 @@ class NewsArticle(Base):
     companies_links = Column(ARRAY(String))
     tags = Column(ARRAY(String))
     insert_timestamp = Column(TIMESTAMP, server_default=func.now())
+    main_links = Column(ARRAY(String), server_default=text("'{}'::text[]"))
+    scraped = Column(Boolean, server_default=text("false"))

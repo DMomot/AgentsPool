@@ -14,6 +14,7 @@ CREATE TABLE news_articles (
     tags TEXT[],
     insert_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     main_links TEXT[] DEFAULT '{}'::text[],
+    scraped BOOLEAN DEFAULT false,
     
     CONSTRAINT unique_article_link UNIQUE(link)
 );

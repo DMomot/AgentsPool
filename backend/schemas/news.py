@@ -14,6 +14,7 @@ class NewsArticleBase(BaseModel):
     companies: Optional[List[str]] = None
     companies_links: Optional[List[str]] = None
     tags: Optional[List[str]] = None
+    main_links: Optional[List[str]] = None
 
 class NewsArticleCreate(NewsArticleBase):
     pass
