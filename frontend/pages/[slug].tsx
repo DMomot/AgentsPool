@@ -465,7 +465,7 @@ function AgentPage({ agent }: { agent: Agent }) {
             <div className="flex items-center justify-center">
               <div 
                 className="relative w-full rounded-xl overflow-hidden shadow-lg bg-gray-100 cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02]"
-                onClick={() => setModalImage(`https://pub-cd507b944a95482a8deaa9b622cb1a6d.r2.dev/screenshots/${agent.slug}.png`)}
+                onClick={() => setModalImage(`https://pub-cd507b944a95482a8deaa9b622cb1a6d.r2.dev/screenshots/${agent.slug}.webp`)}
               >
                 <img
                   src={agent.img_url || `https://pub-cd507b944a95482a8deaa9b622cb1a6d.r2.dev/thumbnails/${agent.slug}_thumbnail.webp`}
