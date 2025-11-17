@@ -41,6 +41,13 @@ class ApiClient {
   }
 
   // Agents
+  async getAgentsStats(): Promise<{
+    total_agents: number;
+    new_agents_24h: number;
+  }> {
+    return this.request('/api/v1/agents/stats');
+  }
+
   async searchAgents(params: AgentSearchParams = {}): Promise<AgentSearchResponse> {
     const searchParams = new URLSearchParams();
     

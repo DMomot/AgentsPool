@@ -15,6 +15,29 @@ from utils.slug import generate_slug
 router = APIRouter(prefix="/agents", tags=["agents"])
 
 
+@router.get("/stats")
+async def get_agents_stats(db: Session = Depends(get_db)):
+    """Get agent statistics: total count and new in last 90 days"""
+    try:
+        stats_query = text("""
+            SELECT 
+                COUNT(*) as total_agents,
+                COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '90 days') as new_90d
+            FROM agents
+            WHERE is_active = true
+        """)
+        
+        result = db.execute(stats_query).mappings().first()
+        
+        return {
+            "total_agents": result["total_agents"],
+            "new_agents_24h": result["new_90d"]
+        }
+    except Exception as e:
+        print(f"Error getting agents stats: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch agents stats")
+
+
 class AISearchRequest(BaseModel):
     query: str
 
@@ -30,8 +53,8 @@ _embedding_model = None
 def get_embedding_model():
     global _embedding_model
     if _embedding_model is None:
-        print("Loading embedding model (all-MiniLM-L6-v2 - CPU optimized, 384 dims)...")
-        _embedding_model = SentenceTransformer('all-MiniLM-L6-v2')  # 384 dims, 10-15x faster on CPU
+        print("Loading embedding model (BAAI/bge-small-en-v1.5 - 384 dims)...")
+        _embedding_model = SentenceTransformer('BAAI/bge-small-en-v1.5')  # 384 dims, higher accuracy
         print("Embedding model loaded!")
     return _embedding_model
 
