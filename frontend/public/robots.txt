@@ -35,4 +35,5 @@ Allow: /
 
 # Sitemap location
 Sitemap: https://agentspool.ai/sitemap.xml
+Sitemap: https://agentspool.ai/sitemap_news.xml
 
