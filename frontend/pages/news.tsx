@@ -339,14 +339,12 @@ export default function NewsPage({
                     {/* Content */}
                     <div className="flex-1">
                       <div className="mb-3">
-                        <a
-                          href={article.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <Link
+                          href={`/news/${article.id}`}
                           className="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors"
                         >
                           {decodeHtmlEntities(article.title)}
-                        </a>
+                        </Link>
                       </div>
 
                       {article.description && (
@@ -388,17 +386,15 @@ export default function NewsPage({
                       )}
 
                       <div>
-                        <a
-                          href={article.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <Link
+                          href={`/news/${article.id}`}
                           className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium text-sm rounded-lg hover:bg-blue-700 transition-colors"
                         >
                           Read More
                           <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>

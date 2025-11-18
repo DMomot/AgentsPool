@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { apiClient } from '../lib/api';
 import { NewsArticle } from '../types';
 
@@ -81,11 +82,9 @@ export default function RelatedNews({ agentUrl }: RelatedNewsProps) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {news.slice(0, 5).map((article) => (
-            <a
+            <Link
               key={article.id}
-              href={article.link}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`/news/${article.id}`}
               className="bg-gray-50 rounded-lg overflow-hidden hover:shadow-sm transition-shadow group block no-underline border border-gray-200"
             >
               <div className="w-full h-40 overflow-hidden">
@@ -108,7 +107,7 @@ export default function RelatedNews({ agentUrl }: RelatedNewsProps) {
                   <time>{formatDate(article.published_at)}</time>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       )}

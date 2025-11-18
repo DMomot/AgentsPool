@@ -31,6 +31,25 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
       }
     }
 
+    // Fetch ALL news articles with pagination (max limit is 100)
+    const newsArticles = [];
+    let newsPage = 1;
+    let hasMoreNews = true;
+
+    while (hasMoreNews) {
+      const newsRes = await fetch(`${apiUrl}/api/v1/news?limit=100&page=${newsPage}`);
+      const newsData = await newsRes.json();
+      const pageNews = newsData.news || [];
+      
+      if (pageNews.length > 0) {
+        newsArticles.push(...pageNews);
+        newsPage++;
+        hasMoreNews = newsData.has_next || false;
+      } else {
+        hasMoreNews = false;
+      }
+    }
+
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 `;
@@ -41,6 +60,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
       { url: '/catalog', priority: '0.9', changefreq: 'daily' },
       { url: '/categories', priority: '0.9', changefreq: 'daily' },
       { url: '/agents', priority: '0.9', changefreq: 'daily' },
+      { url: '/news', priority: '0.9', changefreq: 'daily' },
       { url: '/fundraising', priority: '0.8', changefreq: 'weekly' },
       { url: '/about', priority: '0.7', changefreq: 'monthly' },
     ];
@@ -109,6 +129,36 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
+  </url>
+`;
+    }
+
+    // ALL News Articles
+    for (const article of newsArticles) {
+      if (!article.id) continue;
+      
+      let lastmod = now;
+      if (article.published_at) {
+        try {
+          lastmod = new Date(article.published_at).toISOString();
+        } catch (e) {
+          if (article.insert_timestamp) {
+            try {
+              lastmod = new Date(article.insert_timestamp).toISOString();
+            } catch (e2) {
+              lastmod = now;
+            }
+          } else {
+            lastmod = now;
+          }
+        }
+      }
+      
+      xml += `  <url>
+    <loc>${baseUrl}/news/${article.id}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 `;
     }

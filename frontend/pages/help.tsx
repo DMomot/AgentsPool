@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Header from '../src/components/Header';
 import Footer from '../src/components/Footer';
 import MetaTags from '../src/components/MetaTags';
+import ExternalLink from '../src/components/ExternalLink';
 
 export default function HelpPage() {
   return (
@@ -361,7 +362,7 @@ export default function HelpPage() {
               <div>
                 <h3 className="font-semibold text-gray-900 mb-2">Как связаться с поддержкой?</h3>
                 <p className="text-gray-600">
-                  Вы можете написать нам на <a href="mailto:support@agentspool.ai" className="text-primary-600 hover:text-primary-700">support@agentspool.ai</a> или использовать форму обратной связи на сайте.
+                  Вы можете написать нам на <ExternalLink href="mailto:support@agentspool.ai" className="text-primary-600 hover:text-primary-700" nofollow={false} target="_self">support@agentspool.ai</ExternalLink> или использовать форму обратной связи на сайте.
                 </p>
               </div>
             </div>

@@ -77,11 +77,9 @@ export default function NewsSection() {
             ))
           ) : (
             news.map((article) => (
-              <a
+              <Link
                 key={article.id}
-                href={article.link}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`/news/${article.id}`}
                 className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow group block no-underline"
               >
                 <div className="w-full h-48 overflow-hidden">
@@ -104,7 +102,7 @@ export default function NewsSection() {
                     <time>{formatDate(article.published_at)}</time>
                   </div>
                 </div>
-              </a>
+              </Link>
             ))
           )}
         </div>
