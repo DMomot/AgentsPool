@@ -32,7 +32,7 @@ const decodeHtmlEntities = (text: string) => {
 export default function NewsArticlePage({ article }: NewsArticlePageProps) {
   const router = useRouter();
 
-  const formatDate = (dateString: string | null) => {
+  const formatDate = (dateString: string | null | undefined) => {
     if (!dateString) return 'Unknown date';
     try {
       return new Date(dateString).toLocaleDateString('en-US', {
