@@ -3,30 +3,14 @@ import { GetServerSideProps } from 'next';
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://agentspool.ai';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.agentspool.ai';
     const baseUrl = 'https://agentspool.ai';
     const now = new Date().toISOString();
 
-    // Fetch latest 1000 news articles (10 requests x 100 limit = fast enough)
-    const newsArticles = [];
-    const maxNewsPages = 10; // 10 pages * 100 = 1000 latest articles
-    
-    for (let newsPage = 1; newsPage <= maxNewsPages; newsPage++) {
-      try {
-        const newsRes = await fetch(`${apiUrl}/api/v1/news?limit=100&page=${newsPage}`);
-        const newsData = await newsRes.json();
-        const pageNews = newsData.news || [];
-        
-        if (pageNews.length > 0) {
-          newsArticles.push(...pageNews);
-        } else {
-          break; // No more news
-        }
-      } catch (e) {
-        console.error(`Error fetching news page ${newsPage}:`, e);
-        break;
-      }
-    }
+    // ONE REQUEST to special sitemap endpoint
+    const newsRes = await fetch(`${apiUrl}/api/v1/news/sitemap`);
+    const newsData = await newsRes.json();
+    const newsArticles = newsData.articles || [];
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -41,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   </url>
 `;
 
-    // All News Articles
+    // All News Articles (already filtered by backend)
     for (const article of newsArticles) {
       if (!article.id) continue;
       

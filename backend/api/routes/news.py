@@ -81,6 +81,7 @@ async def get_news(
     tag: str = Query(None),
     source: str = Query(None),
     search: str = Query(None),
+    include_images: bool = Query(True, description="Fetch og:images (slow)"),
     db: Session = Depends(get_db)
 ):
     """Get news articles with pagination"""
@@ -106,10 +107,7 @@ async def get_news(
             where_conditions.append("(title ILIKE :search OR description ILIKE :search)")
             params["search"] = f"%{search}%"
         
-        # Always filter by articles with tags
-        where_conditions.append("tags IS NOT NULL AND array_length(tags, 1) > 0")
-        
-        where_clause = f"WHERE {' AND '.join(where_conditions)}"
+        where_clause = f"WHERE {' AND '.join(where_conditions)}" if where_conditions else ""
         
         news_query = text(f"""
             SELECT 
@@ -136,10 +134,14 @@ async def get_news(
         # Build articles
         articles = []
         
-        # Get og:images in parallel for better performance
-        with ThreadPoolExecutor(max_workers=5) as executor:
-            article_links = [article["link"] for article in news_result]
-            og_images = list(executor.map(get_og_image, article_links))
+        # Get og:images in parallel for better performance (if requested)
+        og_images = []
+        if include_images:
+            with ThreadPoolExecutor(max_workers=5) as executor:
+                article_links = [article["link"] for article in news_result]
+                og_images = list(executor.map(get_og_image, article_links))
+        else:
+            og_images = [None] * len(news_result)
         
         for idx, article in enumerate(news_result):
             # Clean HTML from description
@@ -274,6 +276,39 @@ async def get_news_by_agent_url(
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="Failed to fetch news")
+
+
+@router.get("/sitemap")
+async def get_news_sitemap(db: Session = Depends(get_db)):
+    """Get all news for sitemap (ONE query, no images, only with content & tags)"""
+    try:
+        # ONE QUERY - get all news with tags (content check removed for speed)
+        query = text("""
+            SELECT id, published_at, insert_timestamp
+            FROM news_articles
+            WHERE tags IS NOT NULL 
+              AND array_length(tags, 1) > 0
+            ORDER BY insert_timestamp DESC
+        """)
+        
+        result = db.execute(query).mappings().all()
+        
+        articles = []
+        for row in result:
+            articles.append({
+                "id": row["id"],
+                "published_at": row["published_at"].isoformat() if row["published_at"] else None,
+                "insert_timestamp": row["insert_timestamp"].isoformat() if row["insert_timestamp"] else None
+            })
+        
+        return {
+            "articles": articles,
+            "total": len(articles)
+        }
+        
+    except Exception as e:
+        print(f"Error fetching sitemap: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch news sitemap")
 
 
 @router.get("/{article_id}")

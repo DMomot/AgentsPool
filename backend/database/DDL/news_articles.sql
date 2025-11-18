@@ -22,9 +22,15 @@ CREATE TABLE news_articles (
 -- Index for faster queries by published date
 CREATE INDEX idx_news_published_at ON news_articles(published_at DESC);
 
+-- Index for insert timestamp (used for pagination sorting)
+CREATE INDEX idx_news_insert_timestamp ON news_articles(insert_timestamp DESC);
+
 -- Index for source queries
 CREATE INDEX idx_news_source_name ON news_articles(source_name);
 
 -- Index for main_links queries
 CREATE INDEX idx_news_articles_main_links ON news_articles(main_links);
+
+-- GIN index for tags array
+CREATE INDEX idx_news_tags ON news_articles USING GIN(tags);
 
