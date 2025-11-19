@@ -81,7 +81,7 @@ const nextConfig = {
         ],
       },
       {
-        source: '/sitemap_news.xml',
+        source: '/sitemap-news1.xml',
         headers: [
           {
             key: 'Content-Type',
