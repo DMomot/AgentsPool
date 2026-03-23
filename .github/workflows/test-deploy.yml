@@ -28,7 +28,7 @@ jobs:
     
     - name: Start backend server and run tests
       env:
-        DATABASE_URL: postgresql://postgres:5gkWK_2~_enBlRC1o6Ci2ZUxMz_Th3Jb@yamanote.proxy.rlwy.net:25914/railway
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
         PORT: 8000
         API_BASE_URL: http://localhost:8000
       run: |
